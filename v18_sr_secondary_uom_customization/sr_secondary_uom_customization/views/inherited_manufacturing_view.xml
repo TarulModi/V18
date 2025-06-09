@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_manufacturing_form_extends_add_fields" model="ir.ui.view">
+		<field name="name">view.manufacturing.form.extends.add.fields</field>
+		<field name="model">mrp.production</field>
+		<field name="inherit_id" ref="mrp.mrp_production_form_view" />
+		<field name="arch" type="xml">
+			<xpath expr="//group/group[2]" position="inside">
+				<field name="is_secondary" invisible="1"/>
+				<field name="secondary_qty" invisible="is_secondary != True" />
+				<field name="secondary_uom_id" options="{'no_create': True}" invisible="is_secondary != True"/>
+			</xpath>
+			<xpath expr="//notebook/page/field[@name='move_raw_ids']/list" position="inside">
+				<field name="is_secondary" column_invisible="1"/>
+				<field name="secondary_qty" readonly="is_secondary != True" force_save="True"/>
+				<field name="secondary_uom_id" options="{'no_create': True}" />
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_mrp_production_list_inherit_secondary_uom" model="ir.ui.view">
+        <field name="name">mrp.production.list.inherit.secondary.uom</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_uom_id']" position="after">
+                <field name="secondary_qty" sum="Total Standard"/>
+				<field name="secondary_uom_id"/>
+			</xpath>
+        </field>
+    </record>
+
+</odoo>

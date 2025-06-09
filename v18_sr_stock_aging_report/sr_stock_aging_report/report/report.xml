@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- <report id="action_report_stock_aging"
+		string="Stock Aging Report" model="sr.stock.aging.report"
+		report_type="qweb-pdf"
+		name="sr_stock_aging_report.report_stock_aging"
+		file="sr_stock_aging_report.report_stock_aging" />
+ -->
+
+	<record id="action_report_stock_aging" model="ir.actions.report">
+        <field name="name">Stock Aging Report</field>
+        <field name="model">sr.stock.aging.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_stock_aging_report.report_stock_aging</field>
+        <field name="report_file">sr_stock_aging_report.report_stock_aging</field>
+    </record>
+
+</odoo>

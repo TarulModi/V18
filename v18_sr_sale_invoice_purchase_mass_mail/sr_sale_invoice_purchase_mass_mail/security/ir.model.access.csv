@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_send_mass_mail_invoice,access_send_mass_mail_invoice,model_send_mass_mail_invoice,,1,1,1,1
+access_send_mass_mail_purchase,access_send_mass_mail_purchase,model_send_mass_mail_purchase,,1,1,1,1
+access_send_mass_mail_sale,access_send_mass_mail_sale,model_send_mass_mail_sale,,1,1,1,1

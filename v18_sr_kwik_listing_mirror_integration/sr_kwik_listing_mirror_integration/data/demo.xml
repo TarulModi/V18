@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record model="product.product" id="shipping_price_product">
+            <field name="name">Shipping Price</field>
+            <field name="default_code">ship_price</field>
+            <field name="type">service</field>
+        </record>
+
+        <record model="product.product" id="shipping_tax_product">
+            <field name="name">Shipping Tax</field>
+            <field name="default_code">ship_tax</field>
+            <field name="type">service</field>
+        </record>
+
+        <record model="product.product" id="product_tax_product">
+            <field name="name">Product Tax</field>
+            <field name="default_code">produ_tax</field>
+            <field name="type">service</field>
+        </record>
+
+        <record model="product.product" id="gift_wrap_price_product">
+            <field name="name">Gift Wrap Price</field>
+            <field name="default_code">gift_price</field>
+            <field name="type">service</field>
+        </record>
+
+        <record model="product.product" id="gift_wrap_tax_product">
+            <field name="name">Gift Wrap Tax</field>
+            <field name="default_code">gift_tax</field>
+            <field name="type">service</field>
+	    </record>
+
+        <record model="product.product" id="item_promotion_discount_product">
+            <field name="name">Item Promotion Discount</field>
+            <field name="default_code">item_promotion_discount</field>
+            <field name="type">service</field>
+        </record>
+
+        <record model="product.product" id="ship_promotion_discount_product">
+            <field name="name">Ship Promotion Discount</field>
+            <field name="default_code">ship_promotion_discount</field>
+            <field name="type">service</field>
+        </record>
+
+        <record model="listing.mirror.integration" id="product_integration_box">
+            <field name="name">Product Integration</field>
+        </record>
+
+        <record model="listing.mirror.integration" id="product_bundle_kit_integration_box">
+            <field name="name">Kit Integration</field>
+        </record>
+
+        <record model="listing.mirror.integration" id="orders_integration_box">
+            <field name="name">Orders Integration</field>
+        </record>
+
+        <record model="listing.mirror.integration" id="qty_integration_box">
+            <field name="name">QTY Integration</field>
+        </record>
+
+        <record model="res.partner" id="amazon_channel">
+            <field name="name">Amazon</field>
+            <field name="integration_config_id">2574</field>
+        </record>
+
+        <record model="res.partner" id="walmart_channel">
+            <field name="name">Walmart</field>
+            <field name="integration_config_id">2801</field>
+        </record>
+
+        <record model="res.partner" id="shopify_kwik_garden_channel">
+            <field name="name">Shopify - Kwik Garden</field>
+            <field name="integration_config_id">8377</field>
+        </record>
+
+        <record model="res.partner" id="shopify_kwik_pets_channel">
+            <field name="name">Shopify - Kwik Pets</field>
+            <field name="integration_config_id">4214</field>
+        </record>
+
+        <record model="res.partner" id="ebay_channel">
+            <field name="name">Ebay</field>
+            <field name="integration_config_id">2595</field>
+        </record>
+
+        <record model="res.partner" id="google_kwik_retail_channel">
+            <field name="name">Buy On Google - Kwik Retail</field>
+            <field name="integration_config_id">6472</field>
+        </record>
+
+<!--        <record model="channel.fulfillment.orders" id="fulfillment_by_amazon_box">-->
+<!--            <field name="name">Fulfillment By Amazon</field>-->
+<!--        </record>-->
+<!--        -->
+<!--        <record model="channel.fulfillment.orders" id="fulfillment_by_walmart_box">-->
+<!--            <field name="name">Fulfillment By Walmart</field>-->
+<!--        </record>-->
+
+<!--        <record model="channel.fulfillment.orders" id="return_order_box_amazon">-->
+<!--            <field name="name">Return Order of Amazon</field>-->
+<!--   	    </record>-->
+
+<!--	    <record model="channel.fulfillment.orders" id="return_order_box_walmart">-->
+<!--            <field name="name">Return Order of Walmart</field>-->
+<!--        </record>-->
+
+<!--        <record model="channel.fulfillment.orders" id="payment_box_amazon">-->
+<!--            <field name="name">FBA Payment of Amazon</field>-->
+<!--        </record>-->
+
+<!--        <record model="channel.fulfillment.orders" id="payment_box_walmart">-->
+<!--            <field name="name">FBA Payment of Walmart</field>-->
+<!--        </record>-->
+
+    </data>
+</odoo>

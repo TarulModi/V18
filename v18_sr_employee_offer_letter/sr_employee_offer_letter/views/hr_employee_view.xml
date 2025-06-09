@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_offer_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.offer.fields.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="letter_issue_date"/>
+                <field name="joining_date"/>
+                <field name="last_working_date"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

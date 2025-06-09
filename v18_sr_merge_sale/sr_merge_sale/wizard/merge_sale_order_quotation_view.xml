@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="sr_merge_quotation_form_view">
+        <field name="name">sr.merge.sale.orders.wizard.form.view</field>
+        <field name="model">merge.sale.orders.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Merge Quotations">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="merge_options" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="sale_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="sale_id" invisible="merge_options == 'new_cancel_selected' or merge_options == 'new_delete_all_selected'" force_save="1" store="True"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Merge" name="merge_quotation" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sr_merge_quotation_action" model="ir.actions.act_window">
+        <field name="name">Merge Quotations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">merge.sale.orders.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sr_merge_quotation_form_view"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

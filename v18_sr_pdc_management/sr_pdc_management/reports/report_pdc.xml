@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="sr_pdc_report_action" model="ir.actions.report">
+            <field name="name">Post Dated Cheques Report</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sr_pdc_management.pdc_report_template</field>
+            <field name="report_file">sr_pdc_management.pdc_report_template</field>
+			<field name="binding_model_id" ref="model_sr_pdc_payment"/>
+			<field name="binding_type">report</field>
+        </record>
+	</data>
+</odoo>

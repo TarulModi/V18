@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="profit_loss_report">
+        <t t-call="web.internal_layout">
+            <main>
+                <div class="page">
+                    <!-- Report Header -->
+                    <h1 style="color: #6666ff; font-weight: bold;">Statement of Profit or Loss</h1>
+                    <h2>
+                        <p style="font-weight: bold; margin: 0; padding: 0; font-size: 24px;">
+                            <t t-esc="res_company.name"/>
+                        </p>
+                        <p style="font-weight: bold; font-size: 24px;">
+                            For the month ended <t t-esc="current_month_last_date"/>
+                        </p>
+                    </h2>
+
+                    <!-- Month-Year Header Row -->
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                        <thead style="border-bottom: 1px solid black;">
+                            <tr>
+                                <th style="width: 40%; text-align: left; padding-bottom: 5px; font-weight: bold;"> </th>
+                                <th style="width: 10%; text-align: left; padding-bottom: 5px; font-weight: bold;">NOTES</th>
+                                <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
+                                    <t t-esc="labels['current_month']"/>
+                                </th>
+                                <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
+                                    <t t-esc="labels['prev_month_1']"/>
+                                </th>
+                                <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
+                                    <t t-esc="labels['prev_month_2']"/>
+                                </th>
+                                <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
+                                    <t t-esc="labels['ytd']"/>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <!-- Gross Profit Summary -->
+                    <table style="width: 100%; border-collapse: collapse;" class="o_total_table table table-borderless avoid-page-break-inside">
+                        <tbody>
+                            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                <td style="width: 40%; padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">Gross Profit</td>
+                                <td style="width: 10%; padding: 5px 0;"/>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">-</td>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">-</td>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">-</td>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">-</td>
+                            </tr>
+                            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                <td style="padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">Gross Profit Margin (%)</td>
+                                <td style="padding: 5px 0;"/>
+                                <td style="text-align: right; padding: 5px 0;">-</td>
+                                <td style="text-align: right; padding: 5px 0;">-</td>
+                                <td style="text-align: right; padding: 5px 0;">-</td>
+                                <td style="text-align: right; padding: 5px 0;">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <t t-if="results">
+                        <!-- Operating Expenses Section -->
+                        <h4 style="margin-bottom: 0; margin-top: 15px; font-weight: bold;">Operating Expenses</h4>
+                        <hr style="margin-top: 2px; border: none; border-bottom: 2px solid #000;"/>
+
+
+                        <!-- Dynamic Operating Expenses Tables -->
+                        <t t-foreach="results" t-as="line">
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless">
+                                <tbody>
+                                    <!-- Category Header -->
+                                    <tr style="border-bottom: 1px solid #000;">
+                                        <td colspan="6" style="font-weight: bold; padding: 5px 0; color: #000;">
+                                            <span style="display: block; font-weight: bold; color: #000;">
+                                                <t t-esc="line['category']"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <!-- Nested table for indented rows -->
+                                    <tr>
+                                        <td colspan="6" style="padding: 0;">
+                                            <table style="width: 100%; border-collapse: collapse; margin-left: 15px;">
+                                                <tbody>
+                                                    <!-- Account Rows -->
+                                                    <t t-foreach="line['accounts']" t-as="acc">
+                                                        <t t-if="acc['current_month'] != 0 or acc['prev_month_1'] != 0 or acc['prev_month_2'] != 0 or acc['ytd'] != 0">
+                                                            <tr style="border-bottom: 1px solid #000;">
+                                                                <td style="width: 40%; padding: 5px 0;">
+                                                                    Expenses - <t t-esc="acc['account_name']"/>
+                                                                </td>
+                                                                <td style="width: 10%; padding: 5px 0;"/>
+                                                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['current_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_currency(acc['current_month'])"/></t>
+                                                                </td>
+                                                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['prev_month_1'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_currency(acc['prev_month_1'])"/></t>
+                                                                </td>
+                                                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['prev_month_2'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_currency(acc['prev_month_2'])"/></t>
+                                                                </td>
+                                                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['ytd'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_currency(acc['ytd'])"/></t>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+
+                                                    <!-- Total for this category -->
+                                                    <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                                        <td style="padding: 5px 0;">
+                                                            Total <t t-esc="line['category']"/>
+                                                        </td>
+                                                        <td style="padding: 5px 0;"/>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="line['totals']['current_month'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_currency(line['totals']['current_month'])"/></t>
+                                                        </td>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="line['totals']['prev_month_1'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_currency(line['totals']['prev_month_1'])"/></t>
+                                                        </td>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="line['totals']['prev_month_2'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_currency(line['totals']['prev_month_2'])"/></t>
+                                                        </td>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="line['totals']['ytd'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_currency(line['totals']['ytd'])"/></t>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Total Operating Expenses -->
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                            <tbody>
+                                <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                    <td style="width: 40%; padding: 5px 0; font-weight: bold;">
+                                        Total Operating Expenses
+                                    </td>
+                                    <td style="width: 10%; padding: 5px 0;"/>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['current_month'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['current_month'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['prev_month_1'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['prev_month_1'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['prev_month_2'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['prev_month_2'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['ytd'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['ytd'])"/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Profit/Loss Summary -->
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                            <tbody>
+                                <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                    <td style="width: 40%; padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">
+                                        Operating Profit/(Loss)
+                                    </td>
+                                    <td style="width: 10%; padding: 5px 0;"/>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['current_month'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['current_month'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['prev_month_1'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['prev_month_1'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['prev_month_2'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['prev_month_2'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_profit_loss['ytd'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['ytd'])"/></t>
+                                    </td>
+                                </tr>
+                                <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                    <td style="width: 40%; padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">
+                                        Operating Profit/(Loss) Margin (%)
+                                    </td>
+                                    <td style="width: 10%; padding: 5px 0;"/>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_margin['current_month'] == 0">-</t>
+                                        <t t-else=""><t t-esc="'{:.2f}%'.format(operating_margin['current_month'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_margin['prev_month_1'] == 0">-</t>
+                                        <t t-else=""><t t-esc="'{:.2f}%'.format(operating_margin['prev_month_1'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_margin['prev_month_2'] == 0">-</t>
+                                        <t t-else=""><t t-esc="'{:.2f}%'.format(operating_margin['prev_month_2'])"/></t>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                        <t t-if="operating_margin['ytd'] == 0">-</t>
+                                        <t t-else=""><t t-esc="'{:.2f}%'.format(operating_margin['ytd'])"/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <!-- Non-Operating Expenses Section -->
+                    <t t-if="non_operating_expenses">
+                        <h4 style="margin-bottom: 5px; margin-top: 15px; font-weight: bold;">Non Operating Expenses</h4>
+                        <hr style="margin-top: 2px; border: none; border-bottom: 2px solid #000;" />
+
+                        <!-- Outer table for section title (if needed) or structure -->
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" style="padding: 0;">
+                                        <!-- Nested table with consistent left indent -->
+                                        <table style="width: 100%; border-collapse: collapse; margin-left: 15px;">
+                                            <tbody>
+                                                <!-- Account Rows -->
+                                                <t t-foreach="non_operating_expenses" t-as="acc">
+                                                    <t t-if="acc['current_month'] != 0 or acc['prev_month_1'] != 0 or acc['prev_month_2'] != 0 or acc['ytd'] != 0">
+                                                        <tr style="border-bottom: 1px solid #000;">
+                                                            <td style="width: 40%; padding: 5px 0;">
+                                                                <t t-esc="acc['account_name']"/>
+                                                            </td>
+                                                            <td style="width: 10%; padding: 5px 0;"/>
+                                                            <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                <t t-if="acc['current_month'] == 0">-</t>
+                                                                <t t-else=""><t t-esc="format_currency(acc['current_month'])"/></t>
+                                                            </td>
+                                                            <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                <t t-if="acc['prev_month_1'] == 0">-</t>
+                                                                <t t-else=""><t t-esc="format_currency(acc['prev_month_1'])"/></t>
+                                                            </td>
+                                                            <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                <t t-if="acc['prev_month_2'] == 0">-</t>
+                                                                <t t-else=""><t t-esc="format_currency(acc['prev_month_2'])"/></t>
+                                                            </td>
+                                                            <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                                                <t t-if="acc['ytd'] == 0">-</t>
+                                                                <t t-else=""><t t-esc="format_currency(acc['ytd'])"/></t>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+
+                                                <!-- Total Row -->
+                                                <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                                    <td style="padding: 5px 0;">
+                                                        Total Non Operating Expenses
+                                                    </td>
+                                                    <td style="padding: 5px 0;"/>
+                                                    <td style="text-align: right; padding: 5px 0;">
+                                                        <t t-if="non_operating_totals['current_month'] == 0">-</t>
+                                                        <t t-else=""><t t-esc="format_currency(non_operating_totals['current_month'])"/></t>
+                                                    </td>
+                                                    <td style="text-align: right; padding: 5px 0;">
+                                                        <t t-if="non_operating_totals['prev_month_1'] == 0">-</t>
+                                                        <t t-else=""><t t-esc="format_currency(non_operating_totals['prev_month_1'])"/></t>
+                                                    </td>
+                                                    <td style="text-align: right; padding: 5px 0;">
+                                                        <t t-if="non_operating_totals['prev_month_2'] == 0">-</t>
+                                                        <t t-else=""><t t-esc="format_currency(non_operating_totals['prev_month_2'])"/></t>
+                                                    </td>
+                                                    <td style="text-align: right; padding: 5px 0;">
+                                                        <t t-if="non_operating_totals['ytd'] == 0">-</t>
+                                                        <t t-else=""><t t-esc="format_currency(non_operating_totals['ytd'])"/></t>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                        <tbody>
+                            <!-- Net Profit/(Loss) Row -->
+                            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                <td style="width: 40%; padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">
+                                    Net Profit/(Loss)
+                                </td>
+                                <td style="width: 10%; padding: 5px 0;"/>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                    <t t-if="net_profit_loss['current_month'] == 0">-</t>
+                                    <t t-else=""><t t-esc="format_currency(net_profit_loss['current_month'])"/></t>
+                                </td>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                    <t t-if="net_profit_loss['prev_month_1'] == 0">-</t>
+                                    <t t-else=""><t t-esc="format_currency(net_profit_loss['prev_month_1'])"/></t>
+                                </td>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                    <t t-if="net_profit_loss['prev_month_2'] == 0">-</t>
+                                    <t t-else=""><t t-esc="format_currency(net_profit_loss['prev_month_2'])"/></t>
+                                </td>
+                                <td style="width: 12.5%; text-align: right; padding: 5px 0;">
+                                    <t t-if="net_profit_loss['ytd'] == 0">-</t>
+                                    <t t-else=""><t t-esc="format_currency(net_profit_loss['ytd'])"/></t>
+                                </td>
+                            </tr>
+
+                            <!-- Margin (%) Row -->
+                            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                <td style="padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">
+                                    Net Profit/(Loss) Margin (%)
+                                </td>
+                                <td style="padding: 5px 0;"/>
+                                <td style="text-align: right; padding: 5px 0;">
+                                    <t t-if="net_margin['current_month'] == 0">-</t>
+                                    <t t-else=""><t t-esc="'{:.2f}%'.format(net_margin['current_month'])"/></t>
+                                </td>
+                                <td style="text-align: right; padding: 5px 0;">
+                                    <t t-if="net_margin['prev_month_1'] == 0">-</t>
+                                    <t t-else=""><t t-esc="'{:.2f}%'.format(net_margin['prev_month_1'])"/></t>
+                                </td>
+                                <td style="text-align: right; padding: 5px 0;">
+                                    <t t-if="net_margin['prev_month_2'] == 0">-</t>
+                                    <t t-else=""><t t-esc="'{:.2f}%'.format(net_margin['prev_month_2'])"/></t>
+                                </td>
+                                <td style="text-align: right; padding: 5px 0;">
+                                    <t t-if="net_margin['ytd'] == 0">-</t>
+                                    <t t-else=""><t t-esc="'{:.2f}%'.format(net_margin['ytd'])"/></t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </t>
+    </template>
+</odoo>

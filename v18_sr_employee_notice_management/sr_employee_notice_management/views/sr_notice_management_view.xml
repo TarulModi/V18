@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- Employee Notice Tree View -->
+		<record id="sr_hr_employee_grant_notice_tree_view"
+			model="ir.ui.view">
+			<field name="name">sr.hr.employee.grant.notice.tree.view</field>
+			<field name="model">sr.grant.employee.notice</field>
+			<field name="arch" type="xml">
+				<list name="Notice">
+					<field name="name" />
+					<field name="employee_id" />
+					<field name="manager_id" />
+					<field name="department_id" />
+					<field name="offense_id" />
+					<field name="warning" />
+					<field name="user_id" />
+					<field name="date" />
+					<field name="company_id" groups="base.group_multi_company" />
+					<field name="state" />
+				</list>
+			</field>
+		</record>
+
+		<!-- Employee Notice Form View -->
+		<record id="sr_hr_employee_grant_notice_form_view" model="ir.ui.view">
+			<field name="name">sr.hr.employee.grant.notice.form.view</field>
+			<field name="model">sr.grant.employee.notice</field>
+			<field name="arch" type="xml">
+				<form name="Notice">
+					<header>
+						<button name="confirm_notice" string="Confirm"
+							class="btn-primary" type="object" state="draft"
+							groups="hr.group_hr_manager,hr.group_hr_user" invisible="state in ['confirm', 'done', 'cancel']"/>
+						<button name="notice_done" string="Done"
+							class="btn-primary" type="object" state="confirm"
+							groups="hr.group_hr_manager,hr.group_hr_user" invisible="state in ['draft', 'done', 'cancel']"/>
+						<button name="notice_cancel" class="btn-primary"
+							type="object" string="Cancel" state="draft,confirm"
+							groups="hr.group_hr_manager,hr.group_hr_user" invisible="state in ['cancel', 'done']"/>
+						<button name="draft_notice" class="btn-primary"
+							type="object" string="Set to Draft" state="cancel"
+							groups="hr.group_hr_manager,hr.group_hr_user" invisible="state in ['draft', 'confirm', 'done']"/>
+						<field name="state" widget="statusbar"
+							statusbar_visible="draft,confirm,done,cancel" />
+					</header>
+					<sheet>
+						<div class="oe_title">
+							<h1>
+								<field name="name" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="employee_id" readonly="state != 'draft'"/>
+								<field name="manager_id" readonly="state != 'draft'"/>
+								<field name="department_id" readonly="state != 'draft'"/>
+							</group>
+							<group>
+								<field name="user_id" readonly="state != 'draft'"/>
+								<field name="job_title" readonly="state != 'draft'"/>
+								<field name="identification_no" readonly="state != 'draft'"/>
+							</group>
+						</group>
+						<group>
+							<group>
+								<field name="company_id" readonly="state != 'draft'" groups="base.group_multi_company" />
+								<field name="offense_id" required="1" readonly="state != 'draft'" />
+							</group>
+							<group>
+								<field name="date" readonly="state != 'draft'" />
+								<field name="warning" readonly="state != 'draft'" />
+							</group>
+						</group>
+						<group>
+							<group>
+								<field name="offense_decision" readonly="state != 'draft'" />
+								<field name="overcome_offense" readonly="state != 'draft'" />
+							</group>
+							<group>
+								<field name="offense_improvement" readonly="state != 'draft'"/>
+								<field name="comment" placeholder="Comments" readonly="state != 'draft'"/>
+							</group>
+						</group>
+						<div class="oe_clear" />
+					</sheet>
+					<chatter/>
+				</form>
+			</field>
+		</record>
+
+		<!-- Action for grant notice -->
+		<record id="sr_grant_notice_action" model="ir.actions.act_window">
+			<field name="name">Grant Notice</field>
+			<field name="res_model">sr.grant.employee.notice</field>
+			<field name="view_mode">list,form</field>
+		</record>
+
+		<!-- Main menu -->
+		<menuitem name="Employee Notice Management" id="sr_employee_notice_management_menu" web_icon="sr_employee_notice_management,static/description/icon.png"/>
+		<menuitem id="sr_employee_notice_menu" name="Notice" parent="sr_employee_notice_management_menu" sequence="1" />
+		<menuitem id="sr_grant_notice_menu" name="Notice"
+			action="sr_grant_notice_action" parent="sr_employee_notice_menu" sequence="1" />
+
+		<!-- Employee Offense Tree View -->
+		<record id="sr_hr_employee_offense_form_view" model="ir.ui.view">
+			<field name="name">sr.hr.employee.offense.form.view</field>
+			<field name="model">sr.employee.offense</field>
+			<field name="arch" type="xml">
+				<list name="Notice" editable="top">
+					<field name="name" />
+				</list>
+			</field>
+		</record>
+
+		<!--offense action  -->
+		<record id="sr_notice_offense_action" model="ir.actions.act_window">
+			<field name="name">Offense</field>
+			<field name="res_model">sr.employee.offense</field>
+			<field name="view_mode">list,form</field>
+		</record>
+
+		<!-- offense menu -->
+		<menuitem id="sr_employee_notice_configuration_menu"
+			name="Configuration" parent="sr_employee_notice_management_menu" sequence="2"/>
+
+		<menuitem id="sr_employee_offense_menu" name="Offense" action="sr_notice_offense_action"
+			parent="sr_employee_notice_configuration_menu" />
+	</data>
+</odoo>

@@ -1,0 +1,75 @@
+tfak-a254-r8ej
+
+cd Projects/
+
+source python3.10-3.10-venv/bin/activate
+
+cd /home/abcd/Projects/v18/odoo
+
+ ./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_sr_kwik_listing_mirror_integration --limit-time-real=100000 -d v18_sr_kwik_listing_mirror_integration_2 -u sr_kwik_listing_mirror_integration --limit-memory-soft=4294967296 --limit-memory-hard=5368709120
+
+
+
+v18_sr_kwik_listing_mirror_integration
+
+
+
+uct_bundle_kit_receipes_connection(self, url, headers, payload):
+    #     response = requests.request("GET", url, headers=headers, data=payload)
+    #     response_json = response.json()
+    #     for main_product in response_json.get('results'):
+    #         for recipe in main_product.get('recipes'):
+    #             if recipe.get('sku') != main_product.get('sku'):
+    #                 product_template_id = self.env['product.template'].search([('default_code', '=', main_product.get('sku'))])
+    #                 if not product_template_id:
+    #                     # raise UserError(_('Product Not Found With This SKU : ' + str(main_product.get('sku'))))
+    #                     log_id = self.env['integration.error.log'].create({
+    #                         'name': str(main_product.get('sku')),
+    #                         'integration_name': 'KIT',
+    #                         'remark': 'Product Not Found',
+    #                         'date': fields.Datetime.now(),
+    #                     })
+    #                 existing_bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', product_template_id.id)])
+    #                 print ("========existing_bom_id-----------", existing_bom_id)
+    #                 if not existing_bom_id:
+    #                     bom_id = self.env['mrp.bom'].create({
+    #                         'product_tmpl_id':product_template_id.id,
+    #                         'product_id':self.env['product.product'].search([('default_code', '=', main_product.get('sku'))]).id,
+    #                         'type':'phantom'
+    #                         })
+    #                     print ("=========bom_id-----------------", bom_id)
+    #                     product_template_id.write({
+    #                         'purchase_ok':False
+    #                         })
+    #                     product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))])
+    #                     if not product_id:
+    #                         # raise UserError(_('Product Not Found With This SKU : ' + str(recipe.get('sku'))))
+    #                         log_id = self.env['integration.error.log'].create({
+    #                             'name': str(recipe.get('sku')),
+    #                             'integration_name': 'KIT',
+    #                             'remark': 'Product Not Found',
+    #                             'date': fields.Datetime.now(),
+    #                         })
+    #                     if product_id:
+    #                         self.env['mrp.bom.line'].create({
+    #                             'bom_id':bom_id.id,
+    #                             'product_id':product_id.id,
+    #                             'product_qty':recipe.get('quantity')
+    #                             })
+    #                 else:
+    #                     existing_products = [a.product_id.id for a in existing_bom_id.bom_line_ids]
+    #                     product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))]).id
+    #                     print ("=======existing_products", existing_products, product_id)
+    #                     print ("=========product.id not in existing_products", product_id not in existing_products)
+    #                     if product_id not in existing_products:
+    #                         self.env['mrp.bom.line'].create({
+    #                         'bom_id':existing_bom_id.id,
+    #                         'product_id':product_id,
+    #                         'product_qty':recipe.get('quantity')
+    #                         })
+    #
+    #     if response_json.get('next'):
+    #         url = response_json.get('next')
+    #         self._product_bundle_kit_receipes_connection(url, headers, payload)
+    #     else:
+    #         return

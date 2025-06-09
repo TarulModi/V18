@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_order_form_extends_to_add_out_of_stock_flag_in_order_line" model="ir.ui.view">
+		<field name="name">view.order.form.extends.to.add.out.of.stock.flag.in.order.line</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//notebook/page/field[@name='order_line']/list/field[@name = 'sequence']" position="after">
+				<field name="is_stock_available" column_invisible="True"/>
+			</xpath>
+			<xpath expr="//notebook/page/field[@name='order_line']/list" position="attributes">
+				<attribute name="decoration-danger">is_stock_available==True</attribute>
+			</xpath>
+		</field>
+	</record>
+</odoo>

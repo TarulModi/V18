@@ -1,0 +1,4 @@
+Pricelist Name,Currency,Country Group,Product Name,Product Variant,Product Barcode,Product Category,Price Type,Fixed Price,Discount,Min Quantity,Date Start,Date End
+Retail Pricelist Barcode,KWD,South America,Wood Panel,FURN_7023,FURN_7023,All / Consumable,fixed,60,60,5,04/12/25,04/12/26
+Wholesale Pricelist Barcode,INR,European Union,Desk Pad,FURN_0002,FURN_0002,All,percentage,30,60,4,04/12/25,04/12/26
+,,,Office Chair,FURN_7777,FURN_7777,All / Consumable,fixed,60,60,5,04/12/25,04/12/26

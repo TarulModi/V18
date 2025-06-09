@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <template id="sr_repair_management.report_repair_work_order_template">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div>
+                            <strong>
+                                <center><h2>Work Order</h2></center>
+                            </strong>
+                        </div>
+                        <h3>
+                            <span t-field="doc.name"/>
+                        </h3>
+                        <div>
+                            <div style="display: inline-block; width: 48%; vertical-align: top;">
+                                <strong>Customer : </strong> <span t-field="doc.partner_id.name"/><br/>
+                                <strong>Description : </strong> <span t-field="doc.description"/><br/>
+                                <strong>Checklist : </strong> <span t-field="doc.checklist_id.name"/><br/>
+                            </div>
+                            <div style="display: inline-block; width: 48%; vertical-align: top; margin-left: 2%;">
+                                <strong>Worked Hours : </strong> <span t-field="doc.worked_hours"/><br/>
+                                <strong>Technician : </strong> <span t-field="doc.user_id"/><br/>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="mt-3">General Details</h4>
+                            <table class="o_total_table table table-borderless avoid-page-break-inside">
+                                <thead class="bg-100 align-middle">
+                                    <tr>
+                                        <th scope="col" style="font-weight: bold;">Vehicle</th>
+                                        <th scope="col" style="font-weight: bold;">Brand</th>
+                                        <th scope="col" style="font-weight: bold;">Nodel</th>
+                                        <th scope="col" style="font-weight: bold;">Color</th>
+                                        <th scope="col" style="font-weight: bold;">Plate No</th>
+                                        <th scope="col" style="font-weight: bold;">Fuel Type</th>
+                                        <th scope="col" style="font-weight: bold;">Chassis Num</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-esc="doc.vehicle_name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc.brand"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc.model"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc.color"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc.license_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc.fuel_type"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc.chassis_number"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-if="doc.spar_parts_ids">
+                                <h4 class="mt-3">Spar-Parts Details</h4>
+                                <table class="o_total_table table table-borderless avoid-page-break-inside">
+                                    <thead class="bg-100 align-middle">
+                                        <tr>
+                                            <b>
+                                                <th scope="col" style="font-weight: bold;">Products</th>
+                                                <th scope="col" style="font-weight: bold;">Quantity</th>
+                                                <th scope="col" style="font-weight: bold;">Price</th>
+                                                <th scope="col" style="font-weight: bold;">Notes</th>
+                                                <th scope="col" style="font-weight: bold;">Sub Total</th>
+                                            </b>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.spar_parts_ids" t-as="line">
+                                            <td>
+                                                <span t-esc="line.product_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.quantity"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.price"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.notes"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="line.sub_total"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top">
+                                            <td colspan="4" class="text-end"><strong>Total</strong></td>
+                                            <td>
+                                                <t t-set="total" t-value="0"/>
+                                                <t t-foreach="doc.spar_parts_ids" t-as="line">
+                                                    <t t-set="total" t-value="total + line.sub_total"/>
+                                                </t>
+                                                <span t-esc="total"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-if="doc.attachment_ids">
+                                <div>
+                                    <h4 class="mt-3">Images</h4>
+                                    <t t-foreach="doc.attachment_ids" t-as="att">
+                                        <t t-if="'image' in (att.mimetype or '') and att.datas">
+                                          <img t-att-src="'data:%s;base64,%s' % (att.mimetype, att.datas.decode() if isinstance(att.datas, bytes) else att.datas)"
+                                               style="max-height: 200px; max-width: 100px; border: 1px solid #ccc; margin-bottom: 5px;" />
+                                        </t>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                        <t t-if="doc.note">
+                            <div style="display: inline-block; width: 48%; vertical-align: top;">
+							<h4 class="mt-3">Repair Note</h4>
+							<span t-field="doc.note"/>
+                        </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

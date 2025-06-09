@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="paperformat_aged_payable_summery" model="report.paperformat">
+        <field name="name">Aged Payables Summary</field>
+        <field name="default" eval="False"/>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <template id="sr_account_report_customization.aged_payable_report">
+        <t t-call="web.internal_layout">
+            <main>
+                <div class="page">
+                    <h2 style="color: #00BFFF; font-weight:bold;">Aged Payables Summary</h2>
+                    <p style="font-weight:bold; margin: 0; padding: 0; font-size:20px;color: black;">
+                        <t t-esc="res_company.name"/>
+                    </p>
+                    <p style="font-weight:bold; font-size:20px; margin: 0;color: black;">
+                        As at
+                        <t t-esc="report_date"/>
+                    </p>
+                    <p style="font-weight:bold; font-size:20px; margin: 0;color: black;">
+                        Ageing by invoice date
+                    </p>
+                    <h3 style="margin-top: 10px; font-size: 13px; border-bottom: 1px solid black; padding-bottom: 3px; margin-bottom: 10px;">
+                        <span style="display: inline-block; width: 220px;font-weight:bold;">CONTACT</span>
+                        <span style="display: inline-block; width:105px;font-weight:bold;">&lt; 1 MONTH</span>
+                        <span style="display: inline-block; width: 105px;font-weight:bold;">1 MONTH</span>
+                        <span style="display: inline-block; width: 105px;font-weight:bold;">2 MONTHS</span>
+                        <span style="display: inline-block; width: 115px;font-weight:bold;">3 MONTHS</span>
+                        <span style="display: inline-block; width: 100px;font-weight:bold;">OLDER</span>
+                        <span style="display: inline-block;font-weight:bold;">TOTAL</span>
+                    </h3>
+                    <h3 style="margin-top: 25px; font-size: 18px; font-weight: bold; border-bottom: 1px solid black; padding-bottom: 3px; margin-bottom: 0px;">
+                        Aged Payables
+                    </h3>
+                    <table style="width: 100%;font-size: 10pt;">
+                        <tbody>
+                            <t t-foreach="report_lines" t-as="line">
+                                <tr style="border-bottom: 1px solid #cccccc;border-top: 1px solid white;border-left: 1px solid white;border-right: 1px solid white;">
+                                    <td style="width: 180px;">
+                                        <span t-esc="line['account_name']"/>
+                                    </td>
+                                    <td style="text-align: right;width: 100px;">
+                                        <t t-set="val" t-value="line.get('&lt; 1 MONTH', 0.0)"/>
+                                        <t t-if="val == 0.0">-</t>
+                                        <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="'{:,.2f}'.format(val)"/>
+                                        </t>
+                                    </td>
+
+                                    <td style="text-align: right;width: 100px;">
+                                        <t t-set="val" t-value="line.get('1 MONTH', 0.0)"/>
+                                        <t t-if="val == 0.0">-</t>
+                                        <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="'{:,.2f}'.format(val)"/>
+                                        </t>
+                                    </td>
+
+                                    <td style="text-align: right;width: 100px;">
+                                        <t t-set="val" t-value="line.get('2 MONTH', 0.0)"/>
+                                        <t t-if="val == 0.0">-</t>
+                                        <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="'{:,.2f}'.format(val)"/>
+                                        </t>
+                                    </td>
+
+                                    <td style="text-align: right;width: 100px;">
+                                        <t t-set="val" t-value="line.get('3 MONTH', 0.0)"/>
+                                        <t t-if="val == 0.0">-</t>
+                                        <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="'{:,.2f}'.format(val)"/>
+                                        </t>
+                                    </td>
+
+                                    <td style="text-align: right;width: 100px;">
+                                        <t t-set="val" t-value="line.get('OLDER', 0.0)"/>
+                                        <t t-if="val == 0.0">-</t>
+                                        <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="'{:,.2f}'.format(val)"/>
+                                        </t>
+                                    </td>
+
+                                    <td style="text-align: right;width: 100px;">
+                                        <t t-set="val" t-value="line.get('TOTAL', 0.0)"/>
+                                        <t t-if="val == 0.0">-</t>
+                                        <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="'{:,.2f}'.format(val)"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr style="font-weight:bold;border-bottom: 1px solid white;border-left: 1px solid white;border-right: 1px solid white;">
+                                <td style="text-align: left;width: 180px;">Total Aged Payables</td>
+                                <td style="text-align: right;width: 100px;">
+                                    <t t-set="val" t-value="totals['&lt; 1 MONTH']"/>
+                                    <t t-if="val == 0.0">-</t>
+                                    <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'{:,.2f}'.format(val)"/>
+                                    </t>
+                                </td>
+
+                                <td style="text-align: right;width: 100px;">
+                                    <t t-set="val" t-value="totals['1 MONTH']"/>
+                                    <t t-if="val == 0.0">-</t>
+                                    <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'{:,.2f}'.format(val)"/>
+                                    </t>
+                                </td>
+
+                                <td style="text-align: right;width: 100px;">
+                                    <t t-set="val" t-value="totals['2 MONTH']"/>
+                                    <t t-if="val == 0.0">-</t>
+                                    <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'{:,.2f}'.format(val)"/>
+                                    </t>
+                                </td>
+
+                                <td style="text-align: right;width: 100px;">
+                                    <t t-set="val" t-value="totals['3 MONTH']"/>
+                                    <t t-if="val == 0.0">-</t>
+                                    <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'{:,.2f}'.format(val)"/>
+                                    </t>
+                                </td>
+
+                                <td style="text-align: right;width: 100px;">
+                                    <t t-set="val" t-value="totals['OLDER']"/>
+                                    <t t-if="val == 0.0">-</t>
+                                    <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'{:,.2f}'.format(val)"/>
+                                    </t>
+                                </td>
+
+                                <td style="text-align: right;width: 100px;">
+                                    <t t-set="val" t-value="totals['TOTAL']"/>
+                                    <t t-if="val == 0.0">-</t>
+                                    <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'{:,.2f}'.format(val)"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3 style="background-color : #E5E4E2;margin-top: 15px; font-size: 13px; border-top: 1px solid black; border-bottom: 1px solid black; padding-top: 5px; padding-bottom: 5px; font-weight: bold;">
+                        <span style="display: inline-block; width: 190px; text-align: left;">Total</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">
+                            <t t-set="val" t-value="totals['&lt; 1 MONTH']"/>
+                            <t t-if="val == 0.0">-</t>
+                            <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                            </t>
+                            <t t-else="">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                            </t>
+                        </span>
+
+                        <span style="display: inline-block; width: 100px; text-align: right;">
+                            <t t-set="val" t-value="totals['1 MONTH']"/>
+                            <t t-if="val == 0.0">-</t>
+                            <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                            </t>
+                            <t t-else="">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                            </t>
+                        </span>
+
+                        <span style="display: inline-block; width: 100px; text-align: right;">
+                            <t t-set="val" t-value="totals['2 MONTH']"/>
+                            <t t-if="val == 0.0">-</t>
+                            <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                            </t>
+                            <t t-else="">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                            </t>
+                        </span>
+
+                        <span style="display: inline-block; width: 100px; text-align: right;">
+                            <t t-set="val" t-value="totals['3 MONTH']"/>
+                            <t t-if="val == 0.0">-</t>
+                            <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                            </t>
+                            <t t-else="">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                            </t>
+                        </span>
+
+                        <span style="display: inline-block; width: 100px; text-align: right;">
+                            <t t-set="val" t-value="totals['OLDER']"/>
+                            <t t-if="val == 0.0">-</t>
+                            <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                            </t>
+                            <t t-else="">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                            </t>
+                        </span>
+
+                        <span style="display: inline-block; width: 100px; text-align: right;">
+                            <t t-set="val" t-value="totals['TOTAL']"/>
+                            <t t-if="val == 0.0">-</t>
+                            <t t-elif="val &lt; 0">(<t t-esc="'{:,.2f}'.format(abs(val))"/>)
+                            </t>
+                            <t t-else="">
+                                <t t-esc="'{:,.2f}'.format(val)"/>
+                            </t>
+                        </span>
+                    </h3>
+                    <h3 style="background-color : #E5E4E2;margin-top: 15px; font-size: 13px; border-top: 1px solid black; border-bottom: 1px solid black; font-weight: bold;padding-top: 5px; padding-bottom: 5px;">
+                        <span style="display: inline-block; width: 190px; text-align: left;">Percentage of total</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">-</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">-</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">-</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">-</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">-</span>
+                        <span style="display: inline-block; width: 100px; text-align: right;">-</span>
+                    </h3>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <record id="action_report_aged_payable" model="ir.actions.report">
+        <field name="name">Aged Payable Report</field>
+        <field name="model">aged.payables.summary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_account_report_customization.aged_payable_report</field>
+        <field name="report_file">sr_account_report_customization.aged_payable_report</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_aged_payable_summery"/>
+    </record>
+</odoo>

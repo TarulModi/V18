@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="product_normal_form_view_extends_to_add_expense_field">
+            <field name="name">product.normal.form.view.extends.to.add.expense.field</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//notebook/page/group[1]" position="inside">
+                    <group>
+                        <field name="expence_limit"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_product_expense_form_view_extends_to_add_expense_field">
+            <field name="name">product.product.expense.form.view.extends.to.add.expense.field</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="hr_expense.product_product_expense_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='product_details']/group/div" position="after">
+                    <field name="expence_limit"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_employee_form_extends_to_add_expense_field">
+            <field name="name">view.employee.form.extends.to.add.expense.field</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page name="expence_limit" string="Expence limit">
+                    <field name="expence">
+                        <list string="Expence_limit" editable="bottom">
+                            <field name="product_id" string="product"/>
+                            <field name="expence_limit"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

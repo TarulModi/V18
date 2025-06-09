@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sr_subscription_management,access.sr.subscription.management,model_sr_subscription_management,,1,1,1,1
+access_sr_subscription_document_history,access.sr.subscription.document.history,model_sr_subscription_document_history,,1,1,1,1

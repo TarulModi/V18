@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<odoo>
+	<record id="sr_global_dynamic_excel_report_wizard" model="ir.ui.view">
+		<field name="name">sr.global.dynamic.excel.report.wizard</field>
+		<field name="model">sr.global.excel.report.wizard</field>
+		<field name="arch" type="xml">
+			<form string="Excel Report">
+				<field name="state" invisible="1" />
+				<field name="name" invisible="1" />
+				<div invisible="state != 'choose'">
+					<h2> Are you sure to print report? </h2> <br/>
+					<group>
+						<field name="sheet_per_record"/>
+					</group>
+					<footer invisible="state != 'choose'">
+						<button name="dynamic_print_excel_report" string="Print Excel" type="object"
+							class="oe_highlight" />
+						Or
+						<button string="Cancel" special="cancel" class="oe_link" />
+					</footer>
+				</div>
+				<div invisible="state != 'get'">
+					<h2>Report Generated</h2>
+					<p>
+						Here is the Excel Report:
+						<field name="data" readonly="1" filename="name" />
+					</p>
+				</div>
+				<footer invisible="state != 'get'">
+					<button string="Close" special="cancel" class="oe_link" />
+				</footer>
+			</form>
+		</field>
+	</record>
+</odoo>

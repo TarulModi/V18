@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_stock_valuation_layer_form_extends_add_fields" model="ir.ui.view">
+		<field name="name">view.stock.valuation.layer.form.extends.add.fields</field>
+		<field name="model">stock.valuation.layer</field>
+		<field name="inherit_id" ref="stock_account.stock_valuation_layer_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//notebook/page/group/field[@name='uom_id']" position="after">
+				<field name="is_secondary" invisible="1"/>
+				<field name="secondary_qty" invisible="is_secondary != True" />
+				<field name="secondary_uom_id" options="{'no_create': True}" invisible="is_secondary != True" />
+			</xpath>
+		</field>
+	</record>
+
+	<record id="inherit_stock_valuation_layer_tree" model="ir.ui.view">
+		<field name="name">stock.valuation.layer.tree.inherit.uom.ratio</field>
+		<field name="model">stock.valuation.layer</field>
+		<field name="inherit_id" ref="stock_account.stock_valuation_layer_tree"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='product_id']" position="after">
+				<field name="secondary_uom_id" string="Secondary UOM"/>
+				<field name="secondary_qty" sum="Total Secondary QTY"/>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

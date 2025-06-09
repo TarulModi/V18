@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="view_assign_technician_wizard" model="ir.ui.view">
+			<field name="name">view.assign.technician.wizard</field>
+			<field name="model">assign.technician.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Assign Technician">
+					<group>
+						<group>
+							<field name="user_id" required="1"/>
+						</group>
+					</group>
+					<footer>
+						<button name="assign_technician" string="Assign"
+							class="btn-primary" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_assign_technician_wizard" model="ir.actions.act_window">
+			<field name="name">Assign Technician</field>
+			<field name="res_model">assign.technician.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+	</data>
+</openerp>
+ 

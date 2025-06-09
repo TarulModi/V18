@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<odoo>
+    <data>
+        <record id="view_aged_payables_summary_form" model="ir.ui.view">
+            <field name="name">view.aged.payables.summary.form</field>
+            <field name="model">aged.payables.summary</field>
+            <field name="arch" type="xml">
+                <form string="Aged Payables Summary" create="False" delete="False">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="aged_payable_ids" widget="many2many_tags" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="aged_payables_summary_configuration_demo_data" model="aged.payables.summary"/>
+
+        <record id="action_aged_payables_summary" model="ir.actions.act_window">
+            <field name="name">Aged Payables Summary</field>
+            <field name="res_model">aged.payables.summary</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_aged_payables_summary_form"/>
+            <field name="res_id" eval="aged_payables_summary_configuration_demo_data"/>
+        </record>
+
+        <menuitem id="menu_aged_payables_summary" name="Aged Payables" parent="submenu_configuration" action="action_aged_payables_summary" sequence="5"/>
+    </data>
+</odoo>

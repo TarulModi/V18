@@ -1,0 +1,4 @@
+Name,Type,Default Code,Barcode,Category,Sale Price,Cost Price,UOM,Purchase UOM
+Test Product,Consumable,TP,123456789,Internal,100,50,Units,Units
+Test Product 2,Service,TP2,456789123,Expenses,200,100,kg,kg
+Test Product 3,Storable Product,TP3,987654321,Office Furniture,500,200,Hours,Hours

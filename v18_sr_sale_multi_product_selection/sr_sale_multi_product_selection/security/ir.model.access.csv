@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sr_multi_product_user,sr.multi.product user,model_sr_multi_product,,1,1,1,1
+access_sr_create_quotation_user,sr.create.quotation user,model_sr_create_quotation,,1,1,1,1

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="sr_import_attendance_wizard" model="ir.ui.view">
+			<field name="name">sr.import.attendance.wizard</field>
+			<field name="model">sr.hr.import.attendance</field>
+			<field name="arch" type="xml">
+				<form string="Import Employee attendances">
+					<group>
+						<group>
+							<field name="import_employee_option" widget="radio" />
+							<field name="import_file" filename="name" />
+						</group>
+						<group>
+							<field name="import_file_by" widget="radio" />
+
+						</group>
+
+						<footer>
+							<button name="import_employee_attendance"
+								string="Import Attendance" type="object" class="oe_highlight" />
+							<button string="Cancel" class="oe_link" special="cancel" />
+						</footer>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_action_import_employee_attendance"
+			model="ir.actions.act_window">
+			<field name="name">Import Attendances</field>
+			<field name="res_model">sr.hr.import.attendance</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</odoo>

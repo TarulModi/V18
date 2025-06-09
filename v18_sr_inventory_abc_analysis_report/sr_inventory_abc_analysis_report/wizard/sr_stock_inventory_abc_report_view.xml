@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Stock inventory ABC report form view -->
+    <record id="sr_stock_inventory_abc_report_form_view" model="ir.ui.view">
+        <field name="name">Stock Inventory ABC Report Form View</field>
+        <field name="model">stock.inventory.abc.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Date Filter">
+                            <field name="from_date" required="1"/>
+                            <field name="to_date" required="1"/>
+                        </group>
+                        <group string="Domain">
+                            <field name="abc_base_on" widget="radio" string="Based On"/>
+                            <field name="classification_by" widget="radio" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="print_report_pdf" string="Print PDF" type="object" class="btn-primary"/>
+                    <button name="print_report_excel" string="Print Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Open wizard of stock inventory ABC report actions -->
+    <record id="sr_stock_inventory_abc_report_action" model="ir.actions.act_window">
+        <field name="name">Inventory ABC Analysis Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.inventory.abc.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Custome ABC excel report view -->
+    <data>
+        <record id="sr_custom_abc_excel_report_view" model="ir.ui.view">
+            <field name="name">sr.custom.abc.excel.report.view</field>
+            <field name="model">sr.abc.excel.report</field>
+            <field name="arch" type="xml">
+                <form string="Genrated xls File">
+                    <group>
+                        <field name="file_name" invisible="1"/>
+                        <field name="excel_file" readonly="1" filename="file_name"/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

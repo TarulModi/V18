@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_sale_order_lines,access_import_sale_order_line,model_sr_import_sale_order_lines,,1,1,1,1
+access_import_account_move_lines,access_import_account_move_line,model_sr_import_account_move_lines,,1,1,1,1
+access_import_purchase_order_lines,access_import_purchase_order_line,model_sr_import_purchase_order_lines,,1,1,1,1

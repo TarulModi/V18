@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+"",,,,,,,
+access_sr_report_template_configuration,access.sr.report.template.configuration,model_sr_report_template_configuration,,1,1,1,1
+access_sr_global_dynamic_excel_report,access.sr.global.dynamic.excel.report,model_sr_global_dynamic_excel_report,,1,1,1,1
+access_sr_child_object_fields,access.sr.child.object.fields,model_sr_child_object_fields,,1,1,1,1
+access_sr_parent_object_fields,access.sr.parent.object.fields,model_sr_parent_object_fields,,1,1,1,1
+access_sr_global_excel_report_wizard,access.sr.global.excel.report.wizard,model_sr_global_excel_report_wizard,,1,1,1,1

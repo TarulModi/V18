@@ -1,0 +1,15 @@
+<odoo>
+	<data>
+		<record id="view_move_form_extends_add_PDC_button" model="ir.ui.view">
+			<field name="name">view.move.form.extends.add.PDC.button</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<button id="account_invoice_payment_btn" position="after">
+					<button name="%(action_pdc_payment)d" id="pdc_payment_btn" type="action" invisible="state != 'posted'"
+                            string="Register PDC Cheque" groups="account.group_account_invoice" class="oe_highlight"/>
+				</button>
+			</field>
+		</record>
+	</data>
+</odoo>

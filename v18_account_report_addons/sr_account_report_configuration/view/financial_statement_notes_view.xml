@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record id="view_financial_statement_notes_form" model="ir.ui.view">
+            <field name="name">view.financial.statement.notes.form</field>
+            <field name="model">financial.statement.notes</field>
+            <field name="arch" type="xml">
+                <form create="false" delete="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="property_plant_equipment_ids" widget="many2many_tags"/>
+                                <field name="wip_ids" widget="many2many_tags"/>
+                                <field name="cash_equivalents_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="related_party_ids" widget="many2many_tags"/>
+                                <field name="employee_provision_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Payment and Other Receivables">
+                                <field name="financial_line_ids">
+                                    <list editable="bottom">
+                                        <field name="payment_other_receivables" required="1"/>
+                                        <field name="account_ids" widget="many2many_tags"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="financial_statement_configuration_demo_data" model="financial.statement.notes"/>
+
+         <record id="action_financial_statement_notes" model="ir.actions.act_window">
+            <field name="name">Financial Statement Notes</field>
+            <field name="res_model">financial.statement.notes</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_financial_statement_notes_form"/>
+             <field name="res_id" eval="financial_statement_configuration_demo_data"/>
+        </record>
+
+        <menuitem id="menu_financial_statement_notes" name="Notes to Financial Statements" parent="submenu_configuration" action="action_financial_statement_notes" sequence="3"/>
+    </data>
+</odoo>

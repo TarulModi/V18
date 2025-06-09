@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="sr_import_stock_picking_form_wizard" model="ir.ui.view">
+			<field name="name">sr.import.stock.picking.form.wizard</field>
+			<field name="model">import.stock.picking</field>
+			<field name="arch" type="xml">
+				<form string="Import Stock Picking">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+						<group>
+							<field name="picking_stage_selection" widget="radio" />
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="sequence_option" widget="radio" />
+						</group>
+						<group>
+							<field name="import_product_by" widget="radio" />
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="picking_type" widget="radio"/>
+						</group>
+						<group>
+							<field name="source_location_id" required="picking_type != 'incoming'" invisible="picking_type == 'incoming'"/>
+							<field name="destination_location_id" required="picking_type != 'outgoing'" invisible="picking_type == 'outgoing'"/>
+						</group>
+					</group>
+					<group>
+						<field name="file" filename="name" />
+					</group>
+					<footer>
+						<button name="import_stock_picking" string="Import" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_action_import_stock_picking" model="ir.actions.act_window">
+			<field name="name">Import Stock Picking</field>
+			<field name="res_model">import.stock.picking</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="sr_action_import_stock_picking"
+			id="sr_menu_import_stock_picking" parent="stock.menu_stock_warehouse_mgmt" sequence="200"/>
+	</data>
+</odoo>

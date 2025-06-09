@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="sr_view_task_form2_inherit_add_product_field" model="ir.ui.view">
+        <field name="name">sr.view.task.form2.inherit.add.product.field</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button string="Related Sale Order"
+                        name="action_show_sale_order"
+                        type="object"
+                        invisible = "sale_order_id == False"/>
+            </xpath>
+
+            <field name="partner_id" position="after">
+                    <field name="product_ids" widget="many2many_tags"/>
+                <field name="sale_order_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

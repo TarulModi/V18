@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="grade_view_tree" model="ir.ui.view">
+            <field name="name">grade.view.tree</field>
+            <field name="model">grade.grade</field>
+            <field name="arch" type="xml">
+                <list string="Grade">
+                    <field name="name"/>
+                    <field name="gpa"/>
+                    <field name="min_per"/>
+                    <field name="max_per"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="grade_view_form" model="ir.ui.view">
+            <field name="name">grade.view.form</field>
+            <field name="model">grade.grade</field>
+            <field name="arch" type="xml">
+                <form string="Grade">
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field name="name" placeholder="e.g. Grade" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="gpa"/>
+                                <field name="min_per"/>
+                                <field name="max_per"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_grade" model="ir.actions.act_window">
+            <field name="name">Grade</field>
+            <field name="res_model">grade.grade</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="grade_view_tree"/>
+        </record>
+
+    </data>
+</odoo>

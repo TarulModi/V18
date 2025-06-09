@@ -1,0 +1,26 @@
+<odoo>
+	<record id="sr_mass_duplicate_invoice_view" model="ir.ui.view">
+            <field name="name">sr.mass.duplicate.invoice.view</field>
+            <field name="model">sr.mass.duplicate.invoices</field>
+            <field name="arch" type="xml">
+                <form>
+                    <span>Are you sure duplicate selected Invoices</span>
+                    <footer>
+                        <button name="sr_duplicate_invoices" string="Duplicate Invoices" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sr_action_mass_duplicate_invoices" model="ir.actions.act_window">
+            <field name="name">Mass/Bulk Duplicate Invoices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sr.mass.duplicate.invoices</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="account.model_account_move" />
+            <field name="binding_view_types">list</field>
+        </record>
+
+</odoo>

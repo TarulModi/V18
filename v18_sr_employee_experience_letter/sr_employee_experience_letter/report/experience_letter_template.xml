@@ -1,0 +1,69 @@
+<odoo>
+
+    <record id="paperformat_employee_experience_letter" model="report.paperformat">
+        <field name="name">Employee Experience Letter No Margin</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field> <!-- Use default -->
+        <field name="page_width">0</field> <!-- Use default -->
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <template id="employee_experience_letter">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="employee" t-foreach-index="employee_index">
+
+                <t t-if="employee_index != 0">
+                    <div style="page-break-before: always;"></div>
+                </t>
+
+                <t t-set="company" t-value="employee.company_id"/>
+
+                <div style="position: relative; width: 100%; height: 100%;">
+                    <t t-if="company.experience_letter_image">
+                        <img t-att-src="'data:image/png;base64,%s' % company.experience_letter_image.decode() if isinstance(company.experience_letter_image, bytes) else company.experience_letter_image"
+                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;" />
+                    </t>
+
+                    <div class="page"
+                         style="
+                             position: relative;
+                             z-index: 1;
+                             font-size:14px;
+                             margin: 0 auto;
+                             padding: 200px 100px 100px 100px;
+                             width: 1000px;
+                             height: 1000px;
+                             box-sizing: border-box;
+                             background: transparent;
+                             overflow: hidden;
+                         ">
+
+                        <div style="text-align: center; margin-top: 100px; height: 30%;">
+                            <h2 style="font-size: 30px; margin-bottom: 10px;">Employee Experience Letter</h2>
+                            <p style="font-size: 18px;">Date of Issue:
+                                <strong>
+                                    <span t-field="employee.letter_issue_date" t-options='{"widget": "date"}'/>
+                                </strong>
+                            </p>
+                        </div><br/><br/>
+
+
+                        <div style="font-size: 14px; text-align: justify; max-height: 600px; overflow: hidden;">
+                            <div style="line-height: 1.5;">
+                                <t t-raw="employee.render_experience_letter_html()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </t>
+        </t>
+    </template>
+</odoo>

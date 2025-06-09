@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sr_secondary_uom_customization.BomOverviewTable" t-inherit="mrp.BomOverviewTable" t-inherit-mode="extension">
+        <xpath expr="//table[hasclass('o_mrp_bom_expandable')]/thead/tr/th[2]" position="after">
+            <th class="text-end">Secondary Qty</th>
+            <th class="text-end">Secondary UOM</th>
+        </xpath>
+    </t>
+</templates>

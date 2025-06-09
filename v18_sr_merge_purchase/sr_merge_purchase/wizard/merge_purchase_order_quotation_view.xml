@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="sr_merge_purchase_form_view">
+        <field name="name">sr.merge.purchase.orders.wizard.form.view</field>
+        <field name="model">merge.purchase.orders.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Merge Quotations">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="merge_options" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="merge_multi_currency_purchase"/>
+                            <field name="group_multi_currency" invisible="1"/>
+                            <field name="currency_id" invisible="merge_multi_currency_purchase == False or group_multi_currency == False" required="merge_multi_currency_purchase == True and group_multi_currency == True"/>
+                            <div class="alert alert-warning" role="alert" invisible="merge_multi_currency_purchase == False or group_multi_currency == True">
+                                Please allow user group for multi currency
+                            </div>
+                            <field name="purchase_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="purchase_id" invisible="merge_options == 'new_cancel_selected' or merge_options == 'new_delete_all_selected'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Merge" name="merge_quotation" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sr_merge_purchase_action" model="ir.actions.act_window">
+        <field name="name">Merge Purchase</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">merge.purchase.orders.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sr_merge_purchase_form_view"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

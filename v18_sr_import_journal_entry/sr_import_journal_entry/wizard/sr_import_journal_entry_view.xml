@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="sr_import_journal_entry_form_wizard" model="ir.ui.view">
+			<field name="name">sr.import.journal.entry.form.wizard</field>
+			<field name="model">import.journal.entry</field>
+			<field name="arch" type="xml">
+				<form string="Import Journal Entry">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+						<group>
+							<field name="status" widget="radio" />
+						</group>
+						<group>
+							<field name="file" filename="name" />
+						</group>
+					</group>
+					<footer>
+						<button name="import_journal_entry" string="Import" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_action_import_journal_entry" model="ir.actions.act_window">
+			<field name="name">Import Journal Entry</field>
+			<field name="res_model">import.journal.entry</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="sr_action_import_journal_entry"
+			id="sr_menu_import_journal_entry" parent="account.menu_finance_receivables" />
+	</data>
+</odoo>

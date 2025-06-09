@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="repair_res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">repair.res.config.settings.view.form.inherit.hr.fleet</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Listing Mirror" string="Listing Mirror" name="sr_kwik_listing_mirror_integration">
+                        <block title="Listing Mirror Configuration" id="kwik_listing_setting">
+                            <setting id="kwik_listing_mirror_integration">
+                                <label for="kwik_url"/>
+                                <div class="o_row">
+                                    <field name="kwik_url"/>
+                                </div>
+                                <label for="kwik_token"/>
+                                <div class="o_row">
+                                    <field name="kwik_token"/>
+                                </div>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

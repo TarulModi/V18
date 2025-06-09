@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <template id="report_diagnosis_repair_template">
+    <t t-foreach="docs" t-as="doc">
+      <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+          <div class="page">
+              <div>
+                <strong>
+                    <center><h2 style="font-weight: bold;"> Repair Diagnosis </h2></center>
+                </strong>
+              </div>
+              <h3>
+                  <span t-field="doc.name"/>
+              </h3>
+              <div>
+                  <div style="display: inline-block; width: 48%; vertical-align: top;">
+                      <strong>Diagnosis No: </strong> <span t-field="doc.name"/><br/>
+                      <strong>Date:</strong> <span t-field="doc.date"/><br/>
+                      <strong>Customer : </strong> <span t-field="doc.partner_id.name"/><br/>
+                  </div>
+                  <div style="display: inline-block; width: 48%; vertical-align: top; margin-left: 2%;">
+                      <strong>Mobile: </strong> <span t-field="doc.mobile"/><br/>
+                      <strong>Email : </strong> <span t-field="doc.email"/><br/>
+                  </div>
+              </div>
+
+              <!-- Vehicle Details -->
+              <div>
+                  <h4 class="mt-3">Vehicle Details</h4>
+              </div>
+              <table class="o_total_table table table-borderless avoid-page-break-inside">
+                <thead class="bg-100 align-middle">
+                    <tr>
+                        <th scope="col" style="font-weight: bold;">Vehicle</th>
+                        <th scope="col" style="font-weight: bold;">Brand</th>
+                        <th scope="col" style="font-weight: bold;">Model</th>
+                        <th scope="col" style="font-weight: bold;">Color</th>
+                        <th scope="col" style="font-weight: bold;">License No:</th>
+                        <th scope="col" style="font-weight: bold;">Fuel Type:</th>
+                        <th scope="col" style="font-weight: bold;">Chassis Number:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span t-esc="doc.vehicle_name"/></td>
+                        <td><span t-esc="doc.brand"/></td>
+                        <td><span t-esc="doc.model"/></td>
+                        <td><span t-esc="doc.color"/></td>
+                        <td><span t-esc="doc.license_no"/></td>
+                        <td><span t-esc="doc.fuel_type"/></td>
+                        <td><span t-esc="doc.chassis_number"/></td>
+                    </tr>
+                </tbody>
+              </table>
+
+              <!-- Estimate Details -->
+              <div>
+                  <h4 class="mt-3">Estimate Details</h4>
+              </div>
+              <div>
+                  <div style="display: inline-block; width: 48%; vertical-align: top;">
+                      <strong>Estimate Delivery Date : </strong> <span t-field="doc.est_delivery_date"/><br/>
+                  </div>
+                  <div style="display: inline-block; width: 48%; vertical-align: top; margin-left:20px; text-align: right;">
+                      <strong>Estimate Cost : </strong> <span t-field="doc.total"/><br/>
+                  </div>
+              </div>
+
+              <table class="o_total_table table table-borderless avoid-page-break-inside">
+                <thead class="bg-100 align-middle">
+                 <t t-foreach="doc.checklist_ids" t-as="line">
+                     <thead class="bg-100 align-middle">
+                          <tr>
+                              <th scope="col" style="font-weight: bold;">Checklist</th>
+                              <th scope="col" style="font-weight: bold;">Product</th>
+                              <th scope="col" style="font-weight: bold;">Quantity</th>
+                              <th scope="col" style="font-weight: bold;">Unit Price</th>
+                              <th scope="col" style="font-weight: bold;">Sub Total</th>
+                          </tr>
+                     </thead>
+                     <tbody>
+                         <t t-foreach="doc.repair_estimate_ids" t-as="est">
+                             <tr>
+                                 <td><span t-esc="est.checklist_id.name"/></td>
+                                 <td><span t-esc="est.product_id.display_name"/></td>
+                                 <td><span t-esc="est.quantity"/></td>
+                                 <td><span t-esc="est.price"/></td>
+                                 <td><span t-esc="est.sub_total"/></td>
+                             </tr>
+                         </t>
+                     </tbody>
+                 </t>
+                </thead>
+              </table>
+
+              <!-- Repair Checklist -->
+              <div>
+                  <h4 class="mt-3">Repair Checklist</h4>
+              </div>
+              <table class="o_total_table table table-borderless avoid-page-break-inside">
+                <thead class="bg-100 align-middle">
+                    <tr>
+                        <th scope="col" style="font-weight: bold;">Name</th>
+                        <th scope="col" style="font-weight: bold;">Description</th>
+                        <th scope="col" style="font-weight: bold;">State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="doc.checklist_ids" t-as="dc">
+                        <tr>
+                            <td><span t-esc="dc.name"/></td>
+                            <td><span t-esc="dc.description"/></td>
+                            <td><span t-esc="dc.state"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+              </table>
+
+              <!-- Images -->
+              <div>
+                  <h4 class="mt-3">Images</h4>
+                  <t t-foreach="dc.attachment_ids" t-as="att">
+                      <t t-if="'image' in (att.mimetype or '') and att.datas">
+                          <img t-att-src="'data:%s;base64,%s' % (att.mimetype, att.datas.decode() if isinstance(att.datas, bytes) else att.datas)"
+                               style="max-height: 200px; max-width: 100px; border: 1px solid #ccc; margin-bottom: 5px;" />
+                      </t>
+                  </t>
+              </div>
+
+              <!-- Repair Note  -->
+              <t t-if="doc.note">
+                <div>
+                  <h4 class="mt-3">Repair Note</h4>
+                  <p style="font-size: 14px;"><t t-esc="doc.note"/></p>
+                </div>
+              </t>
+
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>

@@ -1,0 +1,7 @@
+PURCHASE ID,VENDOR,VENDOR REFERENCE,CURRENCY,COMPANY,DATE,PRODUCT,DESCRIPTION,QUANTITY,UOM,PRICE,TAX
+PURCHASE1,Azure Interior,TEST1,USD,YourCompany,11/1/2019,Acoustic Bloc Screens,Apple In-Ear Headphones,1,Units,10000,15.00%
+PURCHASE1,Azure Interior,TEST1,USD,YourCompany,11/2/2019,Corner Desk Right Sit,Apple Wireless Keyboard,2,Units,50000,15.00%
+PURCHASE1,Azure Interior,TEST1,USD,YourCompany,11/3/2019,Large Cabinet,Basic Computer,1,Units,2000,15.00%
+PURCHASE2,Azure Interior,TEST1,EUR,YourCompany,11/4/2019,Storage Box,Bose Mini Bluetooth Speaker,3,Units,100000,15.00%
+PURCHASE3,Azure Interior,TEST1,USD,YourCompany,11/5/2019,Large Desk,Computer Case,1,Units,10000,15.00%
+PURCHASE4,Azure Interior,TEST1,EUR,YourCompany,11/6/2019,Pedal Bin,Computer SC234,2,Units,50000,15.00%

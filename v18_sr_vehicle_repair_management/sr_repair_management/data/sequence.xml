@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+		<record id="sequence_vehicle_repair" model="ir.sequence">
+			<field name="name">Vehicle Repair Order</field>
+			<field name="code">vehicle.repair.order</field>
+			<field name="prefix">RO</field>
+			<field name="padding">5</field>
+		</record>
+
+		<record id="sequence_repair_diagnosis" model="ir.sequence">
+			<field name="name">Repair Diagnosis</field>
+			<field name="code">repair.diagnosis</field>
+			<field name="prefix">RD</field>
+			<field name="padding">5</field>
+		</record>
+
+		<record id="sequence_repair_work_order" model="ir.sequence">
+            <field name="name">Repair Work Order</field>
+            <field name="code">repair.work.order</field>
+            <field name="prefix">RWO</field>
+            <field name="padding">5</field>
+        </record>
+	</data>
+</odoo>
+        

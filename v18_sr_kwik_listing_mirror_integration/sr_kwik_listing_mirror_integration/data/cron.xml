@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="0">
+
+<!--		<record id="ir_cron_push_qty_api_integration" model="ir.cron">-->
+<!--			<field name="name">Push QTY API Integrations with Listing Mirror</field>-->
+<!--			<field name="model_id" ref="model_product_product" />-->
+<!--			<field name="state">code</field>-->
+<!--			<field name="user_id" ref="base.user_admin" />-->
+<!--			<field name="code">model.action_cron_push_qty_api()</field>-->
+<!--			<field name="interval_number">10</field>-->
+<!--			<field name="interval_type">minutes</field>-->
+<!--			<field name="numbercall">-1</field>-->
+<!--		</record>-->
+
+		<record id="ir_cron_order_api_integration" model="ir.cron">
+			<field name="name">Order API Integration from Listing Mirror</field>
+			<field name="model_id" ref="model_sale_order" />
+			<field name="state">code</field>
+			<field name="user_id" ref="base.user_admin" />
+			<field name="code">model.action_cron_order_api_integration()</field>
+			<field name="interval_number">10</field>
+			<field name="interval_type">minutes</field>
+		</record>
+
+<!--		<record id="ir_cron_order_api_status_integration"-->
+<!--			model="ir.cron">-->
+<!--			<field name="name">Check Order state from Listing Mirror</field>-->
+<!--			<field name="model_id" ref="model_sale_order" />-->
+<!--			<field name="state">code</field>-->
+<!--			<field name="user_id" ref="base.user_admin" />-->
+<!--			<field name="code">model.action_cron_check_order_status()</field>-->
+<!--			<field name="interval_number">10</field>-->
+<!--			<field name="interval_type">minutes</field>-->
+<!--			<field name="numbercall">-1</field>-->
+<!--		</record>-->
+
+	<!-- 		<record id="ir_cron_product_update_barcode" model="ir.cron"> -->
+	<!-- 			<field name="name">Update Barcode With UPC</field> -->
+	<!-- 			<field name="model_id" ref="model_product_product" /> -->
+	<!-- 			<field name="state">code</field> -->
+	<!-- 			<field name="user_id" ref="base.user_admin" /> -->
+	<!-- 			<field name="code">model.action_update_barcode_with_upc()</field> -->
+	<!-- 			<field name="interval_number">10</field> -->
+	<!-- 			<field name="interval_type">minutes</field> -->
+	<!-- 			<field name="numbercall">-1</field> -->
+	<!-- 		</record> -->
+	</data>
+</odoo>

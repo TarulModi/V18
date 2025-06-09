@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_stock_move_form_extends_add_fields" model="ir.ui.view">
+		<field name="name">view.stock.move.form.extends.add.fields</field>
+		<field name="model">stock.move</field>
+		<field name="inherit_id" ref="stock.view_move_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//group/group[2]/field[@name='name']" position="before">
+				<field name="is_secondary" invisible="1"/>
+				<field name="secondary_qty" invisible="is_secondary != True" />
+				<field name="secondary_uom_id" options="{'no_create': True}" invisible="is_secondary != True"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_stock_move_list_extends_add_fields" model="ir.ui.view">
+		<field name="name">view.stock.move.list.extends.add.fields</field>
+		<field name="model">stock.move</field>
+		<field name="inherit_id" ref="stock.view_move_tree" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='product_uom']" position="after">
+				<field name="is_secondary" column_invisible="1"/>
+				<field name="secondary_qty" />
+				<field name="secondary_uom_id" options="{'no_create': True}"/>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

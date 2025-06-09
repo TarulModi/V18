@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="update_product_from_listing_mirror_by_sku" model="ir.ui.view">
+			<field name="name">Update Product from Listing Mirror By SKU</field>
+			<field name="model">update.product.listing.mirror</field>
+			<field name="arch" type="xml">
+				<form string="Update Product From Listing Mirror">
+					<group>
+						<field name="sku" />
+					</group>
+					<footer>
+						<button name="update_product_api_integration" string="Update" type="object" class="btn-primary" />
+						<button string="Cancel" class="btn-secondary" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_update_product_from_listing_mirror" model="ir.actions.act_window">
+			<field name="name">Update Product From Listing Mirror</field>
+			<field name="res_model">update.product.listing.mirror</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</openerp>
+ 

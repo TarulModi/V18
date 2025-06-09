@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sr_stock_inventory_turnover_report_view" model="ir.ui.view">
+        <field name="name">Inventory Turnover Analyse Report</field>
+        <field name="model">stock.inventory.turnover.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Date Range">
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group string="Filters">
+                            <field name="product_ids" widget="many2many_tags"/>
+                            <field name="categ_ids" widget="many2many_tags" string="Category"/>
+                        </group>
+                        <group string="Domains">
+                            <field name="warehouse_ids" widget="many2many_tags"/>
+                            <field name="company_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="report_generate_pdf" string="Export To PDF" type="object" class="btn-primary"/>
+                    <button name="report_generate_excel" string="Export To Excel" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<odoo>
+	<record id="sr_view_order_form" model="ir.ui.view">
+		<field name="name">sr.sale.order.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//header" position="inside">
+				<button class="btn-primary" name="open_supplier_info" type="object" string="Supplier Info"/>
+				<button class="btn-primary" name="open_garage_wp_template" type="object" string="Whatsapp Template"/>
+			</xpath>
+			<xpath expr="//div[@name='button_box']" position="inside">
+				<button type="object" name="action_view_rfq" class="oe_stat_button" icon="fa-credit-card" invisible="purchase_count == 0">
+					<field name="purchase_count" widget="statinfo" string="RFQ"/>
+					<field name="purchase_ids" invisible="1"/>
+				</button>
+			</xpath>
+			<xpath expr="//group[@name='partner_details']" position="inside">
+				<label for="vehicle_ids"/>
+				<div name="vehicle_id_div" class="o_row">
+					<field name="vehicle_ids" widget="many2many_tags"/>
+					<button class="btn btn-primary" name="open_search_vehicle" type="object">
+						<span class=" fa fa-search"/>
+					</button>
+				</div>
+				<field name="vehicle_model_id" />
+			</xpath>
+			<xpath expr="//field[@name='incoterm']" position="before">
+				<field name="location_id"/>
+			</xpath>
+			<xpath expr="//field[@name='partner_id']" position="attributes">
+				<attribute name="domain">[('partner_type', '=', 'garage')]</attribute>
+			</xpath>
+			<xpath expr="//group[@name='order_details']" position="inside">
+				<field name="agent_code" />
+				<field name="car_reg_no" />
+				<field name="chassis_number" />
+			</xpath>
+			<xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="attributes">
+				<attribute name="domain">[('sale_ok', '=', True), '|', ('product_tmpl_id.product_tmpl_model_code_ids.fleet_vehicle_id', 'in', parent.vehicle_ids), ('product_tmpl_id.product_tmpl_model_code_ids.fleet_vehicle_id.model_id', '=', parent.vehicle_model_id)]</attribute>
+				<attribute name="optional">show</attribute>
+			</xpath>
+			<xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="after">
+					<button class="btn fa fa-info-circle"
+							style="min-width: 25px; max-width: 25px;"
+							name="view_po_detail" type="object"/>
+			</xpath>
+			<xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+			<xpath expr="//notebook" position="inside">
+				<page string="Supplier" invisible="not product_supplier_ids">
+					<field name="product_supplier_ids" force_save="1">
+						<list create="0" delete="0" edit="0">
+							<field name="sale_line_id" column_invisible="1"/>
+							<field name="vendor_id"/>
+							<field name="price"/>
+							<field name="currency_id" column_invisible="1"/>
+							<button name="create_po" class="btn btn-primary" type="object" string="Create PO"/>
+						</list>
+					</field>
+				</page>
+			</xpath>
+		</field>
+	</record>
+</odoo>

@@ -1,0 +1,7 @@
+CODE,NAME,USER TYPE,TAXES,TAGS,COMPANY,CURRENCY,RECONCILE,DEPRECATED
+1001,TEST ACCOUNT 1,Fixed Assets,Tax 15.00%,Operating Activities,YourCompany,EUR,TRUE,TRUE
+1002,TEST ACCOUNT 2,Fixed Assets,,Operating Activities,YourCompany,,TRUE,TRUE
+1003,TEST ACCOUNT 3,Fixed Assets,,Operating Activities,YourCompany,EUR,TRUE,TRUE
+1004,TEST ACCOUNT 4,Fixed Assets,Tax 15.00%,,YourCompany,EUR,TRUE,TRUE
+1005,TEST ACCOUNT 5,Fixed Assets,Tax 15.00%,Operating Activities,YourCompany,EUR,FALSE,FALSE
+1006,TEST ACCOUNT 6,Fixed Assets,Tax 15.00%,Operating Activities,YourCompany,EUR,,

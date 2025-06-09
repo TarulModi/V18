@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="listing_mirror_integration_kanban"
+		model="ir.ui.view">
+		<field name="name">listing.mirror.integration.kanban</field>
+		<field name="model">listing.mirror.integration</field>
+		<field name="arch" type="xml">
+			<kanban
+				class="o_stock_kanban"
+				create="false" sample="1">
+				<field name="color" />
+				<field name="name" />
+				<templates>
+					<t t-name="card">
+						<div
+							t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}"
+							name="listing_mirror_integration">
+							<div>
+								<div t-attf-class="o_kanban_card_header">
+									<div class="o_kanban_card_header_title">
+										<div class="o_primary">
+											<field name="name" />
+										</div>
+									</div>
+								</div>
+								<div class="container">
+									<div class="row">
+										<div class="o_kanban_primary_left">
+											<t t-if="record.name.value == 'Product Integration'">
+												<div>
+													<br/>
+													<button class="btn btn-primary"
+														name="fetch_all_master_product_listing" type="object">
+														Master Listing
+													</button>
+													<button class="btn btn-primary ms-3"
+														name="update_product_listing" type="object">
+														Update Product
+													</button>
+												</div>
+											</t>
+
+											<t t-if="record.name.value == 'Kit Integration'">
+												<br/>
+												<button class="btn btn-primary"
+													style="margin-left: 10px;"
+													name="fetch_all_receipes_listing" type="object">
+													Bundle Kit Integration
+												</button>
+											</t>
+
+<!--											<t t-if="record.name.value == 'Orders Integration'">-->
+<!--												<button class="btn btn-primary"-->
+<!--													style="margin-left: 10px;" name="fetch_all_orders_listing"-->
+<!--													type="object" context="{'active_id':active_id}">-->
+<!--													Orders Integration-->
+<!--												</button>-->
+<!--											</t>-->
+
+<!--											<t t-if="record.name.value == 'QTY Integration'">-->
+<!--												<button class="btn btn-primary"-->
+<!--													style="margin-left: 10px;"-->
+<!--													name="push_qty_to_orders_listing" type="object"-->
+<!--													context="{'active_id':active_id}">-->
+<!--													Push QTY to Listing Mirror-->
+<!--												</button>-->
+<!--											</t>-->
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+
+	<record id="integration_dashboard_action" model="ir.actions.act_window">
+		<field name="name">Integration Overview</field>
+		<field name="res_model">listing.mirror.integration</field>
+		<field name="view_mode">kanban</field>
+	</record>
+
+	<menuitem id="integration_menu_root" name="Integration"
+		web_icon="sr_kwik_listing_mirror_api_integration,static/description/icon.png" />
+
+	<menuitem id="integration_dashboard_menu"
+		name="Product Integration" parent="integration_menu_root"
+		action="integration_dashboard_action" />
+
+</odoo>

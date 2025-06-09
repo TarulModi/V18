@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+
+        <!-- View Inheritance: Sale Order Form -->
+        <record id="view_order_form_extends_change_buttons_position_stage_wise" model="ir.ui.view">
+            <field name="name">view.order.form.extends.change.buttons.position.stage.wise</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+
+                <field name="payment_term_id" position="after">
+                    <field name="sale_type"/>
+                </field>
+
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+                    <field name="available_quantity"/>
+                </xpath>
+
+                <field name="state" position="attributes">
+                    <attribute name="statusbar_visible">draft,sent,sale</attribute>
+                </field>
+
+                <button name="action_quotation_send" position="attributes">
+                    <attribute name="status">draft</attribute>
+                </button>
+
+                <xpath expr="//button[@name='action_confirm']" position="attributes">
+                    <attribute name="status">draft,sent</attribute>
+                </xpath>
+
+                <button name="action_cancel" position="attributes">
+                    <attribute name="status">draft,sent,sale</attribute>
+                </button>
+
+                <header position="inside">
+                    <button string="Force Availability" type="object" status="sale"
+                        name="button_force_available" class="btn-primary"/>
+                </header>
+
+            </field>
+        </record>
+
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{'default_sale_type': 'quotation'}</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Confirm the Quotation to a Sale Order, then create the Invoice and collect the Payment.
+                </p><p>
+                    Once confirmed, it will move from the Quotations list to the Sales Orders list.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_sale_stock_reservation" model="ir.actions.act_window">
+            <field name="name">Reservations</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{'default_sale_type': 'reservation'}</field>
+            <field name="domain">[('sale_type','=','reservation'),('state','=','sale')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Reservation, the first step of a new process.
+                </p><p>
+                    Confirm it to a Sale Order, then proceed with invoicing and payment.
+                </p><p>
+                    Once confirmed, it will move to the Sales Orders list.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_sale_stock_reservation"
+                  name="Reservation"
+                  parent="sale.sale_order_menu"
+                  action="action_sale_stock_reservation"
+                  />
+
+    </data>
+</odoo>

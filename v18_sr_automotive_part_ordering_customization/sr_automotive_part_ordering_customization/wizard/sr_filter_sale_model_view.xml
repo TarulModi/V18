@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+         <record id="sr_filter_sale_vehicle_model_form_wizard" model="ir.ui.view">
+            <field name="name">sr.filter.sale.vehicle.model.form.wizard</field>
+            <field name="model">sr.filter.sale.vehicle.model</field>
+            <field name="arch" type="xml">
+                <form string="Filter Sale Vehicle Model">
+                    <group>
+                        <group>
+                            <field name="model_year"/>
+                            <field name="model_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                            <field name="fleet_variant_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                        </group>
+                        <group>
+                            <field name="fuel_type"/>
+                            <field name="transmission"/>
+                            <field name="generation_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="model_details" string="Model Details">
+                            <field name="model_line_ids" string="">
+                                <list editable="bottom" create="0" delete="0">
+                                    <field name="is_select"/>
+                                    <field name="vehicle_id" readonly="1" required="1" force_save="1"/>
+                                    <field name="model_year"/>
+                                    <field name="fleet_variant_id"/>
+                                    <field name="fuel_type"/>
+                                    <field name="transmission"/>
+                                    <field name="generation_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="filter_vehicle_model_data" string="Submit" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sr_filter_sale_vehicle_model_action" model="ir.actions.act_window">
+            <field name="name">Supplier Info</field>
+            <field name="res_model">sr.filter.sale.vehicle.model</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="sr_filter_sale_vehicle_model_line_form_wizard" model="ir.ui.view">
+            <field name="name">sr.filter.sale.vehicle.model.line.form.wizard</field>
+            <field name="model">sr.filter.sale.vehicle.model.line</field>
+            <field name="arch" type="xml">
+                <form string="Filter Sale Vehicle Model">
+                    <group>
+                        <group>
+                            <field name="is_select" readonly="1"/>
+                            <field name="vehicle_id" readonly="1" required="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+	</data>
+</odoo>

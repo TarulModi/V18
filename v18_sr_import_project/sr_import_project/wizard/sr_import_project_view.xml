@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="sr_import_project_form_wizard" model="ir.ui.view">
+			<field name="name">sr.import.project.form.wizard</field>
+			<field name="model">import.project</field>
+			<field name="arch" type="xml">
+				<form string="Import Project">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+						<group>
+							<field name="file" filename="name" />
+						</group>
+					</group>
+					<footer>
+						<button name="import_project" string="Import" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_action_import_project" model="ir.actions.act_window">
+			<field name="name">Import Project</field>
+			<field name="res_model">import.project</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="sr_action_import_project"
+			id="sr_menu_import_project" parent="project.menu_project_management" />
+	</data>
+</odoo>

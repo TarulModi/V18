@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record id="view_repair_work_order_list" model="ir.ui.view">
+            <field name="name">view.repair.work.order.list</field>
+            <field name="model">repair.work.order</field>
+            <field name="arch" type="xml">
+                <list default_order="id desc">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="checklist_id"/>
+                    <field name="license_no"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_repair_work_order_form" model="ir.ui.view">
+            <field name="name">view.repair.work.order</field>
+            <field name="model">repair.work.order</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_confirm"
+                            type="object"
+                            string="Confirm"
+                            class="btn-primary"
+                            invisible="state not in ['draft']"/>
+                        <button name="create_quotations"
+                            type="object"
+                            string="Create Quotation"
+                            class="btn-primary"
+                            invisible="so_type != 'in_work_order' or state not in 'in_progress' or sale_order_id"/>
+                        <button name="button_finished"
+                            type="object"
+                            string="Done"
+                            class="btn-primary"
+                            invisible="state not in 'in_progress'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,finished"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_view_diagnosis" type="object"
+                                icon="fa-wrench" string="Diagnosis" invisible="not diagnosis_id"
+                                groups="sr_repair_management.group_repair_manager,sr_repair_management.group_supervisor">
+                            </button>
+                            <button class="oe_stat_button" name="action_view_sale_order" type="object"
+                                icon="fa-shopping-cart" invisible="sale_order_count == 0">
+                                <field name="sale_order_count" widget="statinfo" string="Sale Order"/>
+                            </button>
+                        </div>
+                        <div>
+                            <span class="o_form_label">Repair Work Order</span>
+                            <h1 class="d-flex">
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1" readonly="diagnosis_id"/>
+                                <field name="description"/>
+                                <field name="user_id" readonly="diagnosis_id" domain="[['groups_id', 'in', %(sr_repair_management.group_technician)d]]" options="{'no_create': True}"/>
+                                <field name="diagnosis_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="checklist_id" readonly="diagnosis_id"/>
+                                <field name="worked_hours" type="measure" widget="float_time"/>
+                                <field name="sale_order_id" invisible="1" readonly="diagnosis_id"/>
+                                <field name="so_type" invisible="1" readonly="diagnosis_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="General Details">
+                                <group>
+                                    <group>
+                                        <field name="vehicle_name" required="1" readonly="diagnosis_id"/>
+                                        <field name="brand" required="1" readonly="diagnosis_id"/>
+                                        <field name="model" required="1" readonly="diagnosis_id"/>
+                                        <field name="color" readonly="diagnosis_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="license_no" required="1" readonly="diagnosis_id"/>
+                                        <field name="fuel_type" required="1" readonly="diagnosis_id"/>
+                                        <field name="chassis_number" required="1" readonly="diagnosis_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Spar Parts">
+                                <field name="spar_parts_ids" readonly="state == 'finished'">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="notes"/>
+                                        <field name="quantity" readonly='is_service'/>
+                                        <field name="price"/>
+                                        <field name="sub_total"/>
+                                        <field name="sale_order_id" readonly="1" column_invisible="1"/>
+                                        <field name="repair_estimate_id" readonly="1" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Images">
+                                <field name="attachment_ids" widget="many2many_binary" readonly="diagnosis_id"/>
+                            </page>
+                        </notebook>
+
+                        <br/><br/>
+                        <group name="note_group">
+                            <label for="note"/>
+                            <field  name="note" nolabel="1" placeholder="Repair Notes....!" readonly="state == 'finished'"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_repair_work_order" model="ir.actions.act_window">
+            <field name="name">Work Order</field>
+            <field name="res_model">repair.work.order</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_repair_work_order"
+                  name="Work Order"
+                  action="sr_repair_management.action_repair_work_order"
+                  parent="sr_repair_management.main_menu_vehicle_repair"
+                  groups="sr_repair_management.group_repair_manager,sr_repair_management.group_technician"/>
+    </data>
+</odoo>

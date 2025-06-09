@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+         <record id="wizard_return_refund_replace_form" model="ir.ui.view">
+            <field name="name">return.refund.replace.form</field>
+            <field name="model">return.refund.replace</field>
+            <field name="arch" type="xml">
+                <form string="Return/Refund/Replace">
+                    <sheet>
+                        <notebook>
+                            <page string="Return/Replace/Refund Products">
+                                <field name="line_ids"  nolabel="1" >
+                                    <list create="false" delete="false" edit="true" editable="bottom">
+                                        <field name="product_id" force_save="1" readonly="1"/>
+                                        <field name="return_id" force_save="1" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="reject_id" force_save="1" domain="[('is_reject_reason','=',True)]" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="delivery_qty" force_save="1" readonly="1"/>
+                                        <field name="pending_qty" force_save="1" readonly="0"/>
+                                        <field name="return_qty" force_save="1" readonly="0"/>
+                                        <field name="rma_order_line_id" force_save="1" column_invisible="1"/>
+                                        <field name="sale_line_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <page name="Replace" string="New Product to Replace">
+                                <field name="replace_line_ids">
+                                    <list create="true" delete="true" edit="true" editable="bottom">
+                                        <field name="rma_replaced_product_id" column_invisible="1"/>
+                                        <field name="product_id" options="{'no_create': True,'no_edit': True,'no_open': True}"/>
+                                        <field name="qty" force_save="1"/>
+                                        <field name="price" force_save="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button name="button_submit" string="Submit" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_return_refund_replace_form" model="ir.actions.act_window">
+			<field name="name">Return/Replace/Refund Products</field>
+			<field name="res_model">return.refund.replace</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</odoo>

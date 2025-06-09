@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id = "invoice_report_inherit_id" inherit_id = "account.report_invoice_document">
+		<xpath expr="//table[1]/thead/tr[1]/th[2]" position="before">
+			<th class="text-right">Product Image</th>
+		</xpath>
+		<xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='lines']/tr/t[@name='account_invoice_line_accountable']/td[@name='td_quantity']" position="before">
+			<td class="text-right"><img t-att-src="image_data_uri(line.product_id.image_1920)" class="img-fluid" style="width: 20%"/></td>
+		</xpath>
+	</template>
+</odoo>

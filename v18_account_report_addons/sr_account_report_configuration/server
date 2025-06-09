@@ -1,0 +1,14 @@
+source python3.10-venv/bin/activate
+
+cd /home/rahul/projects/v18/odoo/
+
+./odoo-bin --addons=/home/rahul/projects/v18/odoo/addons,/home/rahul/projects/v18/custom_projects/v_18_Inventory_Management --db-filter=v18_
+
+./odoo-bin --addons=/home/rahul/projects/v18/odoo/addons,/home/rahul/projects/v18/enterprise,/home/rahul/projects/v18/custom_projects/v18_sr_account_report_configuration -d v18_sr_account_report_configuration -u sr_account_report_configuration
+
+a -: new mpass
+
+v18_sr_account_report_configuration = dbname
+
+-u sr_account_report_configuration
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="point_of_sale_assets" name="sr_pos_product_expiry_notification assets" inherit_id="point_of_sale.assets">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/sr_pos_product_expiry_notification/static/src/js/pos.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>

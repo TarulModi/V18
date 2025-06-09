@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="view_order_form_extends_to_add_warehouse_in_sale_order_line">
+			<field name="name">view.order.form.extends.to.add.warehouse.in.sale.order.line</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//page[@name='order_lines']/field/list/field[@name='name']" position="before">
+					<field name="sr_warehouse_id" required="1" />
+				</xpath>
+				<xpath expr="//page[@name='order_lines']/field/form/group/group[1]/field[@name='product_type']" position="after">
+					<field name="sr_warehouse_id" required="1" />
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

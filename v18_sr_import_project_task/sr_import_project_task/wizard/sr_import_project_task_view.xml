@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="sr_import_project_task_form_wizard" model="ir.ui.view">
+			<field name="name">sr.import.project.task.form.wizard</field>
+			<field name="model">import.project.task</field>
+			<field name="arch" type="xml">
+				<form string="Import Project Task">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+						<group>
+							<field name="file" filename="name" />
+						</group>
+					</group>
+					<footer>
+						<button name="import_project_task" string="Import" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_action_import_project_task" model="ir.actions.act_window">
+			<field name="name">Import Project Task</field>
+			<field name="res_model">import.project.task</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="sr_action_import_project_task"
+			id="sr_menu_import_project_task" parent="project.menu_project_management" />
+	</data>
+</odoo>

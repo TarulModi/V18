@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_departments"
+                  parent="sr_education_management.menu_sub_employee"
+                  name="Departments"
+                  action="hr.hr_department_kanban_action"
+                  groups="sr_education_management.group_administrator"
+                  sequence="3"/>
+    </data>
+</odoo>

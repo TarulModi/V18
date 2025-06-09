@@ -1,0 +1,15 @@
+tfak-a254-r8ej
+
+cd Projects/
+
+source python3.10-3.10-venv/bin/activate
+
+
+
+cd /home/abcd/Projects/v18/odoo
+
+./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_sr_customer_supplier_rma --limit-time-real=100000 --db-filter=v18_
+
+
+v18_sr_customer_supplier_rma
+

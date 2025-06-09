@@ -1,0 +1,48 @@
+<odoo>
+	<data>
+
+		<record id="sr_view_import_sale_order_lines_form"
+			model="ir.ui.view">
+			<field name="name">sr.view.import.sale.order.lines.form</field>
+			<field name="model">sr.import.sale.order.lines</field>
+			<field name="arch" type="xml">
+				<form string="Import Sales Order lines">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+						<group>
+							<field name="import_product_by" widget="radio" />
+						</group>
+					</group>
+					<group>
+						<group>
+							<field name="use_product_details_from" widget="radio" />
+						</group>
+						<group>
+							<field name="file" filename="name" />
+						</group>
+					</group>
+					<footer>
+						<button name="import_sales_order_lines" string="Import"
+							type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="sr_action_import_sale_order_lines"
+			model="ir.actions.act_window">
+			<field name="name">Import Sales Order lines</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sr.import.sale.order.lines</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<field name="binding_model_id" ref="sale.model_sale_order" />
+			<field name="binding_view_types">form</field>
+		</record>
+
+	</data>
+</odoo>

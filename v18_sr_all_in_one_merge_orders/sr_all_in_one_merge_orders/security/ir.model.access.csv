@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_merge_inv_cust_vendor_bills_wizard,access_merge_inv_cust_vendor_bills_wizard,model_merge_inv_cust_vendor_bills_wizard,base.group_user,1,1,1,1
+access_merge_purchase_orders_wizard,access_merge_purchase_orders_wizard,model_merge_purchase_orders_wizard,base.group_user,1,1,1,1
+access_merge_sale_orders_wizard,access_merge_sale_orders_wizard,model_merge_sale_orders_wizard,base.group_user,1,1,1,1

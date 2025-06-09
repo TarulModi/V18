@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="doc_preview_view_form" model="ir.ui.view">
+            <field name="name">doc.preview.view.form</field>
+            <field name="model">doc.preview</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="attachment_id" invisible="1"/>
+                        <field name="preview_html" readonly="1"/>
+                    </sheet>
+                    <footer>
+                        <button name="download_document" icon="fa-download"
+                                type="object" class="btn-secondary" title="Download"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+</odoo>

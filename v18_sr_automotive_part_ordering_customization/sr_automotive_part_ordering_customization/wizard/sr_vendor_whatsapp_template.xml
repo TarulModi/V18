@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="sr_vendor_wp_template_form_wizard" model="ir.ui.view">
+        <field name="name">sr.vendor.wp.template.form.wizard</field>
+        <field name="model">sr.vendor.wp.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="body" filename="name"/>
+                </group>
+                <footer>
+                    <button string="Close" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

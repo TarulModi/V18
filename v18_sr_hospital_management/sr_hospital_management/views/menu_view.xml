@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <menuitem id="menu_hospital_management" name="Hospital Management"/>
+
+    <menuitem id="menu_hospital_configuration" name="Configuration"
+              parent="menu_hospital_management" sequence="100"/>
+
+</odoo>

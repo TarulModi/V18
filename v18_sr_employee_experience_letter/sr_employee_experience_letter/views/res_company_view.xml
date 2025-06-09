@@ -1,0 +1,24 @@
+<!-- views/res_company_view.xml -->
+<odoo>
+    <record id="view_company_form_experience_letter" model="ir.ui.view">
+        <field name="name">res.company.form.experience.letter</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <!-- Insert the tab under the existing notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Experience Letter">
+                    <group>
+                        <field name="experience_letter_image" widget="image" class="oe_avatar" options="{'preview_image': 'experience_letter_image'}"/>
+                    </group>
+
+                    <group>
+                        <field name="experience_letter_content" />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+

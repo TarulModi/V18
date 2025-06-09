@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+         <record id="wizard_supplier_info_form" model="ir.ui.view">
+            <field name="name">wizard.supplier.info.form</field>
+            <field name="model">wizard.supplier.info</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Info">
+                    <sheet>
+                        <group>
+                            <field name="supplier_info_line_ids"  nolabel="1" >
+                                <list editable="bottom" create="0">
+                                    <field name="product_id" force_save="1" readonly="1"/>
+                                    <field name="partner_id" force_save="1" domain="[('partner_type', '=', 'supplier')]"/>
+                                    <field name="quantity" force_save="1"/>
+                                    <field name="sale_line_id" force_save="1" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="create_purchase_order" string="Create PO" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_supplier_info" model="ir.actions.act_window">
+            <field name="name">Supplier Info</field>
+            <field name="res_model">wizard.supplier.info</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="wizard_supplier_info_line_form_view" model="ir.ui.view">
+            <field name="name">wizard.supplier.info.line.form</field>
+            <field name="model">wizard.supplier.info.line</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Info">
+                    <group>
+                        <group>
+                            <field name="product_id" readonly="1"/>
+                            <field name="partner_id" readonly="0"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+	</data>
+</odoo>

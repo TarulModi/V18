@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="res_config_settings_view_form_inherit_add_convert_option" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale.add.convert.option</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//block[@id='connectors_setting_container']" position="after">
+                    <h2>Convert Quotation/Sales Order to Task</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box"
+                                 title="Option for appear convert task button in quotation/sales order.">
+                                <div class="o_setting_left_pane">
+                                    <field name="so_draft_allow"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <label for="so_draft_allow"/>
+                                    <div class="text-muted">
+                                        Convert button will available in Quotation
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="col-xs-12 col-md-6 o_setting_box"
+                             title="Option for appear convert task button in quotation/sales order.">
+                            <div class="o_setting_left_pane">
+                                <field name="so_sent_allow"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="so_sent_allow"/>
+                                <div class="text-muted">
+                                    Convert button will available in Quotation Sent
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box"
+                             title="Option for appear convert task button in quotation/sales order.">
+                            <div class="o_setting_left_pane">
+                                <field name="so_sale_allow"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="so_sale_allow"/>
+                                <div class="text-muted">
+                                    Convert button will available in sales order
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+            </xpath>
+        </field>
+    </record>
+
+
+
+    <record id="so_convert_task_form_view" model="ir.ui.view">
+        <field name="name">so.convert.task.form.view</field>
+        <field name="model">so.convert.task</field>
+        <field name="arch" type="xml">
+            <form string="Convert SO To Task">
+                    <group>
+                        <field name="project_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                        <field name="stage_id" domain="[('project_ids','in', project_id)]" required="1" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                    </group>
+                <footer>
+                    <button name="create_task" string="Create task" type="object" class="oe_highlight" />
+                    Or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_so_convert_task" model="ir.actions.act_window">
+        <field name="name">Convert SO To Task</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">so.convert.task</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="so_convert_task_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="sr_view_order_form_inherit_add_button" model="ir.ui.view">
+        <field name="name">sr.view.order.form.inherit.add.button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                    <field name="task_id" invisible="1"/>
+                    <field name="convert" invisible="1"/>
+            </field>
+            <xpath expr="//header" position="inside">
+                <button string="Convert To Task"
+                        name="%(action_so_convert_task)d"
+                        type="action"
+                        invisible="task_id != False or convert == False"/>
+                <button string="Related Task"
+                        name="action_show_task"
+                        type="object"
+                        invisible="task_id == False"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_hr_employee_form_extended_fields" model="ir.ui.view">
+			<field name="name">view.hr.employee.form.extended.fields</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form"/>
+			<field name="arch" type="xml">
+				<field name="coach_id" position="after">
+					<field name="is_faculty"/>
+				</field>
+
+				<xpath expr="//notebook" position="inside">
+					<page name="subject_ids" string="Subjects Details" invisible="is_faculty == False">
+						<field name="subject_ids">
+							<list editable="bottom">
+								<field name="course_id" required="1"/>
+								<field name="subject_ids" required="1" widget="many2many_tags" domain="[('courses_id', '=', course_id)]"/>
+							</list>
+							<form>
+								<group>
+									<group>
+										<field name="course_id" required="1"/>
+										<field name="subject_ids" required="1" widget="many2many_tags" domain="[('courses_id', '=', course_id)]"/>
+									</group>
+								</group>
+							</form>
+						</field>
+					</page>
+					<page name="time_table_monday" string="Monday" invisible="is_faculty == False">
+						<field name="time_table_monday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+					<page name="time_table_tuesday" string="Tuesday" invisible="is_faculty == False">
+						<field name="time_table_tuesday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+					<page name="time_table_wednesday" string="Wednesday" invisible="is_faculty == False">
+						<field name="time_table_wednesday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+					<page name="time_table_thursday" string="Thursday" invisible="is_faculty == False">
+						<field name="time_table_thursday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+					<page name="time_table_friday" string="Friday" invisible="is_faculty == False">
+						<field name="time_table_friday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+					<page name="time_table_saturday" string="Saturday" invisible="is_faculty == False">
+						<field name="time_table_saturday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+					<page name="time_table_sunday" string="Sunday" invisible="1">
+						<field name="time_table_sunday" readonly="1">
+							<list>
+								<field name="course_id"/>
+								<field name="academic_terms_id"/>
+								<field name="class_room_id"/>
+								<field name="start_time"/>
+								<field name="end_time"/>
+								<field name="subject_id"/>
+							</list>
+						</field>
+					</page>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="open_view_employee_list_my_faculty" model="ir.actions.act_window">
+            <field name="name">Faculty</field>
+            <field name="res_model">hr.employee</field>
+            <field name="domain">[('company_id', 'in', allowed_company_ids),('is_faculty' , '=', True)]</field>
+            <field name="context">{'chat_icon': True}</field>
+			<field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+        </record>
+
+        <menuitem id="menu_sub_employee"
+				  parent="sr_education_management.menu_education"
+				  name="Employee"
+				  groups="sr_education_management.group_administrator"
+				  sequence="3"/>
+
+		<menuitem id="menu_employee"
+				  parent="sr_education_management.menu_sub_employee"
+				  name="Employee"
+				  action="hr.open_view_employee_list_my"
+				  groups="sr_education_management.group_administrator"
+				  sequence="1"/>
+
+		<menuitem id="menu_employee_faculty"
+				  parent="sr_education_management.menu_sub_employee"
+				  name="Faculty"
+				  action="sr_education_management.open_view_employee_list_my_faculty"
+				  groups="sr_education_management.group_administrator"
+				  sequence="2"/>
+
+    </data>
+</odoo>

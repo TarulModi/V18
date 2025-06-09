@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_account_report" name="Report" sequence="10000"
+        parent="sr_account_report_configuration.menu_account_report_configuration"/>
+
+        <menuitem
+            id="menu_profit_loss_statement_notes"
+            name="Profit Loss Statement"
+            parent="menu_account_report"
+            action="action_report_profit_loss_statement"
+            sequence="1"/>
+
+        <menuitem
+            id="menu_financial_statement_notes"
+            name="Financial Statement Notes"
+            parent="menu_account_report"
+            action="action_report_financial_statement_notes"
+            sequence="3"/>
+
+        <menuitem
+            id="menu_report_aged_payable"
+            name="Aged Payable Report"
+            parent="menu_account_report"
+            action="action_report_aged_payable"
+            sequence="5"/>
+
+    </data>
+</odoo>
+
+

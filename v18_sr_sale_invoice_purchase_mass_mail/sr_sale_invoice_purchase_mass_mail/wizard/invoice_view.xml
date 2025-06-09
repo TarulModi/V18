@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record model="ir.ui.view" id="view_move_form_inherit_add_sent_mail_field">
+        <field name="name">view.move.form.inherit.add.sent.mail.field</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@id='header_right_group']/div[@class='o_td_label']" position="before">
+                <field name="sent_mail" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_invoice_tree_inherit_add_sent_mail_field">
+        <field name="name">view.invoice.tree.inherit.add.sent.mail.field</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='status_in_payment']" position="after">
+                <field name="sent_mail" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="send_mass_mail_form_wizard_invoice" model="ir.ui.view">
+        <field name="name">send.mass.mail.form.wizard.invoice</field>
+        <field name="model">send.mass.mail.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Send Mass Mail Invoice">
+                <group>
+                    <field name="template_id" domain="[('name','=like','Invoic%')]"/>
+                </group>
+                <footer>
+                    <button name="send_mass_mail" string="Send Mail" type="object" class="oe_highlight"/>
+                    Or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+   <record id="action_send_mass_mail_invoice" model="ir.actions.act_window">
+       <field name="name">Send Mass Mail</field>
+       <field name="type">ir.actions.act_window</field>
+       <field name="res_model">send.mass.mail.invoice</field>
+       <field name="view_mode">form</field>
+       <field name="target">new</field>
+       <field name="binding_model_id" ref="account.model_account_move" />
+       <field name="binding_view_types">list</field>
+   </record>
+</odoo>

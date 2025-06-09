@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Tree View -->
+        <record id="rma_supplier_view_tree" model="ir.ui.view">
+            <field name="name">rma.supplier.view.tree</field>
+            <field name="model">rma.supplier</field>
+            <field name="arch" type="xml">
+                <list string="RMA Supplier">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="purchase_order_id"/>
+                    <field name="delivery_partner_id"/>
+                    <field name="stock_picking_id"/>
+                    <field name="status"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="rma_supplier_view_form" model="ir.ui.view">
+            <field name="name">rma.supplier.view.form</field>
+            <field name="model">rma.supplier</field>
+            <field name="arch" type="xml">
+                <form string="RMA Supplier">
+                    <header>
+                        <button name="action_approve"
+                                type="object"
+                                string="Approve"
+                                class="btn-primary"
+                                invisible="status != 'draft'"/>
+
+                        <button name="action_open_reject_wizard"
+                                type="object"
+                                string="Reject"
+                                class="btn-primary"
+                                invisible="status in ['approved', 'reject', 'closed']"/>
+
+                        <button name="action_send_supplier_email"
+                                type="object"
+                                string="Send by Email"
+                                class="btn-primary"/>
+
+                        <button name="action_set_to_draft"
+                                type="object"
+                                string="Set to Draft"
+                                class="btn-primary"
+                                invisible="status in ['draft', 'processing', 'closed']"/>
+
+                        <button name="action_validate"
+                                string="Validate"
+                                type="object"
+                                class="btn-primary"
+                                invisible="status in ('approved','draft','closed', 'reject') or is_validate"/>
+
+                        <button name="action_close"
+                                string="Close"
+                                type="object"
+                                class="btn-primary"
+                                invisible="status in ('approved','draft', 'reject','closed')"/>
+
+                        <field name="status" widget="statusbar" statusbar_visible="draft,approved,processing,closed,reject"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_receipt" class="oe_stat_button" icon="fa-truck" invisible="picking_ids_count == 0">
+                                <field name="picking_ids_count" widget="statinfo" string="Picking Order"/>
+                            </button>
+
+                            <button type="object" name="action_view_purchase_order" class="oe_stat_button" icon="fa-dollar" invisible="purchase_order_ids_count == 0">
+                                <field name="purchase_order_ids_count" widget="statinfo" string="Purchase Orders"/>
+                            </button>
+                        </div>
+                         <div class="oe_title mb24">
+                            <h1>
+                                <field name="name" required="1" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id" required="1" readonly="status != 'draft'"/>
+                                <field name="purchase_order_id" readonly="status != 'draft'"/>
+                                <field name="subject" required="1" readonly="status != 'draft'"/>
+                                <field name="rma_main_id" readonly="status != 'draft'"/>
+                                <field name="picking_ids" widget="many2many_tags" readonly="status != 'draft'" invisible="1"/>
+                                <field name="purchase_order_ids" widget="many2many_tags" readonly="status != 'draft'" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="date" readonly="status != 'draft'"/>
+                                <field name="deadline" readonly="status != 'draft'"/>
+                                <field name="priority" widget="priority" nolabel="1" class="oe_inline align-top" readonly="status != 'draft'"/>
+                                <field name="is_validate" invisible="1" readonly="status != 'draft'"/>
+                                <field name="reject_reason_id" invisible="not reject_reason_id" readonly="status != 'draft'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="rma_details" id="rma_id" string="RMA Details">
+                                <group>
+                                    <group>
+                                        <field name="stock_picking_id" readonly="status != 'draft'"/>
+                                        <field name="delivery_partner_id" options="{'no_quick_create': True}"
+                                               context="{'default_type':'delivery', 'show_address': 1}" readonly="status != 'draft'"/>
+                                    </group>
+                                    <group>
+                                        <field name="delivery_email" readonly="status != 'draft'"/>
+                                        <field name="delivery_phone" readonly="status != 'draft'"/>
+                                    </group>
+                                </group>
+
+                                <label for="rma_supplier_line_ids" string="RMA Lines" style="font-size:15px;" class="mt16 mb16 text-muted"/>
+								<field name="rma_supplier_line_ids" nolabel="1" readonly="status == 'closed'">
+									<list editable="bottom" create="false">
+										<field name="product_id" store="True" force_save="True"/>
+										<field name="price"/>
+										<field name="delivery_qty"/>
+										<field name="return_qty"/>
+										<field name="reason_id"/>
+										<field name="reason_action" column_invisible="parent.status not in ('approved','processing')"/>
+                                        <field name="stored_boolean" column_invisible="1"/>
+                                        <button name="open_replace_product" invisible="not stored_boolean" string="Replace product" type="object" icon="fa-gear" readonly="parent.status == 'closed'"/>
+
+                                        <field name="replaced_product_id" readonly="1" column_invisible="parent.status not in ('approved','processing','closed')" invisible="reason_action != 'replace'"/>
+										<field name="replaced_qty" readonly="1" column_invisible="parent.status not in ('approved','processing','closed')" invisible="reason_action != 'replace'"/>
+										<field name="replaced_is_invoice" readonly="1" column_invisible="1"/>
+										<field name="received_qty" column_invisible="parent.status not in ('processing')"/>
+									</list>
+								</field>
+								<label for="rma_notes" string="RMA Notes" style="font-size:15px;" class="mt16 mb16 text-muted"/>
+								<field name="rma_notes" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_rma_supplier" model="ir.actions.act_window">
+            <field name="name">RMA Supplier</field>
+            <field name="res_model">rma.supplier</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="rma_supplier_view_tree"/>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="menu_rma_supplier"
+                  name="RMA Supplier"
+                  parent="menu_rma_root"
+                  action="action_rma_supplier"
+                  sequence="3"/>
+
+        <menuitem id="menu_rma_supplier_order"
+              name="RMA Supplier Order"
+              parent="menu_rma_supplier"
+              action="action_rma_supplier"
+              sequence="4"/>
+
+    </data>
+</odoo>

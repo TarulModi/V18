@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- REPORT ACTION -->
+    <record id="report_rma_supplier" model="ir.actions.report">
+        <field name="name">RMA Supplier Report</field>
+        <field name="model">rma.supplier</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_customer_supplier_rma.report_rma_supplier_document</field>
+        <field name="report_file">sr_customer_supplier_rma.report_rma_supplier_document</field>
+        <field name="print_report_name">'RMA Supplier Report - %s' % (object.name or 'Unnamed')</field>
+        <field name="binding_model_id" ref="model_rma_supplier"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

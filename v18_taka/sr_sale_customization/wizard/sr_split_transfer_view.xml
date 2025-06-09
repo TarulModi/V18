@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+         <record id="wizard_split_transfer_form" model="ir.ui.view">
+            <field name="name">sr.split.transfer.form</field>
+            <field name="model">sr.split.transfer</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Info">
+                    <sheet>
+                        <group>
+                            <field name="picking_move_line_ids"  nolabel="1" >
+                                <list editable="bottom" create="0">
+                                    <field name="is_split"/>
+                                    <field name="product_id" force_save="1" readonly="1"/>
+                                    <field name="demand_qty" force_save="1" readonly="1"/>
+                                    <field name="quantity" force_save="1" readonly="1"/>
+                                    <field name="move_id" force_save="1" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="split_transfer" string="Split" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+	</data>
+</odoo>

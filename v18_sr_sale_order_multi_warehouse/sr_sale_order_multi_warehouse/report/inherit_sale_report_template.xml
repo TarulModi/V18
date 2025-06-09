@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_saleorder_document_extends_to_add_warehouse" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t/div[hasclass('page')]/table[hasclass('o_main_table')]/thead/tr/th[@name='th_description']" position="after">
+            <th name="th_warehouse" class="text-left">Warehouse</th>
+        </xpath>
+        <xpath expr="//t/div[hasclass('page')]/table[hasclass('o_main_table')]/tbody/t[2]/tr/t/td[@name='td_name']" position="after">
+            <td name="td_warehouse"><span t-field="line.sr_warehouse_id.name"/></td>
+        </xpath>
+    </template>
+
+</odoo>

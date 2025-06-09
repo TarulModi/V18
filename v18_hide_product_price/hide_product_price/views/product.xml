@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="inherit_hide_cost_price_product_template_form_view">
+            <field name="name">inherit.hide.cost.price.product.template.form.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='standard_price_uom']" position="attributes">
+                    <attribute name="groups">hide_product_price.group_sale_manager_show_product_cost_price</attribute>
+                </xpath>
+                <xpath expr="//label[@for='standard_price']" position="attributes">
+                    <attribute name="groups">hide_product_price.group_sale_manager_show_product_cost_price</attribute>
+                </xpath>
+                <xpath expr="//notebook/page/group/group[@name='group_standard_price']/div/field[@name='list_price']" position="attributes">
+                    <attribute name="groups">hide_product_price.group_sale_manager_show_product_sale_price</attribute>
+                </xpath>
+                <xpath expr="//notebook/page/group/group[@name='group_standard_price']/label[@for='list_price']" position="attributes">
+                    <attribute name="groups">hide_product_price.group_sale_manager_show_product_sale_price</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="inherit_hide_cost_price_product_template_tree_view">
+            <field name="name">inherit.hide.cost.price.product.template.tree.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='standard_price']" position="replace">
+                        <field name="standard_price" widget="monetary" options="{'currency_field': 'cost_currency_id'}" optional="show" readonly="1" groups="hide_product_price.group_sale_manager_show_product_cost_price"/>
+                    </xpath>
+                    <xpath expr="//field[@name='list_price']" position="replace">
+                        <field name="list_price" string="Sales Price" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show" decoration-muted="not sale_ok" groups="hide_product_price.group_sale_manager_show_product_sale_price"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="inherit_sale_price_product_product_tree_view">
+            <field name="name">inherit.sale.price.product.product.tree.view</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='standard_price']" position="attributes">
+                        <attribute name="groups">hide_product_price.group_sale_manager_show_product_cost_price</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='lst_price']" position="attributes">
+                        <attribute name="groups">hide_product_price.group_sale_manager_show_product_sale_price</attribute>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="inherit_hide_cost_price_product_template_kanban_view">
+            <field name="name">inherit.hide.cost.price.product.template.kanban.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//span[contains(text(), 'Price:')]" position="replace">
+                        <span groups="hide_product_price.group_sale_manager_show_product_sale_price">
+                            Price: <field name="list_price" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                        </span>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="inherit_hide_cost_price_product_kanban_view">
+            <field name="name">inherit.hide.cost.price.product.kanban.view</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_kanban_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//span[contains(text(), 'Price:')]" position="replace">
+                        <span groups="hide_product_price.group_sale_manager_show_product_sale_price">
+                            Price: <field name="lst_price"/>
+                        </span>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

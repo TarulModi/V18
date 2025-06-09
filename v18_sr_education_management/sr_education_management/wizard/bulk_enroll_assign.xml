@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="bulk_enroll_assign_view_form" model="ir.ui.view">
+            <field name="name">bulk.enroll.assign.view.form</field>
+            <field name="model">bulk.enroll.assign</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="academic_year_id" required="1" domain="[('state', '=', 'open')]"/>
+                            </group>
+                            <group>
+                                <field name="course_id" required="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Doc Verified Admission">
+                                <field name="verified_admission_ids" readonly="1" force_save="1"/>
+                            </page>
+                            <page name="Doc Non-Verified Admission">
+                                <field name="non_verified_admission_ids" readonly="1" force_save="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button string="Proceed" type="object" name="assign_enroll" class="btn-primary"
+                            confirm="Do you want to proceed with assigning only the document-verified admissions ?"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    <record id="action_bulk_assign_enroll" model="ir.actions.act_window">
+        <field name="name">Assign Enroll</field>
+        <field name="res_model">bulk.enroll.assign</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="bulk_enroll_assign_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="submenu_enroll"
+                  parent="sr_education_management.menu_admission"
+                  name="Enroll"
+                  action="sr_education_management.action_bulk_assign_enroll"
+                  groups="sr_education_management.group_administrator"
+                  sequence="1"/>
+</odoo>

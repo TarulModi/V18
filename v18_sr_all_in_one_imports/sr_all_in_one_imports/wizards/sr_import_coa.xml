@@ -1,0 +1,31 @@
+<odoo>
+	<data>
+        <record id="sr_import_coa_wizard" model="ir.ui.view">
+            <field name="name">sr.import.coa.form.wizard</field>
+            <field name="model">import.coa</field>
+            <field name="arch" type="xml">
+                <form string="Import coa">
+                    <group>
+                        <field name="import_option" widget="radio" />
+                    </group>
+                    <group>
+                        <field name="file" filename="name"/>
+                    </group>
+                    <footer>
+                        <button name="import_coa" string="Import Charts of Accounts" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>		
+            
+    	<record id="sr_action_import_coa" model="ir.actions.act_window">
+            <field name="name">Import Chart of Accounts</field>
+            <field name="res_model">import.coa</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    	<menuitem action="sr_action_import_coa" id="sr_menu_import_coa" parent="account.account_account_menu"/>
+	</data>
+</odoo>

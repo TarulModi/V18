@@ -1,0 +1,7 @@
+<odoo>
+	<data>
+		<menuitem id="main_menu_vehicle_repair"
+				  name="Vehicle Repair"
+				  groups="sr_repair_management.group_repair_manager,sr_repair_management.group_receptionist,sr_repair_management.group_supervisor,sr_repair_management.group_technician"/>
+	</data>
+</odoo>

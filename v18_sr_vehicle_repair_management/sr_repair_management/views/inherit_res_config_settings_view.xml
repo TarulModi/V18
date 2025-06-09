@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="repair_res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">repair.res.config.settings.view.form.inherit.hr.fleet</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Repair" string="Repair" name="sr_car_repair_management">
+                        <block title="Repair Configuration" id="end_contract_setting">
+                            <setting id="repair_default_sale_order_type" company_dependent="1" string="Sale Order" help="Select the default type of Sale Order to be used for repairs. This will be used when creating a new repair order." title="Sale Order Type">
+                                <field name="so_type" class="o_light_label mt16" widget="radio"/>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="repair_config_settings_action" model="ir.actions.act_window">
+            <field name="name">Repair</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'sr_car_repair_management', 'bin_size': False}</field>
+        </record>
+    </data>
+</odoo>

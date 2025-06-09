@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="email_template_insufficient_stock" model="mail.template">
+        <field name="name">Sales: Insufficient Stock</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">{{ object.name }} : Insufficient Product Availability</field>
+        <field name="email_from">{{ (user.email_formatted) }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hello,
+                    <br/><br/>
+                    Here, one or more of the items requested are currently unavailable due to insufficient stock.
+                    <br/>
+                    <b>Insufficient Items </b>
+                    <ul style="margin-bottom: 0;">
+                        <t t-foreach="object.order_line" t-as="line">
+                            <t t-if="line.product_id and line.product_id.is_storable and line.product_uom_qty &gt; line.free_qty_today">
+                                <li style="font-size: 13px;">
+                                    <span t-out="line.product_id.display_name"/>
+                                </li>
+                            </t>
+                        </t>
+                    </ul>
+                </p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

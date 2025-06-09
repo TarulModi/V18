@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <!-- Sold Units Template -->
+        <template id="sold_unit_template">
+            <table class="table table-sm o_main_table">
+                <thead>
+                    <tr class="border-black">
+                        <t t-if="docs.abc_base_on == 'product_categ' ">
+                            <th name="th_product_categ" class="text-center">
+                                <span>Product Categories</span>
+                            </th>
+                        </t>
+                        <t t-else="">
+                            <th name="th_iteams" class="text-center">
+                                <span>Products</span>
+                            </th>
+                        </t>
+                        <th name="th_sold_units" class="text-center">
+                            <span>Sold Units</span>
+                        </th>
+                        <th name="th_per_of_sold_units_value" class="text-center">
+                            <span>% of Sold Units</span>
+                        </th>
+                        <th name="th_classification_value" class="text-center">
+                            <span>Classification</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="items_data" t-as="data">
+                        <tr>
+                            <t t-if="docs.abc_base_on == 'product_categ' ">
+                                <td class="text-center">
+                                    <span t-esc="data['category_name']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['category_sold_units']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['per_of_sold_unit']"/>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="data.get('classification')">
+                                        <span t-esc="data['classification']"/>
+                                    </t>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td class="text-center">
+                                    <span t-esc="data['product']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['product_qty']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['per_of_sold_unit']"/>
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="data.get('classification')">
+                                        <span t-esc="data['classification']"/>
+                                    </t>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </tbody>
+                <tr class="border-black">
+                    <th name="th_total_sold_units" class="text-center">
+                        <strong>Total Sold Units</strong>
+                    </th>
+                    <th name="th_per_of_sold_units" class="text-center">
+                        <strong t-esc="'%.2f'% total_sold_units" />
+                    </th>
+                </tr>
+            </table>
+        </template>
+
+        <!-- Consumption Value Template -->
+        <template id="consumption_value_template">
+            <table class="table table-sm o_main_table">
+                <thead>
+                    <tr class="border-black">
+                        <t t-if="docs.abc_base_on == 'product_categ' ">
+                            <th name="th_product_categ" class="text-center">
+                                <span>Product Categories</span>
+                            </th>
+                        </t>
+                        <t t-else="">
+                            <th name="th_iteams" class="text-center">
+                                <span>Products</span>
+                            </th>
+                        </t>
+                        <th name="th_sold_units" class="text-center">
+                            <span>Sold Units</span>
+                        </th>
+                        <t t-if="docs.abc_base_on == 'products' ">
+                            <th name="th_cost_per_unit" class="text-center">
+                                <span>Cost Per Unit</span>
+                            </th>
+                        </t>
+                        <th name="th_consumption_value" class="text-center">
+                            <span>Consumption Value</span>
+                        </th>
+                        <th name="th_per_of_consumption_value" class="text-center">
+                            <span>% of Consumption Value</span>
+                        </th>
+                        <th name="th_classification_value" class="text-center">
+                            <span>Classification</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="items_data" t-as="data">
+                        <tr >
+                            <t t-if="docs.abc_base_on == 'product_categ' ">
+                                <td class="text-center">
+                                    <span t-esc="data['category_name']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['category_sold_units']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['category_consumption_value']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['per_of_consumption_value']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="data['classification']"/>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td class="text-center">
+                                    <span t-esc="data['product']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['product_qty']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['product_cost']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['consumption_value']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f'% data['per_of_consumption_value']"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="data['classification']"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </tbody>
+                <tr class="border-black">
+                    <th name="th_total_consumption_value_label" class="text-center">
+                        <strong>Total Consumption Value</strong>
+                    </th>
+                    <th name="th_blank_1" class="text-center"/>
+                    <t t-if="docs.abc_base_on == 'products' ">
+                        <th name="th_blank_2" class="text-center"/>
+                    </t>
+                    <th name="th_total_consumption_value" class="text-center">
+                        <strong t-esc="'%.2f'% total_consumption_value" />
+                    </th>
+                </tr>
+            </table>
+        </template>
+
+        <!-- ABC Report Template -->
+        <template id="abc_template">
+            <t t-call="web.html_container">
+                <t t-call="web.internal_layout">
+                    <div class="text-center">
+                        <h3><strong><span>Stock Inventory ABC Analysis Report</span></strong></h3>
+                    </div><br/>
+                    <div class="page">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th name="th_sold_units" class="text-center">
+                                    <span>Based On</span>
+                                </th>
+                                <th name="th_sold_units" class="text-center">
+                                    <span>Classification By</span>
+                                </th>
+                                <th name="th_sold_units" class="text-center">
+                                    <span>From Date</span>
+                                </th>
+                                <th name="th_sold_units" class="text-center">
+                                    <span>To Date</span>
+                                </th>
+                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">
+                                        <span t-field="docs.abc_base_on"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="docs.classification_by"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="docs.from_date"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="docs.to_date"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/><br/>
+                        <t t-if="items_data">
+                            <t t-if="docs.classification_by == 'sold_unit'">
+                                <t t-call="sr_inventory_abc_analysis_report.sold_unit_template" />
+                            </t>
+                            <t t-else="" >
+                                <t t-call="sr_inventory_abc_analysis_report.consumption_value_template" />
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <div class="text-center">
+                                <span style="text-center">There is no data available</span>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+<odoo>
+	<data>
+		<menuitem id="main_menu_car_repair"
+                  name="Car Repair"/>
+
+        <menuitem id="submenu_car_repair"
+                  name="Car Repair"
+                  parent="sr_car_repair_management.main_menu_car_repair"/>
+	</data>
+</odoo>

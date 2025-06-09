@@ -1,0 +1,7 @@
+Order Number,Customer Name,Date,Pricelist,Salesperson,Product Name,Description,Quantity,UOM,Price,Taxes
+Order1,Gemini Furniture,30/05/21,Public Pricelist,,Large Cabinet,Large Cabinet,10,Units,100,Tax 15.00%
+Order1,Gemini Furniture,30/05/21,Public Pricelist,,Pedal Bin,Pedal Bin,2,Units,50,"Tax 15.00%,Tax 12.00%"
+Order1,Gemini Furniture,30/05/21,Public Pricelist,,Office Chair,Office Chair,5,Units,10,Tax 12.00%
+Order2,Azure Interior,30/05/21,Public Pricelist,,Large Desk,Large Desk,4,Units,150,"Tax 15.00%,Tax 12.00%"
+Order2,Azure Interior,30/05/21,Public Pricelist,,Drawer,Drawer,8,Units,80,Tax 12.00%
+Order3,Deco Addict,30/05/21,Public Pricelist,,Flipover,Flipover,15,Units,100,

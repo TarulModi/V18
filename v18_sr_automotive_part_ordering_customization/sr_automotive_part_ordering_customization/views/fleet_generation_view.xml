@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id='fleet_vehicle_generation_view_tree' model='ir.ui.view'>
+        <field name="name">fleet.generation.list</field>
+        <field name="model">fleet.generation</field>
+        <field name="arch" type="xml">
+            <list string="Model Generation" editable="bottom">
+                <field name="name" required="1" />
+            </list>
+        </field>
+    </record>
+
+	<record id='fleet_vehicle_generation_action' model='ir.actions.act_window'>
+        <field name="name">Generation</field>
+        <field name="res_model">fleet.generation</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new generation
+            </p>
+        </field>
+    </record>
+
+	<menuitem action="fleet_vehicle_generation_action"
+			  parent="fleet.fleet_models_configuration"
+			  id="fleet_vehicle_generation_menu"
+			  sequence="6"/>
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_hospital_ipd_admission_tree" model="ir.ui.view">
+        <field name="name">hospital.ipd.admission.tree</field>
+        <field name="model">hospital.ipd.admission</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="ward_id"/>
+                <field name="room_id"/>
+                <field name="admission_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_ipd_admission_form" model="ir.ui.view">
+        <field name="name">hospital.ipd.admission.form</field>
+        <field name="model">hospital.ipd.admission</field>
+        <field name="arch" type="xml">
+            <form string="IPD Admission">
+                <header>
+                    <button name="action_under_treatment" type="object" string="Under Treatment" state="admitted" class="oe_highlight"/>
+                    <button name="action_discharge" type="object" string="Discharge" state="under_treatment"/>
+                    <button name="action_cancel" type="object" string="Cancel" state="admitted,under_treatment" class="oe_secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="admitted,under_treatment,discharged,cancelled"/>
+                </header>
+                <sheet>
+                    <div>
+                        <div class="oe_title">
+                            <h2><field name="name" decoration-bf="1" readonly="1"/></h2>
+                        </div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="ward_id"/>
+                            <field name="room_id"/>
+                        </group>
+                        <group>
+                            <field name="admission_date"/>
+                            <field name="discharge_date"/>
+                            <field name="treatment_notes"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_ipd_admission" model="ir.actions.act_window">
+        <field name="name">IPD Admissions</field>
+        <field name="res_model">hospital.ipd.admission</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hospital_ipd_admission" name="IPD"
+              parent="menu_hospital_management" action="action_hospital_ipd_admission"/>
+
+</odoo>

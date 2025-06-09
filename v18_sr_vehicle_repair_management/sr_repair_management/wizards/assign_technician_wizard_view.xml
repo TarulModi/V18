@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="view_assign_technician_wizard" model="ir.ui.view">
+			<field name="name">view.assign.technician.wizard</field>
+			<field name="model">assign.technician.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Assign Technician">
+					<field name="line_ids" options="{'no_create': True}">
+						<list editable="bottom">
+							<field name="user_id" required="1" domain="[['groups_id', 'in', %(sr_repair_management.group_technician)d]]" options="{'no_create': True}"/>
+							<field name="checklist_id" force_save="True"/>
+						</list>
+					</field>
+					<footer>
+						<button name="assign_technician" string="Submit"
+							class="btn-primary" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_assign_technician_wizard" model="ir.actions.act_window">
+			<field name="name">Assign Technician</field>
+			<field name="res_model">assign.technician.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+	</data>
+</openerp>
+ 

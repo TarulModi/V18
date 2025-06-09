@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id='fleet_vehicle_body_type_view_tree' model='ir.ui.view'>
+        <field name="name">fleet.body.type.list</field>
+        <field name="model">fleet.body.type</field>
+        <field name="arch" type="xml">
+            <list string="Model Body Type" editable="bottom">
+                <field name="name" required="1" />
+            </list>
+        </field>
+    </record>
+
+	<record id='fleet_vehicle_body_type_action' model='ir.actions.act_window'>
+        <field name="name">Body Type</field>
+        <field name="res_model">fleet.body.type</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Body type
+            </p>
+        </field>
+    </record>
+
+	<menuitem action="fleet_vehicle_body_type_action"
+			  parent="fleet.fleet_models_configuration"
+			  id="fleet_vehicle_body_type_menu"
+			  sequence="7"/>
+</odoo>

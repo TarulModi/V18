@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="sr_merge_invoice_customer_vendor_bills_form_view">
+        <field name="name">sr.merge.inv.cust.vendor.bills.wizard.form.view</field>
+        <field name="model">merge.inv.cust.vendor.bills.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Merge Invoices/Bills">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="merge_options" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="merge_multi_currency_inv"/>
+                            <field name="group_multi_currency" invisible="1"/>
+                            <field name="currency_id" invisible= "merge_multi_currency_inv == False or group_multi_currency == False" required= "merge_multi_currency_inv == True or group_multi_currency == True"/>
+                            <div class="alert alert-warning" role="alert" invisible= "merge_multi_currency_inv == False or group_multi_currency == True">
+                                Please allow user group for multi currency
+                            </div>
+                            <field name="move_ids" widget="many2many_tags" invisible="1"/>
+                            <field name="move_id" invisible="merge_options == 'new_cancel_selected' or merge_options == 'new_delete_all_selected'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Merge" name="merge_invoices" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sr_merge_invoice_customer_vendor_bills_action" model="ir.actions.act_window">
+        <field name="name">Merge Invoices/Bills</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">merge.inv.cust.vendor.bills.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sr_merge_invoice_customer_vendor_bills_form_view"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

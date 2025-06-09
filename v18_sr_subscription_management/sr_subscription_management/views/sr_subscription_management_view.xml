@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sr_subscription_management_search_view" model="ir.ui.view">
+            <field name="name">sr.subscription.management.search.view</field>
+            <field name="model">sr.subscription.management</field>
+            <field name="arch" type="xml">
+                <search string="Search Subscription">
+                    <field name="name" string="Subscription"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                    <filter name="running" string="Running" domain="[('state','=','running')]"/>
+                    <filter name="done" string="Done" domain="[('state','=','done')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="User" name="user" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter name="status" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="sr_subscription_management_tree_view" model="ir.ui.view">
+            <field name="name">sr.subscription.management.tree.view</field>
+            <field name="model">sr.subscription.management</field>
+            <field name="arch" type="xml">
+                <list string="Subscriptions">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="sr_subscription_management_form_view" model="ir.ui.view">
+            <field name="name">sr.subscription.management.form.view</field>
+            <field name="model">sr.subscription.management</field>
+            <field name="arch" type="xml">
+                <form string="Subscriptions">
+                    <header>
+                        <button name="start_subscription" string="Start" type="object" class="oe_highlight" invisible="state not in 'draft'"/>
+                        <button name="stop_subscription" string="Stop" type="object" class="oe_highlight" invisible="state not in 'running'"/>
+                        <button name="set_to_draft" string="Set to Draft" type="object" invisible="state not in 'done'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,running,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="date" readonly="state in ['running','done']"/>
+                                <field name="cron_id" invisible="cron_id == False"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="General Information">
+                                <group>
+                                    <group>
+                                        <label for="interval_number" string="Execute Every"/>
+                                        <div>
+                                            <field name="interval_number" class="oe_inline" readonly="state in ['running','done']"/>
+                                            <field name="interval_type" class="oe_inline" readonly="state in ['running','done']"/>
+                                        </div>
+                                        <field name="reference" required="1" readonly="state in ['running','done']"/>
+                                    </group>
+                                    <group>
+                                        <field name="nextcall" readonly="state in ['running','done']"/>
+                                        <field name="number_of_call" readonly="state in ['running','done']"/>
+                                    </group>
+                                </group>
+                                <field name="note" class="oe_inline" placeholder="Comment for the subscription" colspan="4" readonly="state in ['running','done']"/>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="Subscription Document History">
+                                <field name="subscription_document_history_ids" readonly="1">
+                                    <list>
+                                        <field name="date"/>
+                                        <field name="document_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_subscription_management" model="ir.actions.act_window">
+            <field name="name">Subscription</field>
+            <field name="res_model">sr.subscription.management</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="sr_subscription_management_search_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click here to create a new Subscription.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="sr_root_subscription_management_menu" name="Subscription Management"
+                  web_icon="sr_subscription_management,static/description/icon.png"/>
+
+        <menuitem id="sr_inner_subscription_management_menu" name="Subscription"
+              action="action_subscription_management" parent="sr_root_subscription_management_menu"/>
+    </data>
+</odoo>

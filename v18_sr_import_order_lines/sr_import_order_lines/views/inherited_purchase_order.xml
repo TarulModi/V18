@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record
+		id="purchase_order_form_extends_to_add_import_order_line_button"
+		model="ir.ui.view">
+		<field name="name">purchase.order.form.extends.to.add.import.order.line.button
+		</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_form" />
+		<field name="arch" type="xml">
+			<button name="button_cancel" position="after">
+				<button
+					name="%(sr_import_order_lines.sr_action_import_purchase_order_lines)d"
+					string="Import Order Lines" type="action" state="draft"
+					class="btn-primary" />
+			</button>
+		</field>
+	</record>
+
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_daywise_saleorder_new">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t class="page">
+                    <div class="oe_structure" />
+                        <center>
+                            <b>
+                                <h4>Product Sold Day Wise Report-Sales Order</h4>
+                            </b>
+                        </center>
+                        <center>
+                            <b>
+                                <span t-esc="start_date"/>
+                                To
+                                <span t-esc="end_date"/>
+                            </b>
+                        </center>
+                    <br/>
+                    <table class="table table-condensed" style="border: 1px solid black;">
+                        <thead>
+                            <tr style="border: 1px solid black;">
+                            <th style="border: 1px solid black;">Product Name</th>
+                            <th style="border: 1px solid black;">Monday</th>
+                            <th style="border: 1px solid black;">Tuesday</th>
+                            <th style="border: 1px solid black;">Wednesday</th>
+                            <th style="border: 1px solid black;">Thursday</th>
+                            <th style="border: 1px solid black;">Friday</th>
+                            <th style="border: 1px solid black;">Saturday</th>
+                            <th style="border: 1px solid black;">Sunday</th>
+                            <th style="border: 1px solid black;">Total</th>
+                        </tr>
+
+                            <tr>
+                                <t t-if="form">
+                                    <tr t-foreach="form" t-as="order">
+                                        <td style="border: 1px solid black;">
+                                                <span t-if="order.get('product_name')" t-esc="order['product_name']" />
+                                                <span t-else="">Total</span>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['monday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['tuesday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['wednesday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['thursday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['friday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['saturday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['sunday']" /></td>
+                                        <td class="text-center" style="border: 1px solid black;"><span t-esc="order['total']" /></td>
+                                    </tr>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td style="border: 1px solid black;"> Total</td>
+                                        <td class="text-center" colspan="9"><br />No Data.<br /><br /></td>
+                                    </tr>
+                                </t>
+                            </tr>
+
+                        </thead>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

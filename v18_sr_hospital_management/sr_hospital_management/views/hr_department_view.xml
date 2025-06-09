@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_hospital_department_form" model="ir.ui.view">
+        <field name="name">hr.department.form</field>
+        <field name="model">hr.department</field>
+        <field name="arch" type="xml">
+            <form string="department">
+                <field name="company_id" invisible="1"/>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" invisible="not id">
+                        <button class="oe_stat_button" name="action_employee_from_department" type="object" icon="fa-users">
+                            <field string="Employees" name="total_employee" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_plan_from_department" icon="fa-list-ul">
+                            <field string="Plans" name="plans_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" invisible="1"/> <!-- Remove in master -->
+                            <field name="manager_id" widget="many2one_avatar_employee"/>
+                            <field name="parent_id"/>
+                            <field name="child_ids" invisible="1"/>
+                            <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                            <field name="color" widget="color_picker" string="Color"/>
+                        </group>
+                        <group>
+                            <field name="doctor_ids" widget="many2many_tags" readonly="1" store="1" options="{'no_create': True}"/>
+                            <field name="is_hospital"/>
+                        </group>
+                        <div invisible="not id or id and not child_ids and not parent_id">
+                            <widget name="hr_department_chart"/>
+                        </div>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_department" model="ir.actions.act_window">
+        <field name="name">Departments</field>
+        <field name="res_model">hr.department</field>
+        <field name="domain">[('is_hospital', '=', True)]</field>
+        <field name="context">{'default_is_hospital': True}</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[
+				(5, 0, 0),
+				(0, 0, {'view_mode': 'list', 'view_id': ref('hr.view_department_tree')}),
+				(0, 0, {'view_mode': 'form', 'view_id': ref('sr_hospital_management.view_hospital_department_form')}),
+			]"/>
+    </record>
+
+    <menuitem id="menu_hospital_department" name="Departments"
+              parent="menu_hospital_configuration" action="action_hospital_department"/>
+
+</odoo>

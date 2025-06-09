@@ -1,0 +1,47 @@
+tfak-a254-r8ej
+
+cd Projects/
+
+source python3.10-3.10-venv/bin/activate
+
+
+
+cd /home/abcd/Projects/v18/odoo
+
+./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_jewellery_management/spj-test-002 --limit-time-real=100000 --db-filter=v18_jewellery_management -d v18_jewellery_management -u silver_plusss,sr_job_card --log-level=debug
+
+
+
+v18_jewellery_management
+
+25-04-025
+1 :- Nt Wt in product form
+2 :- Westage %  in product form
+3 :- Add sequence in perticuler mo wise
+
+
+
+
+
+
+
+
+
+
+
+
+Spure cutting
+
+Casted PCS :-sum(CST RCV PCS)
+Weight :- sum(CST nT WT)
+
+Spure-scrap :3
+
+Spure-dust : 0 
+
+spure-loss :2
+
+
+
+Button
+spure Allocate Weight on Job card

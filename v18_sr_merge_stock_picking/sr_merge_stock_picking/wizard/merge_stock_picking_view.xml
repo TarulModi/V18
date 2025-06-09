@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="merge_stock_picking_view_form" model="ir.ui.view">
+        <field name="name">merge.stock.picking.view.form</field>
+        <field name="model">merge.picking</field>
+        <field name="arch" type="xml">
+            <form string="Merge Stock Pickings">
+                <group>
+                    <group>
+                        <field name="merge_type" required="1" widget="radio"/>
+                    </group>
+
+                    <group>
+                        <field name="merge_with"
+                               domain="[('id', 'in', context.get('active_ids', []) if context else [])]"
+                               invisible="merge_type in ['new_cancel_selected', 'new_delete_all_selected']"
+                               required="merge_type in ['merge_selected_cancel_other', 'merge_selected_delete_other']"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="action_merge_pickings" string="Merge Stock Picking" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_merge_stock_picking_order" model="ir.actions.act_window">
+        <field name="name">Merge Stock Picking Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">merge.picking</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="merge_stock_picking_view_form"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">list</field>
+        <field name="context">{'default_stock_picking_ids': active_ids}</field>
+    </record>
+</odoo>
+
+

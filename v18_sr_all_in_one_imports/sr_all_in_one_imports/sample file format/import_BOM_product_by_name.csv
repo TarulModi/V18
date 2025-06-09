@@ -1,0 +1,7 @@
+Product Name,Product Variant,Product SKU,Quantity,UOM,BOM Type,Subcontractor,Reference,Component,Component Quantity,Component UoM,Component  SKU
+Wood Panel,FURN_7023,FURN_7023,8,Units,Manufacture this product,,Units ,Corner Desk Left Sit,5,Units,FURN_1118
+Desk Pad,FURN_0002,FURN_0002,7,Units,Kit,,Dozens,Drawer Black,4,Units,FURN_8900
+Table,FURN_9666,FURN_9666,5,Units,Subcontract,Mitchell Admin,Units ,Conference Chair,2,Units,E-COM13
+Table Kit,FURN_7823,FURN_7823,6,Units,Kit,,Dozens,Table Leg,8,Units,FURN_2333
+,,,,,,,,Corner Desk Left Sit,9,Dozens,FURN_1118
+Office Lamp,FURN_8888,FURN_8888,8,Units,Subcontract,Azure Interior,Units ,Desk Stand with Screen,9,Units,FURN_7888

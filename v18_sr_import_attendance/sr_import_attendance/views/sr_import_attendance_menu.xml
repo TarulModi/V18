@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<menuitem id="sr_menu_import_employee_attendance"
+			parent="hr_attendance.menu_hr_attendance_root"
+			action="sr_action_import_employee_attendance" />
+	</data>
+</odoo>

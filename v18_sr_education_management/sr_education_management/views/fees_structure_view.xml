@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="fees_structure_view_tree" model="ir.ui.view">
+            <field name="name">fees.structure.view.tree</field>
+            <field name="model">fees.structure</field>
+            <field name="arch" type="xml">
+                <list string="Fees Structure">
+                    <field name="name" />
+                    <field name="academic_year_id" />
+                    <field name="course_id" />
+                    <field name="term_ids" widget="many2many_tags"/>
+                    <field name="fees_per_term" />
+                </list>
+            </field>
+        </record>
+
+        <record id="fees_structure_view_form" model="ir.ui.view">
+            <field name="name">fees.structure.view.form</field>
+            <field name="model">fees.structure</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="academic_year_id" required="1" domain="[('state', '=', 'open')]"/>
+                                <field name="term_ids" widget="many2many_tags" required="1"
+                                       domain="[('academic_year_id', '=', academic_year_id)]"/>
+                            </group>
+                            <group>
+                                <field name="course_id" required="1"/>
+                                <field name="fees_per_term"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Fees Plan">
+                                <field name="line_ids">
+                                    <list editable="bottom">
+                                        <field name="fees_structure_id" column_invisible="1"/>
+                                        <field name="product_id" required="1"/>
+                                        <field name="amount" sum="amount"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fees_structure" model="ir.actions.act_window">
+            <field name="name">Fees Structure</field>
+            <field name="res_model">fees.structure</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="fees_structure_view_tree"/>
+        </record>
+
+        <menuitem id="menu_fees_structure" parent="sr_education_management.menu_configurations" name="Fees Structure" action="sr_education_management.action_fees_structure" groups="sr_education_management.group_administrator" sequence="3"/>
+
+    </data>
+</odoo>

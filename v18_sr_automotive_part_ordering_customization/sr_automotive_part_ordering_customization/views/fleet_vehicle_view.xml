@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<odoo>
+	<record model="ir.ui.view" id="sr_fleet_vehicle_model_view_form">
+		<field name="name">sr.fleet.vehicle.model.form</field>
+		<field name="model">fleet.vehicle.model</field>
+		<field name="inherit_id" ref="fleet.fleet_vehicle_model_view_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='vehicle_type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+			</xpath>
+            <xpath expr="//notebook" position="attributes">
+                <attribute name="invisible">1</attribute>
+			</xpath>
+		</field>
+	</record>
+
+    <record model="ir.ui.view" id="sr_fleet_vehicle_view_tree">
+		<field name="name">sr.fleet.vehicle.list</field>
+		<field name="model">fleet.vehicle</field>
+		<field name="inherit_id" ref="fleet.fleet_vehicle_view_tree" />
+		<field name="arch" type="xml">
+			<xpath expr="//list" position="replace">
+                <list string="Vehicle" decoration-warning="contract_renewal_due_soon and not contract_renewal_overdue"
+                      decoration-danger="contract_renewal_overdue"
+                      multi_edit="1" sample="1">
+                    <field name="active" column_invisible="True"/>
+                    <field name="import_display_name" />
+                    <field name="model_id" widget="many2one_avatar" readonly="1"/>
+                    <field name="category_id"/>
+                    <field name="model_year" />
+                    <field name="fuel_type" />
+                    <field name="transmission" />
+                    <field name="generation_id" />
+                    <field name="body_type_id" />
+                    <field name="type_id" />
+                    <field name="fleet_variant_id" />
+                    <field name="state_id" widget="badge" readonly="1" optional="hide"/>
+                </list>
+			</xpath>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="sr_custom_fleet_vehicle_view_form">
+		<field name="name">sr.fleet.vehicle.form</field>
+		<field name="model">fleet.vehicle</field>
+		<field name="arch" type="xml">
+			<form string="Vehicle" js_class="fleet_form">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="country_code" invisible="1"/>
+
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="image_128" widget='image' class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="model_id"/>
+                        <h1>
+                            <field name="model_id" placeholder="e.g. Model S" class="w-100"/>
+                        </h1>
+                    </div>
+                    <field name="import_display_name" invisible="0" placeholder="Display Name..."/>
+                    <notebook>
+                        <page string="Model" name="page_model">
+                            <group>
+                                <group string="Model" name="group_model">
+                                    <field name="model_year"/>
+                                    <field name="transmission"/>
+									<field name="generation_id"/>
+									<field name="body_type_id"/>
+									<field name="type_id"/>
+									<field name="fleet_variant_id"/>
+                                </group>
+                                <group string="Engine">
+                                    <field name="fuel_type"/>
+                                </group>
+                            </group>
+                        </page>
+						<page string="Note" name="note">
+                            <field name="description" nolabel="1" placeholder="Write here any other information related to this vehicle" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+		</field>
+	</record>
+
+	<record id='sr_fleet_vehicle_action' model='ir.actions.act_window'>
+        <field name="name">Vehicles</field>
+        <field name="path">fleet_vehicles</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">kanban,list,form,pivot,activity</field>
+		<field name="view_ids" eval="[
+				(5, 0, 0),
+				(0, 0, {'view_mode': 'kanban', 'view_id': ref('fleet.fleet_vehicle_view_kanban')}),
+				(0, 0, {'view_mode': 'list', 'view_id': ref('fleet.fleet_vehicle_view_tree')}),
+				(0, 0, {'view_mode': 'form', 'view_id': ref('sr_custom_fleet_vehicle_view_form')}),
+				(0, 0, {'view_mode': 'pivot', 'view_id': ref('fleet.fleet_vehicle_view_pivot')}),
+				(0, 0, {'view_mode': 'activity', 'view_id': ref('fleet.fleet_vehicle_view_activity')})
+			]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ready to manage your fleet more efficiently?
+            </p>
+            <p>
+                Let's create your first vehicle.
+            </p>
+        </field>
+    </record>
+
+	<menuitem action="sr_fleet_vehicle_action" parent="fleet.fleet_vehicles" name="Fleet"
+        id="fleet.fleet_vehicle_menu" groups="fleet.fleet_group_user" sequence="0"/>
+
+</odoo>

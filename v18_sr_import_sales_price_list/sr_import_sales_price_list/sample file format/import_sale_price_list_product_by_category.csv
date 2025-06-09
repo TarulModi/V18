@@ -1,0 +1,4 @@
+Pricelist Name,Currency,Country Group,Product Name,Product Variant,Product SKU,Product Category,Price Type,Fixed Price,Discount,Min Quantity,Date Start,Date End
+Special Offers Category,USD,SEPA Countries,Desk Combination,FURN_7800,FURN_7800,All / AVCO,fixed,75,9,3,04/12/25,04/12/26
+Other Pricelist Category,KWD,South America,Pedal Bin,E-COM10,E-COM10,All,percentage,30,6,6,04/12/25,04/12/26
+,,,Office Chair,FURN_7777,FURN_7777,All / Consumable,fixed,60,60,5,04/12/25,04/12/26

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_inventory_abc_report,access_stock_inventory_abc_report,model_stock_inventory_abc_report,base.group_user,1,1,1,1
+access_sr_abc_excel_report,access_sr_abc_excel_report,model_sr_abc_excel_report,base.group_user,1,1,1,1

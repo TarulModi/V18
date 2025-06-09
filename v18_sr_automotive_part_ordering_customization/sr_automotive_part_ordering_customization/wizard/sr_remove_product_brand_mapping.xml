@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="sr_remove_product_brand_mapping_form_wizard" model="ir.ui.view">
+        <field name="name">sr.remove.product.brand.mapping.form.wizard</field>
+        <field name="model">remove.product.brand.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="import_option" widget="radio" />
+                    </group>
+                </group>
+                <group>
+                    <field name="file" filename="name"/>
+                </group>
+                <footer>
+                    <button name="import_remove_product_brand_mapping" string="Import" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>		
+        
+    <record id="sr_action_remove_product_brand_mapping" model="ir.actions.act_window">
+        <field name="name">Remove Product Brand Mapping</field>
+        <field name="res_model">remove.product.brand.mapping</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+<!--    <menuitem action="sr_action_remove_product_brand_mapping"-->
+<!--              id="menu_remove_product_brand_mapping"-->
+<!--              parent="sale.product_menu_catalog"-->
+<!--              sequence="100"/>-->
+</odoo>

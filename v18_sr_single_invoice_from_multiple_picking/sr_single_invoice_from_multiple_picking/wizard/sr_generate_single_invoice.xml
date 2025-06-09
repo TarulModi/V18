@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+        <record id="generate_single_invoice_from_picking_form" model="ir.ui.view">
+            <field name="name">generate_single_invoice_from_picking_form</field>
+            <field name="model">sr.generate.single.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Generate Single Invoice">
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="journal_type" force_save="1" store="True" invisible="1"/>
+                            <field name="journal_id" domain="[('type','=', journal_type)]" required="1"/>
+                        </group>
+                        <group>
+                            <field name="invoice_date"/>
+                            <field name="payment_term_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Generate Invoice" name="create_invoice" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+		<record id="action_generate_single_invoice_from_picking" model="ir.actions.act_window">
+            <field name="name">Generate Single Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sr.generate.single.invoice</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking" />
+            <field name="binding_view_types">list</field>
+        </record>
+	</data>
+</odoo>

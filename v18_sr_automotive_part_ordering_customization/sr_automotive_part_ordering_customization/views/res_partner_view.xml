@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id="sr_view_partner_bank_form_inherit_account" model="ir.ui.view">
+		<field name="name">sr.res.partner.bank.form</field>
+		<field name="model">res.partner.bank</field>
+		<field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>
+		<field name="arch" type="xml">
+			<xpath expr="//group/group[1]" position="inside">
+				<field name="account_type"/>
+				<field name="status"/>
+				<field name="ifsc_code"/>
+			</xpath>
+			<xpath expr="//group/group[2]" position="inside">
+				<field name="image" widget="image"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="sr_view_partner_form" model="ir.ui.view">
+		<field name="name">sr.res.partner.form</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_partner_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='l10n_in_gst_treatment']" position="before">
+				<field name="partner_type" invisible="company_type == 'person' and parent_id"/>
+				<field name="ownership_type" invisible="company_type == 'person' and partner_type"/>
+				<field name="owner_company_type" invisible="company_type == 'person' and partner_type"/>
+				<field name="cluster_id" invisible="company_type == 'person' and parent_id"/>
+				<field name="cluster_name" invisible="company_type == 'person' and parent_id"/>
+			</xpath>
+			<xpath expr="//field[@name='l10n_in_gst_treatment']" position="attributes">
+				<attribute name="invisible">company_type != 'company'</attribute>
+			</xpath>
+			<xpath expr="//label[@for='vat']" position="attributes">
+				<attribute name="invisible">company_type != 'company'</attribute>
+			</xpath>
+			<xpath expr="//div[@name='vat_vies_container']" position="attributes">
+				<attribute name="invisible">company_type != 'company'</attribute>
+			</xpath>
+			<xpath expr="//field[@name='l10n_in_pan']" position="attributes">
+				<attribute name="readonly">0</attribute>
+			</xpath>
+			<xpath expr="//field[@name='l10n_in_pan']" position="after">
+				<field name="aadhar_no" invisible="company_type != 'person'"/>
+			</xpath>
+			<xpath expr="//page[@name='sales_purchases']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='function']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='phone']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='website']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='title']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='category_id']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='bank_ids']/list" position="inside">
+				<field name="account_type"/>
+				<field name="status"/>
+				<field name="ifsc_code"/>
+				<field name="image" widget="image"/>
+			</xpath>
+			<xpath expr="//notebook" position="inside">
+				<page name="additional_info" string="Additional Info" invisible="not partner_type">
+					<group>
+						<group>
+							<field name="kam_user_id"/>
+							<field name="create_date" string="Onboarded on"/>
+							<field name="manpower"/>
+							<label for="area"/>
+							<div name="area_uom">
+								<field name="area" class="oe_inline" />
+								<span name="uom_span">
+									per
+									<field name="uom_id" class="oe_inline" style="max-width:136px" options="{'no_create': True}" on_change="1" can_create="True" can_write="True"/>
+								</span>
+							</div>
+							<field name="partner_latitude"/>
+							<field name="partner_longitude"/>
+							<field name="verification_status"/>
+							<field name="verification_date"/>
+						</group>
+					</group>
+				</page>
+				<page name="stock_tab" string="Inventory">
+					<group>
+						<group>
+							<field name="location_id"/>
+						</group>
+					</group>
+				</page>
+			</xpath>
+		</field>
+	</record>
+</odoo>

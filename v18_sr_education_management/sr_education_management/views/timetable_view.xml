@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="school_timetable_view_tree" model="ir.ui.view">
+            <field name="name">school.timetable.view.tree</field>
+            <field name="model">school.timetable</field>
+            <field name="arch" type="xml">
+                <list string="School Timetable">
+                    <field name="course_id"/>
+                    <field name="academic_year_id" />
+                    <field name="academic_terms_id"/>
+                    <field name="company_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="school_timetable_view_form" model="ir.ui.view">
+            <field name="name">school.timetable.view.form</field>
+            <field name="model">school.timetable</field>
+            <field name="arch" type="xml">
+                <form string="School Timetable">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="course_id" required="1"/>
+                                <field name="academic_year_id" required="1" domain="[('state', '=', 'open')]"/>
+                                <field name="academic_terms_id" required="1" domain="[('academic_year_id', '=', academic_year_id)]"/>
+                            </group>
+                            <group>
+                                <field name="start_date" required="1"/>
+                                <field name="end_date" required="1"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="time_table_monday" id="time_table_monday_id" string="Monday">
+                                <field name="time_table_monday" context="{'default_day': '0'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="time_table_tuesday" id="time_table_tuesday_id" string="Tuesday">
+                                <field name="time_table_tuesday" context="{'default_day': '1'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="time_table_wednesday" id="time_table_wednesday_id" string="Wednesday">
+                                <field name="time_table_wednesday" context="{'default_day': '2'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="time_table_thursday" id="time_table_thursday_id" string="Thursday">
+                                <field name="time_table_thursday" context="{'default_day': '3'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="time_table_friday" id="time_table_friday_id" string="Friday">
+                                <field name="time_table_friday" context="{'default_day': '4'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="time_table_saturday" id="time_table_saturday_id" string="Saturday">
+                                <field name="time_table_saturday" context="{'default_day': '5'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="time_table_sunday" id="time_table_sunday_id" string="Sunday" invisible="1">
+                                <field name="time_table_sunday" context="{'default_day': '6'}">
+                                    <list editable="bottom">
+                                        <field name="day" column_invisible="1" />
+                                        <field name="class_room_id" required="1"/>
+                                        <field name="subject_id" required="1"/>
+                                        <field name="employee_id" required="1"/>
+                                        <field name="start_time" required="1" widget="float_time"/>
+                                        <field name="end_time" required="1" widget="float_time"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="day" readonly="1"/>
+                                                <field name="start_time" required="1" widget="float_time"/>
+                                                <field name="end_time" required="1" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="employee_id" required="1"/>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="class_room_id" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_school_timetable" model="ir.actions.act_window">
+            <field name="name">Timetable</field>
+            <field name="res_model">school.timetable</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="school_timetable_view_tree"/>
+        </record>
+
+        <menuitem id="menu_school_timetable" parent="sr_education_management.menu_education" name="Timetable" action="sr_education_management.action_school_timetable" groups="sr_education_management.group_administrator" sequence="5"/>
+
+    </data>
+</odoo>

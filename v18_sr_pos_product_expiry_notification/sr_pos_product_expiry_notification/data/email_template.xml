@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<odoo>-->
+<!--    <data noupdate="0">-->
+<!--        <record id="stock_production_lot_expired_email" model="mail.template">-->
+<!--            <field name="name">Product Expired Alert Email</field>-->
+<!--            <field name="email_from">{{user.company_id and user.company_id.email or ''}}</field>-->
+<!--            <field name="subject">Product Expiration</field>-->
+<!--            <field name="email_to">{{ctx['email_to']}}</field>-->
+<!--&lt;!&ndash;            <field name="email_to">{{user.email}}</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="email_to">{{ctx['email_to']|safe}}</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="model_id" ref="stock.model_stock_production_lot"/>&ndash;&gt;-->
+<!--            <field name="model_id" ref="stock.model_stock_lot"/>-->
+<!--            <field name="auto_delete" eval="False"/>-->
+<!--            <field name="body_html">-->
+<!--                <div style="margin: 0px; padding: 0px;">-->
+<!--                    <t t-foreach="object.lot_ids" t-as="lot">-->
+<!--                        Product Expiry Alert for <b><t t-out="lot.product_id.name"/></b> with serial/lot <b><t t-out="lot.name"/></b><br/>-->
+<!--                    </t>-->
+<!--                </div>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--    </data>-->
+<!--</odoo>-->
+
+<odoo>
+    <data noupdate="0">
+        <record id="stock_production_lot_expired_email" model="mail.template">
+            <field name="name">Product Expired Alert Email</field>
+            <field name="email_from">{{ user.company_id and user.company_id.email or '' }}</field>
+            <field name="subject">Product Expiration</field>
+            <field name="email_to">{{ ctx['email_to'] }}</field>
+            <field name="model_id" ref="stock.model_stock_lot"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <t t-foreach="ctx['lot_ids']" t-as="lot">
+                        Product Expiry Alert for <b><t t-out="lot.product_id.name"/></b> with serial/lot <b><t t-out="lot.name"/></b><br/>
+                    </t>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

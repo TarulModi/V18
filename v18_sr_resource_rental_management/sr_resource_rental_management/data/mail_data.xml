@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="email_template_pickup" model="mail.template">
+        <field name="name">Reminder: Pickup</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Email for pickup {{ (object.env['ir.config_parameter'].get_param('sr_resource_rental_management.reminder_pickup_order_days')) }}</field>
+        <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+        <field name="partner_to">{{object.partner_id.id}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <t t-set="value" t-value="object.env['ir.config_parameter'].get_param('sr_resource_rental_management.reminder_pickup_order_days')" />
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hello <t t-out="object.partner_id.name or ''"/>,<br/>
+                    &#160;&#160;&#160;&#160;This is formal reminder for your pickup rental order <strong><t t-out="object.name or ''"/></strong> after <t t-out="value" /> days on <t t-out="object.pickup_date"/>.<br/>
+                    Regards
+                </p>
+                <br/><br/><br/>
+                <t t-if="object.order_line">
+                    <table class="table" border="1">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-left">Product</th>
+                                <th class="text-left">Description</th>
+                                <th class="text-right">Quantity</th>
+                                <th>UnitPrice</th>
+                                <th>Taxes</th>
+                                <th class="text-left">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="object.order_line" t-as="line">
+                            <t t-if="line.check_pickup()">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left"><t t-out="line.product_id.name"/></td>
+                                        <td class="text-left"><t t-out="line.name"/></td>
+                                        <td class="text-right"><t t-out="line.product_uom_qty"/></td>
+                                        <td><t t-out="line.price_unit"/></td>
+                                        <td><t t-out="line.get_tax_name()"/></td>
+                                        <td class="text-left"><t t-out="line.price_subtotal"/></td>
+                                    </tr>
+                                </tbody>
+                            </t>
+                        </t>
+                    </table>
+                </t>
+            </div>
+        </field>
+        <field name="lang">{{object.partner_id.lang}}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_return" model="mail.template">
+        <field name="name">Reminder: Return</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Email for Return {{ (object.env['ir.config_parameter'].get_param('sr_resource_rental_management.reminder_return_order_days')) }}</field>
+        <field name="email_from">{{(object.user_id.email_formatted or user.email_formatted) }}</field>
+        <field name="partner_to">{{object.partner_id.id}}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <t t-set="value" t-value="object.env['ir.config_parameter'].get_param('sr_resource_rental_management.reminder_return_order_days')" />
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hello <t t-out="object.partner_id.name or ''"/>,<br/>
+                    &#160;&#160;&#160;&#160;This is formal reminder for your return rental order <strong><t t-out="object.name"/></strong>  after <t t-out="value"/> days on <t t-out="object.return_date"/>.<br/>
+                    Regards
+                </p>
+                <br/>
+                <br/>
+                <br/>
+                <t t-if="object.order_line">
+                    <table class="table" border="1">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-left">Product</th>
+                                <th class="text-left">Description</th>
+                                <th class="text-right">Quantity</th>
+                                <th class="text-right">Qty Delivered</th>
+                                <th>Unit Price</th>
+                                <th>Taxes</th>
+                                <th class="text-left">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="object.order_line" t-as="line">
+                            <t t-if="line.check_return()">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left"><t t-out="line.product_id.name"/></td>
+                                        <td class="text-left"><t t-out="line.name"/></td>
+                                        <td class="text-right"><t t-out="line.product_uom_qty"/></td>
+                                        <td class="text-right"><t t-out="line.qty_delivered"/></td>
+                                        <td><t t-out="line.price_unit"/></td>
+                                        <td><t t-out="line.get_tax_name()"/></td>
+                                        <td class="text-left"><t t-out="line.price_subtotal"/></td>
+                                    </tr>
+                                </tbody>
+                            </t>
+                        </t>
+                    </table>
+                </t>
+            </div>
+        </field>
+        <field name="lang">{{object.partner_id.lang}}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

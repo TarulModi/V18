@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="so_po_line_wizard_view_form" model="ir.ui.view">
+        <field name="name">wizard.sale.line.po.form</field>
+        <field name="model">wizard.sale.line.po</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="po_line_ids" nolabel="1" readonly="1" invisible="1">
+                            <list>
+                                <field name="partner_id"/>
+                                <field name="date_order"/>
+                                <field name="product_qty"/>
+                                <field name="price_unit"/>
+                            </list>
+                        </field>
+                        <field name="product_variant_seller_ids" nolabel="1" readonly="1">
+                            <list string="Vendor Information">
+                                <field name="priority"/>
+                                <field name="partner_id" readonly="0" on_change="1" can_create="True" can_write="True"/>
+                                <field name="ap"/>
+                                <field name="gp"/>
+                                <field name="cluster_id"/>
+                                <field name="cluster_name"/>
+                                <field name="write_date"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

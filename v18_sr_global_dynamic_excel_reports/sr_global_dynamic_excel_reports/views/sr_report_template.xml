@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<odoo>
+	<record model="ir.ui.view" id="sr_template_configuration_form">
+		<field name="name">sr.template.configuration.form</field>
+		<field name="model">sr.report.template.configuration</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_title">
+						<label class="oe_edit_only" for="name" string="Template Name" />
+						<h1>
+							<field name="name" placeholder="Template Name" />
+						</h1>
+						<div name="options">
+							<div>
+								<field name="is_show_company" />
+								<label for="is_show_company" />
+							</div>
+							<div>
+								<field name="is_print_total" />
+								<label for="is_print_total" />
+							</div>
+						</div>
+					</div>
+					<group string="Excel Information">
+						<group>
+							<field name="excel_sheet_name" />
+						</group>
+						<group>
+							<field name="header_title" />
+						</group>
+					</group>
+					<notebook>
+						<page string="Company Details" invisible="is_show_company == False">
+							<group>
+								<group>
+									<field name="company_font_name" />
+								</group>
+								<group>
+									<field name="company_font_size" />
+								</group>
+							</group>
+							<group>
+								<group>
+									<field name="company_font_color" />
+								</group>
+								<group>
+									<field name="company_background_color" />
+								</group>
+							</group>
+							<group>
+								<group>
+									<field name="is_company_bold" />
+								</group>
+								<group>
+									<field name="is_company_italic" />
+								</group>
+							</group>
+						</page>
+						<page string="Total Details" invisible="is_print_total == False">
+							<group>
+								<group>
+									<field name="total_background_color" />
+								</group>
+								<group>
+									<field name="total_Font_color" />
+								</group>
+							</group>
+						</page>
+						<page string="Header Details">
+							<group>
+								<group>
+									<field name="header_font_name" />
+								</group>
+								<group>
+									<field name="header_font_size" />
+								</group>
+							</group>
+							<group>
+								<group>
+									<field name="header_font_color" />
+								</group>
+								<group>
+									<field name="header_background_color" />
+								</group>
+							</group>
+							<group>
+								<group>
+									<field name="is_header_bold" />
+								</group>
+								<group>
+									<field name="is_header_italic" />
+								</group>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="sr_template_configuration_tree">
+		<field name="name">sr.template.configuration.tree</field>
+		<field name="model">sr.report.template.configuration</field>
+		<field name="arch" type="xml">
+			<list>
+				<field name="name" />
+				<field name="excel_sheet_name"/>
+				<field name="header_title"/>
+			</list>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="sr_action_template_configuration">
+		<field name="name">Template Configuration</field>
+		<field name="res_model">sr.report.template.configuration</field>
+		<field name="binding_view_types">form</field>
+		<field name="view_mode">list,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new template for your excel report
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="sr_global_dynamic_excel_report_parent_menu"
+		name="Global Dynamic Excel Report" web_icon="sr_global_dynamic_excel_reports,static/description/icon.png"/>
+
+	<menuitem action="sr_action_template_configuration" id="sr_menu_template_configuration"
+		parent="sr_global_dynamic_excel_report_parent_menu" />
+</odoo>

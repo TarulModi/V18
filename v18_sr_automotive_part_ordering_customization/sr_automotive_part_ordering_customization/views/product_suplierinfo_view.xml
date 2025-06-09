@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id="sr_product_product_supplierinfo_tree_view2" model="ir.ui.view">
+		<field name="name">sr.product.supplierinfo.list.view2.product</field>
+		<field name="model">product.supplierinfo</field>
+		<field name="priority" eval="1100"/>
+		<field name="inherit_id" ref="purchase.product_product_supplierinfo_tree_view2"/>
+		<field name="arch" type="xml">
+<!--			<xpath expr="//field[@name='sequence']" position="after">-->
+<!--				<field name="priority"/>-->
+<!--			</xpath>-->
+			<xpath expr="//field[@name='min_qty']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='delay']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='sequence']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+		</field>
+	</record>
+
+    <record id="sr_product_supplierinfo_tree_view" model="ir.ui.view">
+		<field name="name">sr.product.supplierinfo.list.view</field>
+		<field name="model">product.supplierinfo</field>
+		<field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='price']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+            <xpath expr="//field[@name='partner_id']" position="before">
+				<field name="priority"/>
+			</xpath>
+            <xpath expr="//field[@name='product_id']" position="attributes">
+				<attribute name="optional">show</attribute>
+			</xpath>
+            <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+				<attribute name="optional">hide</attribute>
+			</xpath>
+            <xpath expr="//field[@name='product_id']" position="after">
+				<field name="ap"/>
+                <field name="gp"/>
+				<field name="cluster_id"/>
+				<field name="cluster_name"/>
+			</xpath>
+            <xpath expr="//list" position="inside">
+				<field name="write_date"/>
+			</xpath>
+			<xpath expr="//field[@name='price']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='min_qty']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='delay']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='sequence']" position="attributes">
+				<attribute name="column_invisible">1</attribute>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

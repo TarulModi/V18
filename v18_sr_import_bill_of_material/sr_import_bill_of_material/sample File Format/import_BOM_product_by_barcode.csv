@@ -1,0 +1,5 @@
+Product Name,Product Variant,Barcode,Quantity,UOM,BoM Type,Subcontractor,Reference,Component,Component Quantity,Component UoM,Component  Barcode
+Wood Panel,FURN_7023,FURN_7023,8,Units,Subcontract,Nicole Ford,Units ,Screw,5,Units,CONS_25630
+Desk Combination,FURN_7800,FURN_7800,6,Units,Manufacture this product,,Dozens,Office Chair Black,3,Units,FURN_0269
+,,,,,,,,Drawer Black,9,Dozens,FURN_8900
+Table,FURN_9666,FURN_9666,5,Units,Subcontract,Azure Interior,Units ,Office Chair Black,2,Units,FURN_0269

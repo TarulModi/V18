@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sr_import_price_list_form_wizard" model="ir.ui.view">
+			<field name="name">sr.import.price.list.form.wizard</field>
+			<field name="model">import.price.list</field>
+			<field name="arch" type="xml">
+				<form string="Import Price List">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+						<group>
+							<field name="import_type" widget="radio" />
+							<field name="import_product_by" widget="radio"
+                                invisible="import_type == 'category'"
+                                required="import_type == 'product'"/>
+						</group>
+					</group>
+					<group>
+						<field name="file" filename="name" />
+					</group>
+					<footer>
+                       	<button name="action_import_price_list" type="object" string="Import" class="btn-primary" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+				</form>
+			</field>
+		</record>
+
+        <record id="sr_action_import_price_list" model="ir.actions.act_window">
+			<field name="name">Import Price List</field>
+			<field name="res_model">import.price.list</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="sr_action_import_price_list" id="sr_menu_import_price_list" parent="sale.product_menu_catalog" sequence="31" />
+
+    </data>
+</odoo>

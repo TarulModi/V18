@@ -1,0 +1,99 @@
+<odoo>
+    <template id="report_rma_order_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="o">
+
+                        <h2 class="mt-4"><font style="font-size: 35px;"><strong>Return Order #<span t-esc="o.name"/> <span style="text-transform: capitalize;" t-esc="o.state"/></strong></font></h2>
+
+                        <div class="row mt-4 mb-4" id="informations_1">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Customer:</strong>
+                                <p class="m-0" t-field="o.sale_order_id.partner_id.name"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Date:</strong>
+                                <p class="m-0" t-field="o.date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Order Referance:</strong>
+                                <p class="m-0" t-field="o.sale_order_id.name"/>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Shipping Referance:</strong>
+                                <p class="m-0" t-field="o.stock_picking_id.name"/>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4" id="informations_2">
+                            <div class="col-5 mw-100 ">
+                                <strong>Responsible:</strong>
+                                <p class="m-0" t-field="o.user_id.name"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered" border="1" style="width:100%;margin-top: 32px">
+                            <tr>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Delivery Quantity</th>
+                                <th class="text-center">Return Quantity</th>
+                                <th class="text-center">Lot/Serial Number</th>
+                            </tr>
+                            <t t-foreach="o.rma_order_line_ids" t-as="line">
+                                <tr>
+                                    <td class="text-center">
+                                        <p t-esc="line.product_id.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <p t-esc="line.delivery_qty"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <p t-esc="line.return_qty"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <p t-esc="', '.join([ lt.name for lt in line.lot_ids ])"/>
+                                   </td>
+                                </tr>
+                            </t>
+                        </table>
+                        <t t-if="o.rma_replaced_product_ids">
+                        <h4>Replaced Product</h4>
+                        <table class="table table-bordered" border="0" style="width:100%;margin-top: 32px">
+                            <tr>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Price</th>
+                            </tr>
+                            <t t-foreach="o.rma_replaced_product_ids" t-as="line">
+                                <tr>
+                                    <td class="text-center">
+                                        <p t-esc="line.product_id.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <p t-esc="line.qty"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <p t-esc="line.price"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
+                        </t>
+                        <table class="table table-bordered" style="width:100%;border-style:hidden;">
+                            <tr style="border-style:hidden;">
+                                <th class="text-start"><h3>RMA Notes :</h3></th>
+                            </tr>
+                            <tr>
+                                <td><p t-esc="o.rma_notes"/></td>
+                            </tr>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
+
+
+
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_profit_loss_statement" model="ir.actions.report">
+        <field name="name">Profit Loss Statement</field>
+        <field name="model">profit.loss.statement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_account_report_customization.profit_loss_report</field>
+        <field name="report_file">sr_account_report_customization.profit_loss_statement_report_view</field>
+        <field name="binding_model_id" ref="sr_account_report_configuration.model_profit_loss_statement"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
+

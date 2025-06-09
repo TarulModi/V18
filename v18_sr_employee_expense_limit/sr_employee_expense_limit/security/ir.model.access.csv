@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_expence_expence,access_expence_expence,model_expence_expence,base.group_user,1,1,1,1

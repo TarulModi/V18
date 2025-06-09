@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_room_facility_list" model="ir.ui.view">
+        <field name="name">room.facility.list</field>
+        <field name="model">room.facility</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="1" edit="1">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_room_facility_form" model="ir.ui.view">
+        <field name="name">room.facility.form</field>
+        <field name="model">room.facility</field>
+        <field name="arch" type="xml">
+            <form string="Room Facility">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_room_facility" model="ir.actions.act_window">
+        <field name="name">Facilities</field>
+        <field name="res_model">room.facility</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_room_facility" name="Facilities"
+              parent="menu_hospital_configuration" action="action_room_facility" sequence="1"/>
+
+</odoo>

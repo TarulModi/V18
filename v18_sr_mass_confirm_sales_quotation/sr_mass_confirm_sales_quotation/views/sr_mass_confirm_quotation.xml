@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="sr_confirm_quotations_email_wizard_form_view" model="ir.ui.view">
+			<field name="name">sr.confirm.quotations.email.wizard.form.view</field>
+			<field name="model">mass.confirm.quotation</field>
+			<field name="arch" type="xml">
+				<form string="Confirm Quotations with Email">
+					<group>
+						<field name="is_send_email"/>
+						<field name="template_id" invisible="is_send_email == False" required="is_send_email == True"/>
+					</group>
+					<footer>
+						<button name="sr_mass_confirm_quotations" string="Confirm Order" type="object" class="oe_highlight"
+							invisible="is_send_email != False" />
+						<button name="sr_mass_confirm_quotations_with_emails"
+							string="Confirm Order and Send email" type="object" class="oe_highlight"
+							invisible="is_send_email == False" />
+						<button string="Cancel" class="oe_highlight"
+							special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_act_confirm_quotation_with_emails" model="ir.actions.act_window">
+	        <field name="name">Confirm Quotations with Emails</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">mass.confirm.quotation</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="sr_confirm_quotations_email_wizard_form_view"/>
+	        <field name="target">new</field>
+	        <field name="binding_model_id" ref="sale.model_sale_order"/>
+	    </record>
+	</data>
+</odoo>

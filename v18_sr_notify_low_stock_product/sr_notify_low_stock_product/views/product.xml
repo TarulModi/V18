@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="product_min_qty_form_view">
+            <field name="name">product.min.qty.form.view</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="before">
+                    <field name="min_qty_visible" invisible="1"/>
+                    <field name="min_qty" string="Min qty" invisible="min_qty_visible == False"/>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="product_category_min_qty_form_view">
+            <field name="name">product.category.min.qty.form.view</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <group name="first" position="after">
+                    <group>
+                        <field name="min_qty_visible" invisible="1"/>
+                        <group name="min_qty" string="Notify Min Qty" invisible="min_qty_visible == False">
+                            <field name="min_qty" string="Min Qty" invisible="min_qty_visible == False"/>
+                        </group>
+                    </group>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

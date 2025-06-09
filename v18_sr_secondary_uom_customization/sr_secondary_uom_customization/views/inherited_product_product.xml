@@ -1,0 +1,49 @@
+<odoo>
+
+    <record id="view_product_variant_easy_edit_uom_dynamic" model="ir.ui.view">
+        <field name="name">product.product.view.form.easy.uom.dynamic</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[last()]" position="after">
+                <group string="Secondary UOM Details" invisible="is_secondary == False">
+                    <group>
+                        <field name="is_secondary" invisible="1"/>
+                        <field name="secondary_uom_id" invisible="is_secondary == False"/>
+                    </group>
+                    <group>
+                        <field name="standard_ratio" invisible="is_secondary == False"/>
+                        <field name="dynamic_ratio" invisible="is_secondary == False"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_product_tree_view_inherit_secondary_uom" model="ir.ui.view">
+        <field name="name">product.product.tree.inherit.secondary.uom</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_template_variant_value_ids']" position="after">
+                <field name="secondary_uom_id"/>
+                <field name="standard_ratio"/>
+                <field name="dynamic_ratio"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_product_product_stock_tree_add_ratios" model="ir.ui.view">
+        <field name="name">product.product.stock.list.inherit.uom.ratio</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='outgoing_qty']" position="after">
+                <field name="secondary_uom_id" string="Secondary UOM"/>
+                <field name="standard_ratio" sum="Total Standard"/>
+                <field name="dynamic_ratio" sum="Total Dynamic"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

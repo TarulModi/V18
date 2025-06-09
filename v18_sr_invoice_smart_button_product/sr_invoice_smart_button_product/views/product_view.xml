@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_product_invoice_list" model="ir.actions.act_window">
+        <field name="name">Invoice Lines</field>
+        <field name="res_model">account.move.line</field>
+        <field name="domain">[('move_id.state', 'in', ['open', 'paid']),
+                             ('product_id.id', '=', active_id)]</field>
+    </record>
+
+    <record model="ir.ui.view" id="product_form_view_invoice_button">
+        <field name="name">product.product.account.invoice</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+
+                <button class="oe_stat_button" name="%(action_product_invoice_list)d"
+                        type="action" icon="fa-cart-plus" groups="account.group_account_manager">
+                    <field string="Invoice Qty" name="invoice_count" widget="statinfo"/>
+                </button>
+
+                <button class="oe_stat_button" name="%(action_product_invoice_list)d"
+                        type="action" icon="fa-usd" groups="account.group_account_manager">
+                    <field string="Invoice Amt" name="invoice_amount_count" widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

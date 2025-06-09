@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<odoo>
+    <data>
+        <record id="view_financial_position_form" model="ir.ui.view">
+            <field name="name">view.financial.position.form</field>
+            <field name="model">financial.position</field>
+            <field name="arch" type="xml">
+                <form string="Financial Position Form" create="False" delete="False">
+                    <sheet>
+                        <group>
+                        </group>
+                        <notebook>
+                            <page string="Assets">
+                                <field name="financial_position_ids">
+                                    <list editable="bottom">
+                                        <field name="assets" required="1"/>
+                                        <field name="account_ids" widget="many2many_tags"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <page string="Equity Liabilities">
+                                <field name="equity_liabilities_ids">
+                                    <list editable="bottom">
+                                        <field name="equity_liabilities" required="1"/>
+                                        <field name="account_ids" widget="many2many_tags"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="financial_position_configuration_demo_data" model="financial.position"/>
+
+        <record id="action_financial_position" model="ir.actions.act_window">
+            <field name="name">Financial Position</field>
+            <field name="res_model">financial.position</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_financial_position_form"/>
+            <field name="res_id" ref="financial_position_configuration_demo_data"/>
+        </record>
+
+        <menuitem id="menu_financial_position" name="Financial Position" parent="submenu_configuration" action="action_financial_position" sequence="2"/>
+
+    </data>
+</odoo>

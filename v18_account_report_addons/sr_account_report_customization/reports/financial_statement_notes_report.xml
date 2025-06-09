@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="finc_stm_notes">
+        <t t-call="web.internal_layout">
+            <main>
+                <div class="page">
+                    <h2 style="color: #6666ff; font-weight:bold;">Notes to the Financial Statements</h2>
+                    <p style="font-weight:bold; margin: 0; padding: 0; font-size:20px;">
+                        <t t-esc="res_company.name"/>
+                    </p>
+                    <p style="font-weight:bold; font-size:20px;">
+                        For the month ended <t t-esc="current_month_last_date"/>
+                    </p>
+
+                    <t t-if="results">
+                        <!-- Month Header Row -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead class="align-middle">
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"/>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="current_month_label"/>
+                                    </th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="previous_month_label"/>
+                                    </th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="previous_previous_month_label"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <!-- Section Title -->
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0;">
+                            Property, Plant &amp; Equipment
+                        </h3>
+
+                        <!-- Table Content -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 10px); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 10px;">
+                            <tbody>
+                                <t t-foreach="results" t-as="line">
+                                    <tr>
+                                        <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="line['account_name']"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['current_month'] == 0 else '({:,.2f})'.format(abs(line['current_month'])) if line['current_month'] &lt; 0 else '{:,.2f}'.format(line['current_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_month'])) if line['previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_previous_month'])) if line['previous_previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_previous_month'])"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- Total Row -->
+                                <tr style="font-weight: bold;" class="align-middle">
+                                    <td style="padding: 6px 8px;">Total Property, Plant &amp; Equipment</td>
+                                    <td style="padding: 6px 8px; text-align: right;">
+                                        <t t-esc="'-' if total_current_ppe == 0 else '({:,.2f})'.format(abs(total_current_ppe)) if total_current_ppe &lt; 0 else '{:,.2f}'.format(total_current_ppe)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right;">
+                                        <t t-esc="'-' if total_previous_ppe == 0 else '({:,.2f})'.format(abs(total_previous_ppe)) if total_previous_ppe &lt; 0 else '{:,.2f}'.format(total_previous_ppe)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right;">
+                                        <t t-esc="'-' if total_previous_previous_ppe == 0 else '({:,.2f})'.format(abs(total_previous_previous_ppe)) if total_previous_previous_ppe &lt; 0 else '{:,.2f}'.format(total_previous_previous_ppe)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+
+                    <br/>
+                    <t t-if="wip_results">
+                        <!-- Month Header Row -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead>
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"/>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;"><t t-esc="current_month_label"/></th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;"><t t-esc="previous_month_label"/></th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;"><t t-esc="previous_previous_month_label"/></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0;">
+                            WIP
+                        </h3>
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0; margin-left: 20px;">
+                            Work In Progress
+                        </h3>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 20px); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 30px;">
+                            <tbody>
+                                <t t-foreach="wip_results" t-as="line">
+                                    <tr>
+                                        <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="line['account_name']"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['current_month'] == 0 else '({:,.2f})'.format(abs(line['current_month'])) if line['current_month'] &lt; 0 else '{:,.2f}'.format(line['current_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_month'])) if line['previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_previous_month'])) if line['previous_previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_previous_month'])"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- Totals Row -->
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">Total Work In Progress</td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if wip_total_current == 0 else '({:,.2f})'.format(abs(wip_total_current)) if wip_total_current &lt; 0 else '{:,.2f}'.format(wip_total_current)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if wip_total_previous == 0 else '({:,.2f})'.format(abs(wip_total_previous)) if wip_total_previous &lt; 0 else '{:,.2f}'.format(wip_total_previous)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if wip_total_previous_previous == 0 else '({:,.2f})'.format(abs(wip_total_previous_previous)) if wip_total_previous_previous &lt; 0 else '{:,.2f}'.format(wip_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Extra Totals Row -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 10px; margin-top: 1px;">
+                            <tbody>
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-top: 1px solid #000;">Extra Total WIP</td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if wip_total_current == 0 else '({:,.2f})'.format(abs(wip_total_current)) if wip_total_current &lt; 0 else '{:,.2f}'.format(wip_total_current)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if wip_total_previous == 0 else '({:,.2f})'.format(abs(wip_total_previous)) if wip_total_previous &lt; 0 else '{:,.2f}'.format(wip_total_previous)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if wip_total_previous_previous == 0 else '({:,.2f})'.format(abs(wip_total_previous_previous)) if wip_total_previous_previous &lt; 0 else '{:,.2f}'.format(wip_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <br/>
+                     <t t-if="cash_results">
+                        <!-- Month Header Row - Should Be First -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead>
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"/>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;"><t t-esc="current_month_label"/></th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;"><t t-esc="previous_month_label"/></th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;"><t t-esc="previous_previous_month_label"/></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0;">
+                            Cash &amp; Cash Equivalents
+                        </h3>
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0; margin-left: 20px;">
+                            cash &amp; cash equivalents
+                        </h3>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 20px); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 30px;">
+                            <tbody>
+                                <t t-foreach="cash_results" t-as="line">
+                                    <tr>
+                                        <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="line['account_name']"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['current_month'] == 0 else '({:,.2f})'.format(abs(line['current_month'])) if line['current_month'] &lt; 0 else '{:,.2f}'.format(line['current_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_month'])) if line['previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_previous_month'])) if line['previous_previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_previous_month'])"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">Total Cash and cash equivalents</td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if cash_total_current == 0 else '({:,.2f})'.format(abs(cash_total_current)) if cash_total_current &lt; 0 else '{:,.2f}'.format(cash_total_current)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if cash_total_previous == 0 else '({:,.2f})'.format(abs(cash_total_previous)) if cash_total_previous &lt; 0 else '{:,.2f}'.format(cash_total_previous)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if cash_total_previous_previous == 0 else '({:,.2f})'.format(abs(cash_total_previous_previous)) if cash_total_previous_previous &lt; 0 else '{:,.2f}'.format(cash_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100%); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 10px; margin-top: 1px;">
+                            <tbody>
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-top: 1px solid #000;">Total Cash and Cash Equivalents</td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if cash_total_current == 0 else '({:,.2f})'.format(abs(cash_total_current)) if cash_total_current &lt; 0 else '{:,.2f}'.format(cash_total_current)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if cash_total_previous == 0 else '({:,.2f})'.format(abs(cash_total_previous)) if cash_total_previous &lt; 0 else '{:,.2f}'.format(cash_total_previous)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if cash_total_previous_previous == 0 else '({:,.2f})'.format(abs(cash_total_previous_previous)) if cash_total_previous_previous &lt; 0 else '{:,.2f}'.format(cash_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <br/>
+
+                     <t t-if="payment_receivables_results">
+                        <!-- Table Header -->
+                         <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead>
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"/>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;  font-weight: bold;"><t t-esc="current_month_label"/></th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;  font-weight: bold;"><t t-esc="previous_month_label"/></th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right;  font-weight: bold;"><t t-esc="previous_previous_month_label"/></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <!-- Section Title -->
+                        <h3 style="
+                            font-size: 14px;
+                            font-weight: bold;
+                            border-bottom: 1px solid #000;
+                            padding: 6px 8px;
+                            margin: 0;
+                            margin-top: 25px;
+                        ">
+                             Prepayment &amp; Other Receivables
+                        </h3>
+
+                        <t t-foreach="payment_receivables_results" t-as="group">
+                            <!-- Subgroup Label -->
+                            <h4 style="margin: 12px 0 5px 10px; font-size: 12px; font-weight: bold; color: black;">
+                                <t t-esc="group['label']"/>
+                            </h4>
+
+                            <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 20px); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 10px;">
+                                <tbody>
+                                    <t t-foreach="group['lines']" t-as="line">
+                                        <tr>
+                                            <td style="padding: 6px 8px; text-align: left; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="line['name']"/>
+                                            </td>
+                                            <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['current'] == 0 else '({:,.2f})'.format(abs(line['current'])) if line['current'] &lt; 0 else '{:,.2f}'.format(line['current'])"/>
+                                            </td>
+                                            <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['previous'] == 0 else '({:,.2f})'.format(abs(line['previous'])) if line['previous'] &lt; 0 else '{:,.2f}'.format(line['previous'])"/>
+                                            </td>
+                                            <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['previous_previous'] == 0 else '({:,.2f})'.format(abs(line['previous_previous'])) if line['previous_previous'] &lt; 0 else '{:,.2f}'.format(line['previous_previous'])"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Subtotal Row -->
+                                    <tr style="font-weight: bold;">
+                                        <td style="padding: 6px 8px;">Total <t t-esc="group['label']"/></td>
+                                        <td style="padding: 6px 8px; text-align: right;">
+                                            <t t-esc="'-' if group['total_current'] == 0 else '({:,.2f})'.format(abs(group['total_current'])) if group['total_current'] &lt; 0 else '{:,.2f}'.format(group['total_current'])"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; text-align: right;">
+                                            <t t-esc="'-' if group['total_previous'] == 0 else '({:,.2f})'.format(abs(group['total_previous'])) if group['total_previous'] &lt; 0 else '{:,.2f}'.format(group['total_previous'])"/>
+                                        </td>
+                                        <td style="padding: 6px 8px; text-align: right;">
+                                            <t t-esc="'-' if group['total_previous_previous'] == 0 else '({:,.2f})'.format(abs(group['total_previous_previous'])) if group['total_previous_previous'] &lt; 0 else '{:,.2f}'.format(group['total_previous_previous'])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Grand Total Row -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 10px); margin-left: 10px; font-size: 10pt; border-collapse: collapse; margin-top: 10px;">
+                            <tr style="font-weight: bold; border-top: 1px solid #000;">
+                                <td style="padding: 6px 8px;">Grand Total Prepayment &amp; Other Receivables</td>
+                                <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                    <t t-esc="'-' if payment_receivables_grand_total_current == 0 else '({:,.2f})'.format(abs(payment_receivables_grand_total_current)) if payment_receivables_grand_total_current &lt; 0 else '{:,.2f}'.format(payment_receivables_grand_total_current)"/>
+                                </td>
+                                <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                    <t t-esc="'-' if payment_receivables_grand_total_previous == 0 else '({:,.2f})'.format(abs(payment_receivables_grand_total_previous)) if payment_receivables_grand_total_previous &lt; 0 else '{:,.2f}'.format(payment_receivables_grand_total_previous)"/>
+                                </td>
+                                <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                    <t t-esc="'-' if payment_receivables_grand_total_previous_previous == 0 else '({:,.2f})'.format(abs(payment_receivables_grand_total_previous_previous)) if payment_receivables_grand_total_previous_previous &lt; 0 else '{:,.2f}'.format(payment_receivables_grand_total_previous_previous)"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+
+
+                    <br/>
+                    <t t-if="related_results">
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead>
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"/>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="current_month_label"/>
+                                    </th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="previous_month_label"/>
+                                    </th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="previous_previous_month_label"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0;">
+                            Related partymain
+                        </h3>
+                        <h3 style="font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0; margin-left: 20px;">
+                           Related party
+                        </h3>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 20px); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 30px;">
+                            <tbody>
+                                <t t-foreach="related_results" t-as="line">
+                                    <tr>
+                                        <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="line['account_name']"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['current_month'] == 0 else '({:,.2f})'.format(abs(line['current_month'])) if line['current_month'] &lt; 0 else '{:,.2f}'.format(line['current_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_month'])) if line['previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_previous_month'])) if line['previous_previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_previous_month'])"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">Total Related party</td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if related_total_current == 0 else '({:,.2f})'.format(abs(related_total_current)) if related_total_current &lt; 0 else '{:,.2f}'.format(related_total_current)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if related_total_previous == 0 else '({:,.2f})'.format(abs(related_total_previous)) if related_total_previous &lt; 0 else '{:,.2f}'.format(related_total_previous)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if related_total_previous_previous == 0 else '({:,.2f})'.format(abs(related_total_previous_previous)) if related_total_previous_previous &lt; 0 else '{:,.2f}'.format(related_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 10px; margin-top: 1px;">
+                            <tbody>
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-top: 1px solid #000;">Total Related party</td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if related_total_current == 0 else '({:,.2f})'.format(abs(related_total_current)) if related_total_current &lt; 0 else '{:,.2f}'.format(related_total_current)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if related_total_previous == 0 else '({:,.2f})'.format(abs(related_total_previous)) if related_total_previous &lt; 0 else '{:,.2f}'.format(related_total_previous)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if related_total_previous_previous == 0 else '({:,.2f})'.format(abs(related_total_previous_previous)) if related_total_previous_previous &lt; 0 else '{:,.2f}'.format(related_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <br/>
+
+                    <!-- Month Header Row - Should Be First -->
+                    <t t-if="related_results">
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead>
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"/>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="current_month_label"/>
+                                    </th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="previous_month_label"/>
+                                    </th>
+                                    <th style="width: 20%; padding: 6px 8px; text-align: right; font-weight: bold;">
+                                        <t t-esc="previous_previous_month_label"/>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <h3 style="
+                            font-size: 14px;
+                            font-weight: bold;
+                            border-bottom: 1px solid #000;
+                            padding: 6px 8px;
+                            margin: 0;
+                        ">
+                            6. Provisions For Employee
+                        </h3>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: calc(100% - 20px); border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 30px;">
+                            <tbody>
+                                <t t-foreach="related_results" t-as="line">
+                                    <tr>
+                                        <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="line['account_name']"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['current_month'] == 0 else '({:,.2f})'.format(abs(line['current_month'])) if line['current_month'] &lt; 0 else '{:,.2f}'.format(line['current_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_month'])) if line['previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_month'])"/>
+                                        </td>
+                                        <td style="width: 20%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                            <t t-esc="'-' if line['previous_previous_month'] == 0 else '({:,.2f})'.format(abs(line['previous_previous_month'])) if line['previous_previous_month'] &lt; 0 else '{:,.2f}'.format(line['previous_previous_month'])"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">Total Related party</td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if related_total_current == 0 else '({:,.2f})'.format(abs(related_total_current)) if related_total_current &lt; 0 else '{:,.2f}'.format(related_total_current)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if related_total_previous == 0 else '({:,.2f})'.format(abs(related_total_previous)) if related_total_previous &lt; 0 else '{:,.2f}'.format(related_total_previous)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                        <t t-esc="'-' if related_total_previous_previous == 0 else '({:,.2f})'.format(abs(related_total_previous_previous)) if related_total_previous_previous &lt; 0 else '{:,.2f}'.format(related_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="o_total_table table table-borderless avoid-page-break-inside" style="width: 100%; border-collapse: collapse; font-size: 10pt; border-spacing: 0; margin-left: 10px; margin-top: 1px;">
+                            <tbody>
+                                <tr style="font-weight: bold;">
+                                    <td style="padding: 6px 8px; border-top: 1px solid #000;">Total Related party</td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if related_total_current == 0 else '({:,.2f})'.format(abs(related_total_current)) if related_total_current &lt; 0 else '{:,.2f}'.format(related_total_current)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if related_total_previous == 0 else '({:,.2f})'.format(abs(related_total_previous)) if related_total_previous &lt; 0 else '{:,.2f}'.format(related_total_previous)"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 6px 8px; text-align: right; border-top: 1px solid #000;">
+                                        <t t-esc="'-' if related_total_previous_previous == 0 else '({:,.2f})'.format(abs(related_total_previous_previous)) if related_total_previous_previous &lt; 0 else '{:,.2f}'.format(related_total_previous_previous)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </main>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_sr_grant_employee_notice,access_sr_grant_employee_notice,model_sr_grant_employee_notice,,1,1,1,1
+access_sr_employee_offense,access_sr_employee_offense,model_sr_employee_offense,,1,1,1,1

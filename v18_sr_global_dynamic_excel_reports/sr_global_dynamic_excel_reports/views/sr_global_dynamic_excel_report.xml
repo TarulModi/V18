@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<odoo>
+	<record model="ir.ui.view" id="sr_global_dynamic_excel_report_form">
+		<field name="name">sr.global.dynamic.excel.report.form</field>
+		<field name="model">sr.global.dynamic.excel.report</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button name="show_print_report" type="object" class="oe_stat_button" icon="fa-plus"
+							invisible="act_window_ref != False">
+							<div class="o_field_widget o_stat_info">
+								<span class="o_stat_text">Add Context Action</span>
+							</div>
+						</button>
+
+						<button name="remove_print_report" type="object" class="oe_stat_button" icon="fa-minus"
+							invisible="act_window_ref == False">
+							<div class="o_field_widget o_stat_info">
+								<span class="o_stat_text">Remove Context Action</span>
+							</div>
+						</button>
+					</div>
+
+					<div class="oe_title">
+						<label class="oe_edit_only" for="name" string="Report Name" />
+						<h1>
+							<field name="name" placeholder="Report Name" />
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="object_id" />
+							<field name="groupby_parent_field_id"
+								domain="[('model_id','=', object_id),('ttype', 'not in', ('many2many','one2many'))]"
+								invisible="object_id == False" />
+						</group>
+						<group>
+							<field name="child_object_id" />
+							<field name="template_id" />
+							<field name="act_window_ref" invisible="1" />
+						</group>
+					</group>
+
+					<notebook>
+						<page string="Parent Object Fields To Print">
+							<field name="parent_object_field_ids">
+								<list editable="bottom">
+									<field name="field_id"
+										options="{'no_quick_create':True,'no_create_edit':True}"
+										domain="[('model_id','=', parent.object_id),('ttype', 'not in', ('many2many','one2many'))]" />
+									<field name="label" />
+								</list>
+							</field>
+						</page>
+						<page string="Child Object Fields To Print"
+							invisible="child_object_id == False">
+							<field name="child_object_field_ids">
+								<list editable="bottom">
+									<field name="field_id" options="{'create': false, 'create_edit': false}"
+										domain="[('model_id','=', parent.child_object_id),('ttype', 'not in', ('many2many','one2many'))]" />
+									<field name="label" />
+								</list>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="sr_global_dynamic_excel_report_tree">
+		<field name="name">sr.global.dynamic.excel.report.tree</field>
+		<field name="model">sr.global.dynamic.excel.report</field>
+		<field name="arch" type="xml">
+			<list>
+				<field name="name" />
+				<field name="object_id" />
+			</list>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="sr_action_global_excel_report">
+		<field name="name">Global Dynamic Excel Report</field>
+		<field name="res_model">sr.global.dynamic.excel.report</field>
+		<field name="binding_view_types">form</field>
+		<field name="view_mode">list,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new global dynamic excel report
+			</p>
+		</field>
+	</record>
+
+	<menuitem action="sr_action_global_excel_report" id="sr_menu_global_excel_report"
+		parent="sr_global_dynamic_excel_report_parent_menu"/>
+</odoo>

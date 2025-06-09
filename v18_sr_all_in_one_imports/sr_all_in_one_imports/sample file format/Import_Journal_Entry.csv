@@ -1,0 +1,7 @@
+Number,Reference,Partner,Date,Journal,Account,Label,Debit,Credit,Amount Currency,Currency
+1,11,Azure Interior,12/1/2015,Bank,101401,/,0,8000,-8000,EUR
+1,22,Azure Interior,12/1/2015,Bank,101402,machine,5500,0,5500,EUR
+1,33,Azure Interior,12/2/2015,Vendor Bills,101402,Tax 15%,2500,0,2500,EUR
+2,44,Floyd Steward,12/3/2015,Bank,101402,/,6000,,6000,EUR
+2,55,Floyd Steward,12/4/2015,Bank,101401,COmputer,,2500,-2500,EUR
+2,66,Floyd Steward,12/5/2015,Bank,101401,server,,3500,-3500,EUR

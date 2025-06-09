@@ -1,0 +1,74 @@
+<odoo>
+    <record id="view_sr_car_repair_form_list" model="ir.ui.view">
+        <field name="name">view.sr.car.repair.form.list</field>
+        <field name="model">car.repair.form</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sr_car_repair_form_form" model="ir.ui.view">
+        <field name="name">view.sr.car.repair.form.form</field>
+        <field name="model">car.repair.form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field name="name" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Customer Information">
+                            <field name="partner_id" required="1"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                        </group>
+                        <group string="">
+                            <field name="date" required="1"/>
+                            <field name="received_date"/>
+                            <field name="received_user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="car_information" string="Car Information">
+                            <group>
+                                <group>
+                                    <field name="car_name"/>
+                                    <field name="brand"/>
+                                    <field name="model"/>
+                                    <field name="color"/>
+                                </group>
+                                <group>
+                                    <field name="license_no"/>
+                                    <field name="fuel_type"/>
+                                    <field name="chassis_number"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+
+                    <div>
+                        <label for="note"/>
+                        <field name="note" placeholder="Repair Notes....!"/>
+                    </div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_car_repair_form" model="ir.actions.act_window">
+        <field name="name">Car Repair</field>
+        <field name="res_model">car.repair.form</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <menuitem id="menu_car_repair"
+              name="Car Repair Form"
+              action="sr_car_repair_management.action_car_repair_form"
+              parent="sr_car_repair_management.submenu_car_repair"/>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="seq_hospital_patient" model="ir.sequence">
+        <field name="name">Patient ID Sequence</field>
+        <field name="code">res.partner</field>
+        <field name="prefix">PAT</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_hospital_appointment" model="ir.sequence">
+        <field name="name">Appointment Sequence</field>
+        <field name="code">hospital.appointment</field>
+        <field name="prefix">APT</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_hospital_ipd_admission" model="ir.sequence">
+        <field name="name">IPD Admission Sequence</field>
+        <field name="code">hospital.ipd.admission</field>
+        <field name="prefix">IPD</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

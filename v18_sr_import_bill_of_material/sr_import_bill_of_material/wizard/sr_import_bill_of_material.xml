@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sr_import_bom_form_wizard"
+			model="ir.ui.view">
+			<field name="name">sr.import.bom.form.wizard</field>
+			<field name="model">bom.import</field>
+			<field name="arch" type="xml">
+				<form string="Import BOM">
+					<group>
+						<group>
+							<field name="import_option" widget="radio" />
+						</group>
+
+						<group>
+							<field name="import_product_by" widget="radio" />
+						</group>
+					</group>
+					<group>
+						<field name="file" filename="name" />
+					</group>
+					<footer>
+						<button name="action_import_bom" type="object" string="Import" class="btn-primary" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+        <record id="sr_action_import_bom"
+			model="ir.actions.act_window">
+			<field name="name">Import BOM</field>
+			<field name="res_model">bom.import</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="sr_action_import_bom" id="sr_menu_import_bom" parent="mrp.menu_mrp_bom" sequence="14" />
+
+    </data>
+</odoo>

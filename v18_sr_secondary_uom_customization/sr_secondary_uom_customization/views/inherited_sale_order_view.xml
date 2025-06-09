@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_sale_order_form_extends_add_fields" model="ir.ui.view">
+		<field name="name">view.sale.order.form.extends.add.fields</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//notebook/page/field[@name='order_line']/list/field[@name='price_unit']" position="before">
+				<field name="is_secondary" column_invisible="1"/>
+				<field name="is_secondary1" column_invisible="0"/>
+				<field name="secondary_qty" readonly="is_secondary1 != True" />
+				<field name="secondary_uom_id" options="{'no_create': True}"/>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sr_secondary_uom_customization.BomOverviewLine" t-inherit="mrp.BomOverviewLine"
+       t-inherit-mode="extension">
+        <xpath expr="//td[@class='text-end'][1]" position="after">
+            <td class="text-end">
+                <t t-if="data.secondary_qty != undefined"
+                   t-esc="formatFloat(data.secondary_qty, {'digits': [false, precision]})"/>
+                <t t-if="data.secondary_qty == undefined"></t>
+            </td>
+            <td class="text-end">
+                <t t-if="data.secondary_qty != undefined"
+                   t-esc="data.secondary_uom"/>
+                <t t-if="data.secondary_qty == undefined"></t>
+            </td>
+        </xpath>
+    </t>
+</templates>

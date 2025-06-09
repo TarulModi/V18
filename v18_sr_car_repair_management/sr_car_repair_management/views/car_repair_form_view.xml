@@ -1,0 +1,103 @@
+<odoo>
+    <record id="view_sr_car_repair_form_list" model="ir.ui.view">
+        <field name="name">view.sr.car.repair.form.list</field>
+        <field name="model">car.repair.form</field>
+        <field name="arch" type="xml">
+            <list default_order="id desc">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="mobile"/>
+                <field name="email"/>
+                <field name="date"/>
+                <field name="received_user_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sr_car_repair_form_form" model="ir.ui.view">
+        <field name="name">view.sr.car.repair.form.form</field>
+        <field name="model">car.repair.form</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" invisible="state not in 'draft'"/>
+                    <button name="create_diagnosis" type="object" string="Create Diagnosis" class="btn-primary" invisible="state not in 'confirm'"/>
+<!--                    <button name="action_done" type="object" string="Done" class="btn-primary" invisible="state not in 'confirm'"/>-->
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-primary" invisible="state not in ['draft', 'confirm']"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" class="btn-primary" invisible="state not in 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,in_diagnosis,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_diagnosis" type="object"
+                                icon="fa-list" invisible="diagnosis_count == 0">
+                                <field name="diagnosis_count" widget="statinfo" string="Diagnosis"/>
+                        </button>
+                    </div>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field name="name" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Customer Information">
+                            <field name="partner_id" required="1" readonly="state not in 'draft'"/>
+                            <field name="mobile" readonly="state not in 'draft'"/>
+                            <field name="email" readonly="state not in 'draft'"/>
+                        </group>
+                        <group string="">
+                            <field name="date" required="1" readonly="state not in 'draft'"/>
+                            <field name="received_user_id" required="1" readonly="state not in 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="car_information" string="Car Information">
+                            <group>
+                                <group>
+                                    <field name="car_name" readonly="state not in 'draft'"/>
+                                    <field name="brand" readonly="state not in 'draft'"/>
+                                    <field name="model" readonly="state not in 'draft'"/>
+                                    <field name="color" readonly="state not in 'draft'"/>
+                                </group>
+                                <group>
+                                    <field name="license_no" readonly="state not in 'draft'"/>
+                                    <field name="fuel_type" readonly="state not in 'draft'"/>
+                                    <field name="chassis_number" readonly="state not in 'draft'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="checklist_ids" string="CheckList Details">
+                            <field name="checklist_ids" readonly="state not in ['draft', 'confirm']">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="attachment_ids" widget="many2many_binary"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <br/><br/>
+                    <group name="note_group">
+                        <label for="note"/>
+                        <field  name="note" nolabel="1" placeholder="Repair Notes....!" readonly="state not in 'draft'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_car_repair_form" model="ir.actions.act_window">
+        <field name="name">Car Repair</field>
+        <field name="res_model">car.repair.form</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <menuitem id="menu_car_repair"
+              name="Car Repair Form"
+              action="sr_car_repair_management.action_car_repair_form"
+              parent="sr_car_repair_management.submenu_car_repair"/>
+</odoo>

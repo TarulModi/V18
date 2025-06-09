@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_product_tmpl_form_extends_add_fields" model="ir.ui.view">
+		<field name="name">view.product.tmpl.form.extends.add.fields</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="product.product_template_form_view" />
+		<field name="arch" type="xml">
+			<xpath expr="//div[@name='options']" position="inside">
+				<span class="d-inline-flex">
+					<field name="is_secondary"/>
+					<label for="is_secondary"/>
+				</span>
+			</xpath>
+			<xpath expr="//group/group[@name='group_general']" position="inside">
+				<field name="secondary_uom_id" options="{'no_create': True}" invisible="is_secondary == False"/>
+				<field name="standard_ratio" invisible="is_secondary == False"/>
+				<field name="dynamic_ratio" invisible="is_secondary == False"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="product_template_tree_view_add_uom_ratio" model="ir.ui.view">
+		<field name="name">product.template.tree.uom.ratio</field>
+		<field name="model">product.template</field>
+		<field name="inherit_id" ref="product.product_template_tree_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='product_tag_ids']" position="after">
+				<field name="secondary_uom_id"/>
+				<field name="standard_ratio"/>
+				<field name="dynamic_ratio"/>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

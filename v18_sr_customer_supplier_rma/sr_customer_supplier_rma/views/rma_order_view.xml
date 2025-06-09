@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_rma_order_list" model="ir.ui.view">
+            <field name="name">rma.order.list</field>
+            <field name="model">rma.order</field>
+            <field name="arch" type="xml">
+                <list string="RMA Orders">
+                    <field name="name"/>
+                    <field name="company_id"/>
+                    <field name="sale_order_id"/>
+                    <field name="subject"/>
+                    <field name="crm_team_id"/>
+                    <field name="date"/>
+                    <field name="deadline"/>
+                    <field name="user_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_rma_order_form" model="ir.ui.view">
+            <field name="name">rma.order.form</field>
+            <field name="model">rma.order</field>
+            <field name="arch" type="xml">
+                <form string="RMA Orders">
+                     <header>
+                         <button name="action_submit" string="Submit" type="object" class="btn-primary" invisible="state in ('submit','approved','processing','reject','close')"/>
+
+                         <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state not in ('submit')"/>
+
+                         <button name="button_reject" string="Reject" type="object" class="btn-primary" invisible="state in ('draft','approved','processing','reject','close')"/>
+
+                         <button name="action_move_to_draft" string="Reset To Draft" type="object" class="btn-primary" invisible="state in ('approved','processing','draft', 'close')"/>
+
+                         <button name="action_validate" string="Validate" type="object" class="btn-primary" invisible="state in ('submit','approved','draft','close', 'reject', 'supplier_rma') or is_validate == True or rma_replaced_product_ids == []"/>
+
+                         <button name="action_close" string="Close" type="object" class="btn-primary" confirm="Are you sure do you want to close this RMA?" invisible="state in ('submit','approved','draft', 'reject', 'close')"/>
+
+                         <button name="action_send_rma" string="Send by Email" type="object" class="btn-primary"/>
+
+                         <button name="action_create_supplier_rma" string="Create Supplier RMA" type="object" class="btn-primary" groups="sr_customer_supplier_rma.group_supplier_ema" invisible="state in ('submit','approved','processing','reject','supplier_rma','close')"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submit,processing,close,approved"/>
+
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_receipt" class="oe_stat_button" icon="fa-truck" invisible="picking_ids_count == 0">
+                                <field name="picking_ids_count" widget="statinfo" string="Picking Order"/>
+                            </button>
+
+                            <button type="object" name="action_view_refund_invoice" class="oe_stat_button" icon="fa-money" invisible="invoice_ids_count == 0">
+                                <field name="invoice_ids_count" widget="statinfo" string="Credit Note"/>
+                            </button>
+
+                            <button type="object" name="action_view_sale_order" class="oe_stat_button" icon="fa-dollar" invisible="sale_order_ids_count == 0">
+                                <field name="sale_order_ids_count" widget="statinfo" string="Sale Orders"/>
+                            </button>
+
+                            <button name="action_supplier_rma" type="object" class="oe_stat_button" icon="fa-star" invisible="supplier_ids_count == 0">
+                                <field name="supplier_ids_count" string="Supplier RMA" widget="statinfo"/>
+                            </button>
+                        </div>
+
+                         <div class="oe_title mb24">
+                            <h1>
+                                <field name="name" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id" required="1" readonly="state != 'draft'"/>
+                                <field name="sale_order_id" required="1" readonly="state != 'draft'"/>
+                                <field name="subject" required="1" readonly="state != 'draft'"/>
+                                <field name="crm_team_id" readonly="state != 'draft'"/>
+                                <field name="picking_ids" widget="many2many_tags" invisible="1" readonly="state != 'draft'"/>
+                                <field name="invoice_ids" widget="many2many_tags" invisible="1" readonly="state != 'draft'"/>
+                                <field name="sale_order_ids" widget="many2many_tags" invisible="1" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="date" readonly="state != 'draft'"/>
+                                <field name="deadline" readonly="state != 'draft'"/>
+                                <field name="user_id" readonly="state != 'draft'"/>
+                                <field name="priority" widget="priority" nolabel="1" class="oe_inline align-top" readonly="state != 'draft'"/>
+                                <field name="is_validate" invisible="1" readonly="state != 'draft'"/>
+                                <field name="validate" invisible="1" readonly="state != 'draft'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="rma_details" id="rma_id" string="RMA Details">
+                                <group>
+                                    <group>
+                                        <field name="stock_picking_id" required="1" readonly="state != 'draft'"/>
+                                        <field name="delivery_partner_id" options="{'no_quick_create': True}"
+                                               context="{'default_type':'delivery', 'show_address': 1}" readonly="state != 'draft'"/>
+                                        <field name="delivery_email" readonly="state != 'draft'"/>
+                                        <field name="delivery_phone" readonly="state != 'draft'"/>
+                                    </group>
+                                    <group>
+                                        <field name="invoice_partner_id" options="{'no_quick_create': True}"
+                                            context="{'default_type':'invoice', 'show_address': 1}" readonly="state != 'draft'"/>
+                                        <field name="invoice_email" readonly="state != 'draft'"/>
+                                        <field name="invoice_phone" readonly="state != 'draft'"/>
+                                    </group>
+                                </group>
+
+                                <button name="open_return_refund_replace_wizard" type="object" string="Return/Replace/Refund" invisible="state != 'draft'"/>
+                                <br/>
+
+                                <label for="rma_order_line_ids" />
+                                <field name="rma_order_line_ids" readonly="state != 'draft'">
+                                    <list create="false" delete="false" edit="false" editable="bottom">
+                                        <field name="product_id" required="1"/>
+                                        <field name="return_id"/>
+                                        <field name="reject_id"/>
+                                        <field name="sale_line_id" column_invisible="1"/>
+                                        <field name="delivery_qty"/>
+                                        <field name="return_qty"/>
+                                        <field name="lot_ids" widget="many2many_tags"/>
+                                        <field name="price_before"/>
+                                        <field name="total" sum="Total"/>
+                                    </list>
+                                </field>
+
+                                <label for="rma_replaced_product_ids" />
+                                <field name="rma_replaced_product_ids" readonly="state != 'draft'">
+                                    <list create="false" delete="false" edit="false" editable="bottom">
+                                        <field name="product_id" required="1"/>
+                                        <field name="qty"/>
+                                        <field name="price"/>
+                                        <field name="total" sum="Total"/>
+                                    </list>
+                                </field>
+
+                                <label for="rma_notes" string="RMA Notes" style="font-size:15px;" class="mt16 mb16 text-muted"/>
+								<field name="rma_notes" nolabel="1" readonly="state != 'draft'"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rma_order" model="ir.actions.act_window">
+            <field name="name">RMA</field>
+            <field name="res_model">rma.order</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_rma_root" name="RMA"/>
+
+        <menuitem id="menu_rma_submenu" name="RMA Orders" parent="menu_rma_root" sequence="1"/>
+
+        <menuitem id="menu_rma_orders" name="RMA Orders" parent="menu_rma_submenu"
+                  action="action_rma_order" sequence="1"/>
+    </data>
+</odoo>

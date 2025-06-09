@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="sr_view_order_form">
+        <field name="name">sr.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_invoice']" position="before">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_po" icon="fa-solid fa-credit-card">
+                    <field name="po_count" widget="statinfo" string="Purchase Order"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                <field name="has_consu_product" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="after">
+                <button name="action_create_po" id="create_po" string="Create PO" type="object"
+                        invisible="state == 'cancel' or not has_consu_product" class="btn-primary"/>
+            </xpath>
+            <xpath expr="//notebook/page[@name='order_lines']/field/list/field[@name='product_template_id']"
+                   position="after">
+                <field name="prod_type" readonly="True" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

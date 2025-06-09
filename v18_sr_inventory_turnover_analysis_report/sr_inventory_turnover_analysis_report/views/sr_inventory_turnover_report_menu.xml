@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sr_stock_inventory_turnover_action" model="ir.actions.act_window">
+            <field name="name">Inventory Turnover Analysis Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.inventory.turnover.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="sr_stock_inventory_turnover_menu"
+                  name="Inventory Turnover Analysis Report"
+                  parent="stock.menu_warehouse_report"
+                  action="sr_stock_inventory_turnover_action"/>
+    </data>
+
+    <record id="sr_stock_inventory_turnover_report_template" model="ir.actions.report">
+        <field name="name">Inventory Turnover Report</field>
+        <field name="model">stock.inventory.turnover.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_inventory_turnover_analysis_report.turnover</field>
+        <field name="report_file">sr_inventory_turnover_analysis_report.turnover</field>
+        <field name="print_report_name">'Inventory Turnover Analyse Report'</field>
+        <field name="binding_model_id" ref="model_stock_inventory_turnover_report"/>
+    </record>
+</odoo>

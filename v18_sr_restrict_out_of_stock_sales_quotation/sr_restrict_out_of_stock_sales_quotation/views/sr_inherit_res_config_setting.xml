@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_extends_add_restrict_stock_configuration" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.extends.add.restrict.stock.configuration</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='sale_management']" position="inside">
+                <h2>Restrict Quotation when Quantity is not available</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="restrict_product_stock_in_sale_setting"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="restrict_product_stock_in_sale_setting"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

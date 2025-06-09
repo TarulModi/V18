@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+		<record id="sr_confirm_multiple_picking_wizard_view" model="ir.ui.view">
+			<field name="name">sr.confirm.multiple.picking.wizard.view</field>
+			<field name="model">mass.confirm.picking</field>
+			<field name="arch" type="xml">
+				<form string="Mass Validate Pickings">
+						<span style="font-size: 20px; color: green;">Of the delivery orders given below, only those will be considered which is in ready state.</span>
+						<field name="picking_ids" nolabel="1" readonly="1" force_save="1" store="Ture">
+							<list decoration-muted="state not in ('assigned')" decoration-success="state == 'assigned'" create="false" delete="false" edit="false">
+								<field name="name"/>
+								<field name="state"/>
+							</list>
+						</field>
+					<footer>
+						<button name="sr_mass_confirm_picking" string="Confirm Delivery orders" type="object" class="oe_highlight"/>
+						<button string="Cancel" class="oe_highlight" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="sr_act_confirm_multiple_picking" model="ir.actions.act_window">
+	        <field name="name">Mass Validate Pickings</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">mass.confirm.picking</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="sr_confirm_multiple_picking_wizard_view"/>
+	        <field name="target">new</field>
+	        <field name="binding_model_id" ref="sale.model_sale_order"/>
+	    </record>
+	</data>
+</odoo>

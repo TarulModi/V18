@@ -1,0 +1,43 @@
+tfak-a254-r8ej
+
+cd Projects/
+
+source python3.10-3.10-venv/bin/activate
+
+
+
+cd /home/abcd/Projects/v18/odoo
+
+./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_sr_hospital_management --limit-time-real=100000 --db-filter=v18_
+
+
+v18_sr_hospital_management_2
+
+
+
+
+Patient 
+doctor
+staff
+bad
+Ward
+bulding floor
+services
+	depend on category
+
+categorys
+Farmacy manange
+ICU
+Appointment
+Inpatient Admission
+Outpatient 
+Invoicing
+Purchasing
+
+
+https://apps.odoo.com/apps/modules/18.0/tk_hospital_management#features
+
+
+https://www.youtube.com/watch?v=qrvvOwaaVQ4
+
+https://www.youtube.com/watch?v=xTLcLmQkKaE

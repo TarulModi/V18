@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="academic_year_view_tree" model="ir.ui.view">
+            <field name="name">academic.year.view.tree</field>
+            <field name="model">academic.year</field>
+            <field name="arch" type="xml">
+                <list string="Academic Year">
+                    <field name="name"/>
+                    <field name="term_structure_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="academic_year_view_form" model="ir.ui.view">
+            <field name="name">academic.year.view.form</field>
+            <field name="model">academic.year</field>
+            <field name="arch" type="xml">
+                <form string="Academic Year">
+                    <header>
+                        <button name="action_confirm" string="Confirm" class="btn-primary" type="object" invisible="state != 'new'"/>
+                        <button name="action_close" string="Close" class="btn-primary" type="object" invisible="state == 'close'"/>
+                        <button name="generate_academic_terms" string="Generate Academic Terms" class="btn-primary" type="object" invisible="state != 'new'"/>
+                        <field name="state" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <div name="button_box" class="oe_button_box">
+                            <button name="action_open_student" class="oe_stat_button" icon="fa-users" type="object" invisible="not student_count">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value"><field name="student_count"/></span>
+                                    <span class="o_stat_text">Students</span>
+                                </div>
+                            </button>
+                            <button name="action_open_fees_structure" class="oe_stat_button" icon="fa-tags" type="object" invisible="not fees_structure_ids">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Fees Structure</span>
+                                </div>
+                            </button>
+                            <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="not invoice_ids">
+                                <span class="o_stat_text">Invoices</span>
+                            </button>
+                        </div>
+                        <div class="oe_title mb24">
+                            <h1>
+                                <field name="name" placeholder="e.g. Academic Year" required="1" readonly="state != 'new'"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="term_structure_id" required="1" readonly="state != 'new'"/>
+                            </group>
+                            <group>
+                                <field name="start_date" required="1" readonly="state != 'new'"/>
+                                <field name="end_date" required="1" readonly="state != 'new'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="academic_terms_ids" id="academic_terms_id" string="Academic Terms">
+                                <field name="academic_terms_ids" readonly="state != 'new'">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name" required="1"/>
+                                        <field name="start_date" required="1"/>
+                                        <field name="end_date" required="1"/>
+<!--                                        <field name="parent_id" column_invisible="1"/>-->
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="name" required="1"/>
+                                                <field name="start_date" required="1"/>
+                                            </group>
+                                            <group>
+                                                <field name="end_date" required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_academic_year" model="ir.actions.act_window">
+            <field name="name">Academic Year</field>
+            <field name="res_model">academic.year</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="academic_year_view_tree"/>
+        </record>
+
+        <menuitem id="menu_academic_year" parent="sr_education_management.menu_configurations" name="Academic Year" action="sr_education_management.action_academic_year" groups="sr_education_management.group_administrator" sequence="4"/>
+
+    </data>
+</odoo>

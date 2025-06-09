@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="web.ListView" t-inherit-mode="extension">
+        <xpath expr="//t[@t-set-slot='control-panel-selection-actions']" position="after">
+            <t t-set-slot="control-panel-dynamic-list">
+                    <button
+                        class="d-print-none btn btn-outline-secondary fa fa-sliders"
+                        title="Dynamic List Layout"
+                        t-on-click="()=>this.onclickDynamicList()">
+                    </button>
+
+                    <div class="new_layout o_popover popover mw-100 o-dropdown--menu dropdown-menu mx-0 flex-wrap
+                         flex-lg-nowrap w-100 w-md-auto mx-md-auto mt-2 d-none"
+                         role="menu" style="position: absolute; top: 87px;">
+                        <t t-if="dynamicTreeViewIds.length">
+                            <div class="d-flex" t-foreach="dynamicTreeViewIds" t-as="dynamicTreeViewId"
+                                       t-key="dynamicTreeViewId.id">
+                                <button
+                                    class="btn btn-outline-secondary w-100 text-start"
+                                    style="border: 0px;"
+                                    t-on-click="()=>this.onclickChangeTemplate(dynamicTreeViewId.id, dynamicTreeViewId.view_id)"
+                                >
+                                    <t t-esc="dynamicTreeViewId.name" />
+                                </button>
+                                <button
+                                    class="btn btn-outline-secondary"
+                                    style="border: 0px;"
+                                    t-if="hasAccess"
+                                    t-on-click="()=>this.onclickEditTemplate(dynamicTreeViewId.id)"
+                                >
+                                    <i class="fa fa-pencil" />
+                                </button>
+                                <button
+                                    class="btn btn-outline-secondary"
+                                    style="border: 0px;"
+                                    t-if="hasAccess"
+                                    t-on-click="()=>this.onclickDeleteTemplate(dynamicTreeViewId.id)"
+                                >
+                                    <i class="fa fa-trash" />
+                                </button>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <t t-if="hasAccess"></t>
+                            <strong t-else="" style="padding-left: 10px;">No Layout found</strong>
+                        </t>
+                        <button
+                            class="btn btn-outline-secondary w-100"
+                            style="border: 0px;"
+                            t-if="hasAccess"
+                            title="Add New Layout"
+                            t-on-click="onclickCreateNewTemplate"
+                        >
+                            <i class="fa fa-plus"></i>
+                            Add New Layout
+                        </button>
+                    </div>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

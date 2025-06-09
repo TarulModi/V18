@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="action_report_estimate" model="ir.actions.report">
+            <field name="name">Estimate Report</field>
+            <field name="model">repair.diagnosis</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sr_repair_management.report_estimate_template</field>
+            <field name="report_file">sr_repair_management.report_estimate_template</field>
+			<field name="binding_model_id" ref="model_repair_diagnosis"/>
+			<field name="binding_type">report</field>
+        </record>
+	</data>
+</odoo>

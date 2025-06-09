@@ -1,0 +1,41 @@
+<odoo>
+	<data>
+         <record id="sr_import_inventory_adjustment_wizard" model="ir.ui.view">
+            <field name="name">sr.import.inventory.adjustment.wizard</field>
+            <field name="model">import.inventory.adjustment</field>
+            <field name="arch" type="xml">
+                <form string="Import Inventory Adjustment">
+                    <group>
+                        <group>
+                            <field name="import_file_by" widget="radio" />
+                        </group>
+                        <group>
+                            <field name="import_product_option" widget="radio" />
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="location_id" />
+                        </group>
+                        <group>
+                            <field name="import_file" filename="name"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="import_inventory_adjustment" string="Import" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sr_action_import_inventory_adjustment" model="ir.actions.act_window">
+            <field name="name">Import Inventory Adjustment</field>
+            <field name="res_model">import.inventory.adjustment</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem action="sr_action_import_inventory_adjustment" id="sr_menu_import_inventory_adjustment" parent="stock.menu_stock_root"/>
+	</data>
+</odoo>

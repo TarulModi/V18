@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_supplier_replace_product_form" model="ir.ui.view">
+        <field name="name">supplier.replace.product.form</field>
+        <field name="model">supplier.replace.product</field>
+        <field name="arch" type="xml">
+            <form string="Reject Claim">
+                <group>
+                    <field name="product_id" required="1"/>
+                    <field name="qty" invisible="product_id == False"/>
+                    <field name="is_invoice" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="button_submit" string="Submit" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_supplier_replace_product" model="ir.actions.act_window">
+        <field name="name">Reject Claim</field>
+        <field name="res_model">supplier.replace.product</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

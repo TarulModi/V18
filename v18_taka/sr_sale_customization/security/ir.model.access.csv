@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+sr_sale_customization.access_sr_split_transfer,access_sr_split_transfer,sr_sale_customization.model_sr_split_transfer,base.group_user,1,1,1,1
+sr_sale_customization.access_sr_split_move_line,access_sr_split_move_line,sr_sale_customization.model_sr_split_move_line,base.group_user,1,1,1,1

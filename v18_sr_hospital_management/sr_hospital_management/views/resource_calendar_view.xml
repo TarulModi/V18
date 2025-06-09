@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="resource_calendar_hospital_form" model="ir.ui.view">
+        <field name="name">resource.calendar.form</field>
+        <field name="model">resource.calendar</field>
+        <field name="arch" type="xml">
+            <form string="Time Slot">
+                <field name="two_weeks_calendar" invisible="1"/>
+                <header>
+                    <button name="switch_calendar_type" invisible="two_weeks_calendar or flexible_hours" string="Switch to 2 weeks calendar" type="object"
+                        confirm="Are you sure you want to switch to a 2-week calendar? All work entries will be lost."
+                        confirm-label="Switch"/>
+                    <button name="switch_calendar_type" invisible="not two_weeks_calendar" string="Switch to 1 week calendar" type="object"
+                        confirm="Are you sure you want to switch to a 1-week calendar? All work entries will be lost."
+                        confirm-label="Switch"/>
+                </header>
+                <sheet string="Working Time">
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(resource.resource_calendar_leaves_action_from_calendar)d" type="action"
+                                icon="fa-plane"
+                                class="oe_stat_button"
+                                groups="base.group_no_one">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Time Off</span>
+                                </div>
+                        </button>
+                        <button name="%(resource.resource_resource_action_from_calendar)d" type="action"
+                                icon="fa-cogs"
+                                class="oe_stat_button"
+                                groups="base.group_user">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Work Resources</span>
+                                </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group name="resource_details" col="2">
+                        <group name="resource_working_hours">
+                            <field name="flexible_hours"/>
+                            <label for="full_time_required_hours" invisible="flexible_hours"/>
+                            <label for="full_time_required_hours" string="Hours per Week" invisible="not flexible_hours"/>
+                            <div>
+                                <field name="full_time_required_hours" style="width: 10%" widget="float_time"/>
+                                <span> hours/week</span>
+                            </div>
+                            <field name="hours_per_day" widget="float_time" readonly="not flexible_hours"/>
+                        </group>
+                        <group name="resource_company">
+                            <field name="active" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="tz" widget="timezone_mismatch" options="{'tz_offset_field': 'tz_offset', 'mismatch_title': 'Timezone Mismatch : This timezone is different from that of your browser.\nPlease, be mindful of this when setting the working hours or the time off.'}" />
+                            <field name="tz_offset" invisible="1"/>
+                            <field name="department_id"/>
+                            <field name="department_doctor_ids" widget="many2many_tags" invisible="1" required="1"/>
+                            <field name="doctor_ids" widget="many2many_tags" invisible="department_id == False" options='{"no_open": True, "no_create": True}' domain="[('is_doctor', '=', True), ('id', 'in', department_doctor_ids)]" required="1"/>
+                            <field name="is_hospital"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Working Hours" name="working_hours" invisible="flexible_hours">
+                            <field name="two_weeks_explanation" invisible="not two_weeks_calendar"/>
+                            <field name="attendance_ids" widget="section_one2many"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_time_slot" model="ir.actions.act_window">
+        <field name="name">Time Slots</field>
+        <field name="res_model">resource.calendar</field>
+        <field name="domain">[('is_hospital', '=', True)]</field>
+        <field name="context">{'default_is_hospital': True}</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('resource.view_resource_calendar_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('sr_hospital_management.resource_calendar_hospital_form')}),
+        ]"/>
+    </record>
+
+
+    <menuitem id="menu_hospital_time_slot" name="Time Slot"
+              parent="menu_hospital_configuration" action="action_hospital_time_slot"/>
+
+</odoo>
