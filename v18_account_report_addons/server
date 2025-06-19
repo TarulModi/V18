@@ -8,7 +8,7 @@ source python3.10-3.10-venv/bin/activate
 
 cd /home/abcd/Projects/v18/odoo
 
-./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_account_report_addons --limit-time-real=100000 --db-filter=v18_
+./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_account_report_addons --limit-time-real=100000 --db-filter=v18_account_report_addons -d v18_account_report_addons
 
 
 v18_account_report_addons

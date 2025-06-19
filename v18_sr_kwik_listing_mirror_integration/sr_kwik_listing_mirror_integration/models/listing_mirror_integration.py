@@ -147,6 +147,10 @@ class ListingMirrorIntegration(models.Model):
         url = f"{kwik_url}master-listing/"
         all_results = []
 
+        integration_name = f"Master Product Listing"
+        remark = f"Created Products"
+        start_date = fields.Datetime.now()
+
         retry_count = 0
         max_retries = 5
         while url:
@@ -256,6 +260,11 @@ class ListingMirrorIntegration(models.Model):
             # product_obj.flush()
             _logger.info(f"{created_count} products created successfully.")
 
+        end_date = fields.Datetime.now()
+        print("--new_products-------new_products------",new_products)
+        if new_products:
+            self._log_details_integration(integration_name, remark, created_count, start_date, end_date, new_products)
+
         if failed_records:
             _logger.warning(f"{len(failed_records)} records failed.")
             return {
@@ -275,62 +284,181 @@ class ListingMirrorIntegration(models.Model):
         
 # Product Kit Integration
     
-    def _product_bundle_kit_receipes_connection(self, url, headers, payload):
-        response = requests.request("GET", url, headers=headers, data=payload)
-        response_json = response.json()
-        for main_product in response_json.get('results'):
-            for recipe in main_product.get('recipes'):
-                if recipe.get('sku') != main_product.get('sku'):
-                    product_template_id = self.env['product.template'].search([('default_code', '=', main_product.get('sku'))])
-                    if not product_template_id:
-                        # raise UserError(_('Product Not Found With This SKU : ' + str(main_product.get('sku'))))
-                        self._log_integration_error(main_product.get('sku'), 'Product Not Found')
-                    existing_bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', product_template_id.id)])
-                    print ("========existing_bom_id-----------", existing_bom_id)
-                    if not existing_bom_id:
-                        bom_id = self.env['mrp.bom'].create({
-                            'product_tmpl_id':product_template_id.id,
-                            'product_id':self.env['product.product'].search([('default_code', '=', main_product.get('sku'))]).id,
-                            'type':'phantom'
-                            })
-                        print ("=========bom_id-----------------", bom_id)
-                        product_template_id.write({
-                            'purchase_ok':False
-                            })
-                        product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))])
-                        if not product_id:
-                            # raise UserError(_('Product Not Found With This SKU : ' + str(recipe.get('sku'))))
-                            self._log_integration_error(recipe.get('sku'), 'Product Not Found')
-                        if product_id:
-                            self.env['mrp.bom.line'].create({
-                                'bom_id':bom_id.id,
-                                'product_id':product_id.id,
-                                'product_qty':recipe.get('quantity')
-                                })
-                    else:
-                        existing_products = [a.product_id.id for a in existing_bom_id.bom_line_ids]
-                        product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))]).id
-                        print ("=======existing_products", existing_products, product_id)
-                        print ("=========product.id not in existing_products", product_id not in existing_products)
-                        if product_id not in existing_products:
-                            self.env['mrp.bom.line'].create({
-                            'bom_id':existing_bom_id.id,
-                            'product_id':product_id,
-                            'product_qty':recipe.get('quantity')
-                            })
+    # def _product_bundle_kit_receipes_connection(self, url, headers, payload):
+    #     response = requests.request("GET", url, headers=headers, data=payload)
+    #     response_json = response.json()
+    #     integration_name = f"Bundle Kit Integration"
+    #     remark = f"Kits"
+    #     start_date = fields.Datetime.now()
+    #     count = 0
+    #     bom_list = []
+    #     for main_product in response_json.get('results'):
+    #         for recipe in main_product.get('recipes'):
+    #             if recipe.get('sku') != main_product.get('sku'):
+    #                 product_template_id = self.env['product.template'].search([('default_code', '=', main_product.get('sku'))])
+    #                 if not product_template_id:
+    #                     # raise UserError(_('Product Not Found With This SKU : ' + str(main_product.get('sku'))))
+    #                     self._log_integration_error(main_product.get('sku'), 'Product Not Found')
+    #                 existing_bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', product_template_id.id)])
+    #                 print ("========existing_bom_id-----------", existing_bom_id)
+    #                 if not existing_bom_id:
+    #                     bom_id = self.env['mrp.bom'].create({
+    #                         'product_tmpl_id':product_template_id.id,
+    #                         'product_id':self.env['product.product'].search([('default_code', '=', main_product.get('sku'))]).id,
+    #                         'type':'phantom'
+    #                         })
+    #                     print ("=========bom_id-----------------", bom_id)
+    #                     count += len(bom_id)
+    #                     bom_list.append(bom_id.id)
+    #                     product_template_id.write({
+    #                         'purchase_ok':False
+    #                         })
+    #                     product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))])
+    #                     if not product_id:
+    #                         # raise UserError(_('Product Not Found With This SKU : ' + str(recipe.get('sku'))))
+    #                         self._log_integration_error(recipe.get('sku'), 'Product Not Found')
+    #                     if product_id:
+    #                         self.env['mrp.bom.line'].create({
+    #                             'bom_id':bom_id.id,
+    #                             'product_id':product_id.id,
+    #                             'product_qty':recipe.get('quantity')
+    #                             })
+    #                 else:
+    #                     existing_products = [a.product_id.id for a in existing_bom_id.bom_line_ids]
+    #                     product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))]).id
+    #                     print ("=======existing_products", existing_products, product_id)
+    #                     print ("=========product.id not in existing_products", product_id not in existing_products)
+    #                     if product_id not in existing_products:
+    #                         self.env['mrp.bom.line'].create({
+    #                         'bom_id':existing_bom_id.id,
+    #                         'product_id':product_id,
+    #                         'product_qty':recipe.get('quantity')
+    #                         })
+    #                     count += len(existing_bom_id)
+    #                     bom_list.append(existing_bom_id.id)
+    #
+    #     end_date = fields.Datetime.now()
+    #     print("----bom_list-------bom_list-----------",bom_list)
+    #     if bom_list:
+    #         self._log_details_integration_bom(integration_name, remark, count, start_date, end_date, bom_list)
+    #
+    #     if response_json.get('next'):
+    #         url = response_json.get('next')
+    #         self._product_bundle_kit_receipes_connection(url, headers, payload)
+    #     else:
+    #         return
 
-        if response_json.get('next'):
-            url = response_json.get('next')
-            self._product_bundle_kit_receipes_connection(url, headers, payload)
-        else:
+    def _product_bundle_kit_receipes_connection(self, url, headers, payload):
+        integration_name = "Bundle Kit Integration"
+        remark = "Kits"
+        try:
+            response = requests.request("GET", url, headers=headers, data=payload)
+            response.raise_for_status()
+            response_json = response.json()
+        except Exception as e:
+            # self._log_integration_error("N/A", f"Request failed at URL: {url} - Error: {str(e)}")
+            integration_name = 'KIT'
+            remark = f"Request failed at URL: {url} - Error: {str(e)}"
+            self.env['integration.error.log']._log_integration_error("N/A", integration_name, remark)
+
             return
 
-    def _log_integration_error(self, sku, remark):
-        self.env['integration.error.log'].create({
-            'name': sku,
-            'integration_name': 'KIT',
+        start_date = fields.Datetime.now()
+        count = 0
+        bom_list = []
+
+        results = response_json.get('results', [])
+        if not isinstance(results, list):
+            # self._log_integration_error("N/A", "Invalid or missing 'results' in response")
+            remark = "Invalid or missing 'results' in response"
+            self.env['integration.error.log']._log_integration_error("N/A", integration_name, remark)
+            return
+
+        for main_product in results:
+            for recipe in main_product.get('recipes', []):
+                if recipe.get('sku') != main_product.get('sku'):
+                    product_template_id = self.env['product.template'].search(
+                        [('default_code', '=', main_product.get('sku'))], limit=1)
+                    if not product_template_id:
+                        # self._log_integration_error(main_product.get('sku'), 'Product Not Found')
+                        remark = "Product Not Found"
+                        self.env['integration.error.log']._log_integration_error(main_product.get('sku'), integration_name, remark)
+                        continue
+
+                    existing_bom_id = self.env['mrp.bom'].search([('product_tmpl_id', '=', product_template_id.id)],
+                                                                 limit=1)
+                    if not existing_bom_id:
+                        bom_id = self.env['mrp.bom'].create({
+                            'product_tmpl_id': product_template_id.id,
+                            'product_id': self.env['product.product'].search(
+                                [('default_code', '=', main_product.get('sku'))], limit=1).id,
+                            'type': 'phantom'
+                        })
+                        count += 1
+                        bom_list.append(bom_id.id)
+
+                        product_template_id.write({'purchase_ok': False})
+
+                        product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))],
+                                                                        limit=1)
+                        if not product_id:
+                            # self._log_integration_error(recipe.get('sku'), 'Product Not Found')
+                            remark = "Product Not Found"
+                            self.env['integration.error.log']._log_integration_error(recipe.get('sku'), integration_name, remark)
+                            continue
+
+                        self.env['mrp.bom.line'].create({
+                            'bom_id': bom_id.id,
+                            'product_id': product_id.id,
+                            'product_qty': recipe.get('quantity')
+                        })
+                    else:
+                        existing_products = [line.product_id.id for line in existing_bom_id.bom_line_ids]
+                        product_id = self.env['product.product'].search([('default_code', '=', recipe.get('sku'))],
+                                                                        limit=1)
+                        if not product_id:
+                            # self._log_integration_error(recipe.get('sku'), 'Product Not Found')
+                            remark = "Product Not Found"
+                            self.env['integration.error.log']._log_integration_error(recipe.get('sku'), integration_name, remark)
+                            continue
+
+                        if product_id.id not in existing_products:
+                            self.env['mrp.bom.line'].create({
+                                'bom_id': existing_bom_id.id,
+                                'product_id': product_id.id,
+                                'product_qty': recipe.get('quantity')
+                            })
+
+                        count += 1
+                        bom_list.append(existing_bom_id.id)
+
+        end_date = fields.Datetime.now()
+
+        if bom_list:
+            self._log_details_integration_bom(integration_name, remark, count, start_date, end_date, bom_list)
+
+        next_url = response_json.get('next')
+        if isinstance(next_url, str) and next_url.strip():
+            self._product_bundle_kit_receipes_connection(next_url.strip(), headers, payload)
+
+    def _log_details_integration(self, integration_name, remark, count, start_date, end_date, new_products):
+        self.env['integration.log.details'].create({
+            'integration_name': integration_name,
             'remark': remark,
-            'date': fields.Datetime.now(),
+            'count': count,
+            'start_date': start_date,
+            'end_date': end_date,
+            'product_ids': [(6, 0, new_products)],
+        })
+
+    def _log_details_integration_bom(self, integration_name, remark, count, start_date, end_date, bom_list):
+        self.env['integration.log.details'].create({
+            'integration_name': integration_name,
+            'remark': remark,
+            'count': count,
+            'start_date': start_date,
+            'end_date': end_date,
+            'bom_ids': [(6, 0, bom_list)],
         })
 
     def fetch_all_receipes_listing(self):

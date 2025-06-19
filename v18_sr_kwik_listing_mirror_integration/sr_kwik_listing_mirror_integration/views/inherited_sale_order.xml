@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_order_form_add_boolean_field_for_main_product" model="ir.ui.view">
+		<field name="name">view.order.form.add.boolean.field.for.main.product</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="arch" type="xml">
+			<field name="partner_id" position="after">
+				<field name="listing_mirror_order_id" invisible="1"/>
+				<field name="alternate_market_order_id" invisible="1"/>
+				<field name="alternate_market_order_id_2" invisible="1"/>
+				<field name="lm_status" />
+				<field name="error_msg"/>
+				<field name="channel_order_status"/>
+				<field name="is_channel_fulfillment"/>
+			</field>
+			<xpath expr="//notebook/page/field[@name='order_line']/list/field[@name='product_id']" position="before">
+				<field name="channel_order_line_status"/>
+			</xpath>
+			<xpath expr="//notebook" position="inside">
+				<page name="json_response" string="Json">
+					<field name="json_response"/>
+				</page>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

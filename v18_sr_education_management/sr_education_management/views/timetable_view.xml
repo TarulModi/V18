@@ -232,7 +232,8 @@
             <field name="view_id" ref="school_timetable_view_tree"/>
         </record>
 
-        <menuitem id="menu_school_timetable" parent="sr_education_management.menu_education" name="Timetable" action="sr_education_management.action_school_timetable" groups="sr_education_management.group_administrator" sequence="5"/>
+        <menuitem id="menu_school_timetable" parent="sr_education_management.menu_education" name="Timetable" action="sr_education_management.action_school_timetable"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_student,sr_education_management.group_faculty" sequence="5"/>
 
     </data>
 </odoo>

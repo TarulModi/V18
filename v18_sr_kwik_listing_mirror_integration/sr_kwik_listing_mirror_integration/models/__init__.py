@@ -15,3 +15,8 @@ from . import inherit_product_template
 from . import inherit_product
 from . import integration_error_log
 from . import inherited_sale_order
+from . import update_qty_log
+from . import inherit_stock_location
+from . import integration_log_details
+from . import integration_put_log_details
+from . import common_qty_push_mixin

@@ -6,11 +6,60 @@ source python3.10-3.10-venv/bin/activate
 
 cd /home/abcd/Projects/v18/odoo
 
- ./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_sr_kwik_listing_mirror_integration --limit-time-real=100000 -d v18_sr_kwik_listing_mirror_integration_2 -u sr_kwik_listing_mirror_integration --limit-memory-soft=4294967296 --limit-memory-hard=5368709120
+./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_sr_kwik_listing_mirror_integration --limit-time-real=100000 -d v18_sr_kwik_listing_mirror_integration_2 -u sr_kwik_listing_mirror_integration --limit-memory-soft=4294967296 --limit-memory-hard=5368709120
 
 
 
 v18_sr_kwik_listing_mirror_integration
+
+
+
+
+
+
+
+
+
+
+Hikari USA Cichlid Gold Pellets Fish Food, 8.8 oz, LG
+
+Shipping Price
+
+[ZM-BTST-06OZ] Zoo Med Blue Tongue Skink &Tegu Canned Food 6oz
+
+[DE-NBMF-20LB] Down To Earth Blood Meal Natural Fertilizer 12-0-0 Omri ,20 Lb
+
+[FX-YHTC-LCYW] F10SC Veterinary Disinfectant 200 ml
+
+[19-L6NO-QOUP] Chuckit! Zipflight Dog Toy, Medium-2 Pack
+
+[HY-PTUO-LUQC] Hi-Yield 38 Plus Turf Termite & Ornamental Insect Control Liquid Concentrate - 32oz
+
+
+[produ_tax] Product Tax
+
+
+
+Zoo Med Natural Aquatic Turtle Food Growth Formula 8.75oz
+
+[CN-RTGL-100M] Clonex Rooting Gel, 100ml
+
+[SC-LIQU-04OZ] Schultz Liquid Plant Food, 4 oz (SPF45160)
+
+[AG-WCNR-125G] ALGONE Water Clarifier and Nitrate Remover Small to 125gal
+
+[KT-FFVT-PARK] Kaytee Fiesta Parakeet Fruit Veggie Jar 9.5oz     6749230072099
+
+
+[ZM-ATFF-75OZ] Zoo Med Natural Aquatic Turtle Food Growth Formula 8.75oz           109016337653600
+
+
+
+
+
+
+
+----------------------------
 
 
 
@@ -73,3 +122,124 @@ uct_bundle_kit_receipes_connection(self, url, headers, payload):
     #         self._product_bundle_kit_receipes_connection(url, headers, payload)
     #     else:
     #         return
+
+
+
+
+=========================================================================================================================================
+
+ def _create_special_line(self, order_id, code, quantity, price):
+        """Helper to create a sale order line with a specific product code"""
+        product = self.env['product.product'].search([('default_code', '=', code)], limit=1)
+        if product:
+            self.env['sale.order.line'].create({
+                'product_id': product.id,
+                'product_uom_qty': quantity,
+                'price_unit': price,
+                'order_id': order_id.id
+            })
+
+    def _api_order_integration(self, url, headers, payload):
+        while url:
+            print("======url", url)
+            response = requests.get(url, headers=headers, data=payload)
+            response.raise_for_status()
+            response_json = response.json()
+
+            _logger.info("Fetching orders from: %s", url)
+            _logger.info("Order count: %s", response_json.get('count'))
+
+            for order in response_json.get('results', []):
+                if self.search([('name', '=', order.get('market_order_id'))], limit=1):
+                    continue  # Order already exists
+
+                partner = self.env['res.partner'].search(
+                    [('integration_config_id', '=', order.get('integration_config_id'))], limit=1)
+
+                order_dt = zulu.parse(order.get('order_datetime'))
+                date_order = order_dt if order_dt.tzinfo is None else order_dt.replace(tzinfo=None)
+
+                new_order_id = self.create({
+                    'partner_id': partner.id if partner else False,
+                    'name': order.get('market_order_id'),
+                    'listing_mirror_order_id': order.get('order_id'),
+                    'alternate_market_order_id': order.get('alternate_market_order_id'),
+                    'alternate_market_order_id_2': order.get('alternate_market_order_id_2'),
+                    'date_order': date_order,
+                    'lm_status': order.get('order_status'),
+                })
+
+                for line in order.get('order_items', []):
+                    discount = float(line.get('shipping_discount') or 0.0) + float(line.get('item_discount') or 0.0)
+                    main_product = self.env['product.product'].search([('default_code', '=', line.get('sku'))], limit=1)
+
+                    if not main_product:
+                        new_order_id.write({
+                            'lm_status': 'Error',
+                            'error_msg': f"{line.get('sku')} Not Available in Odoo"
+                        })
+                        continue
+
+                    self.env['sale.order.line'].create({
+                        'product_id': main_product.id,
+                        'product_uom_qty': line.get('quantity'),
+                        'price_unit': float(line.get('price')) / line.get('quantity'),
+                        'discount': discount,
+                        'order_id': new_order_id.id
+                    })
+
+                    # Create additional charge lines
+                    self._create_special_line(new_order_id, 'ship_price', 1, line.get('shipping_price', 0.0))
+                    self._create_special_line(new_order_id, 'ship_tax', 1, line.get('shipping_tax', 0.0))
+                    self._create_special_line(new_order_id, 'produ_tax', 1, line.get('tax', 0.0))
+                    self._create_special_line(new_order_id, 'gift_price', 1, line.get('gift_warp_price', 0.0))
+                    self._create_special_line(new_order_id, 'gift_tax', 1, line.get('gift_warp_tax', 0.0))
+
+                # Check stock availability
+                for line in new_order_id.order_line:
+                    if line.product_id.bom_ids:
+                        for bom_line in line.product_id.bom_ids[0].bom_line_ids:
+                            qty = bom_line.product_id.qty_available - (
+                                    bom_line.product_id.outgoing_qty + (bom_line.product_qty * line.product_uom_qty))
+                            if qty < 0:
+                                new_order_id.write({
+                                    'lm_status': 'Error',
+                                    'error_msg': "QTY is less than zero"
+                                })
+                                break
+                    elif line.product_id.type != 'service':
+                        qty = line.product_id.qty_available - (line.product_id.outgoing_qty + line.product_uom_qty)
+                        if qty < 0:
+                            new_order_id.write({
+                                'lm_status': 'Error',
+                                'error_msg': "QTY is less than zero"
+                            })
+                            break
+
+                if new_order_id.lm_status != 'Error':
+                    try:
+                        new_order_id.action_confirm()
+                    except Exception as e:
+                        new_order_id.write({'lm_status': 'Error', 'error_msg': str(e)})
+
+            url = response_json.get('next')
+            print("===2222222222222222===url", url)
+
+    def action_cron_order_api_integration(self):
+        current_date = datetime.today().date()
+        previous_date = current_date - timedelta(days=1)
+
+        config = self.env['ir.config_parameter'].sudo()
+        kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
+        kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
+
+        if not kwik_url or not kwik_token:
+            raise UserError(_("API URL or Token is not configured."))
+
+        headers = {'Authorization': f"Basic {kwik_token}"}
+        payload = {}
+
+        order_statuses = ['Accepted', 'Unpaid', 'Pending']
+        for status in order_statuses:
+            url = f"{kwik_url}orders/?start_date={previous_date}T00:00:00&end_date={current_date}T23:59:59&order_status={status}&fulfillment_inventory_source_id=2048"
+            self._api_order_integration(url, headers, payload)

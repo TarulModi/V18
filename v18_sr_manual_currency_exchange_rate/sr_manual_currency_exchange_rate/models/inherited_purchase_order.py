@@ -127,6 +127,6 @@ class PurchaseOrderLine(models.Model):
                 line.name = line._get_product_purchase_description(line.product_id.with_context(product_ctx))
 
     def _prepare_stock_move_vals(self, picking, price_unit, product_uom_qty, product_uom):
-        if self.order_id.apply_manual_currency_exchange:
+        if self.order_id.apply_manual_currency_exchange and self.order_id.manual_currency_exchange_rate > 0 and self.price_unit > 0:
             price_unit = self.price_unit / self.order_id.manual_currency_exchange_rate
         return super(PurchaseOrderLine,self)._prepare_stock_move_vals(picking,price_unit,product_uom_qty,product_uom)

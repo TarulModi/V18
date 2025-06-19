@@ -10,6 +10,7 @@
 
 import json
 import pytz
+import time
 import zulu
 import base64
 import logging
@@ -35,87 +36,114 @@ class SaleOrder(models.Model):
     channel_order_status = fields.Selection([('Cancelled', 'Cancelled'), ('Pending', 'Pending'), ('Shipped', 'Shipped'), ('Shipping', 'Shipping'),  ('Delivered', 'Delivered')], string="Channel Order Status")
     is_channel_fulfillment = fields.Boolean('Fulfilled By Channel?')
     error_msg = fields.Char('Error Message')
+    json_response = fields.Text("Json Response")
 
 
-    # def action_cron_check_order_status(self):
-    #     sale_order = self.env['sale.order'].search([('lm_status', 'in', ['Pending', 'Unpaid'])])
-    #     print ("========sale_order",sale_order)
-    #     for order in sale_order:
-    #         url = "https://api.listingmirror.com/api/v2/orders/?search_value=" + order.name
-    #         print ("======url", url)
-    #         payload = {}
-    #         headers = {
-    #                 'Authorization': 'Basic ZDVZaUJQRW5XRmRLQURxREJqbEtqUWhJbkc2VDRUR1c6NzJPV0hqSE9meHQ3VlY5bkZHdFRFNjh2M3c0akdVVXE='
-    #                 }
-    #         response = requests.request("GET", url, headers=headers, data=payload)
-    #         response_json = response.json()
-    #         order_response = response_json.get('results')
-    #         print ("====================order",order)
-    #         print ("=======order_response",order_response)
-    #         if order_response:
-    #             if order_response[0].get('order_status') == 'Cancelled':
-    #                 vals = []
-    #                 log_val = []
-    #                 print ("==========order",order)
-    #                 order.action_cancel()
-    #                 for line in order.order_line:
-    #                     if line.product_id.bom_ids:
-    #                         for bom_line in line.product_id.bom_ids.bom_line_ids:
-    #                             loc_ids = self.env['stock.location'].search([('usage', '=', 'internal')])
-    #                             qty = 0
-    #                             for loc in loc_ids:
-    #                                 if loc.name != 'Stock' and not loc.exclude_location:
-    #                                     qty += self.env['stock.quant']._get_available_quantity(bom_line.product_id, loc)
-    #                             vals.append({
-    #                                 'sku':bom_line.product_id.default_code,
-    #                                 "quantity": qty
-    #                                 })
-    #                             log_val.append({
-    #                                 'product':bom_line.product_id,
-    #                                 'kit_product':line.product_id,
-    #                                 'order_qty':line.product_uom_qty,
-    #                                 'pushed_qty':qty
-    #                                 })
-    #                     else:
-    #                         if line.product_id.type != 'service':
-    #                             loc_ids = self.env['stock.location'].search([('usage', '=', 'internal')])
-    #                             qty = 0
-    #                             for loc in loc_ids:
-    #                                 if loc.name != 'Stock' and not loc.exclude_location:
-    #                                     qty += self.env['stock.quant']._get_available_quantity(line.product_id, loc)
-    #                             vals.append({
-    #                                 "sku": line.product_id.default_code,
-    #                                 "quantity": qty
-    #                            })
-    #                             log_val.append({
-    #                                 'product':line.product_id,
-    #                                 'order_qty':line.product_uom_qty,
-    #                                 'pushed_qty':qty
-    #                             })
-    #                 payload = json.dumps(vals)
-    #                 url = "https://api.listingmirror.com/api/v2/inventory/"
-    #                 headers = {
-    #                             'Authorization': 'Basic ZDVZaUJQRW5XRmRLQURxREJqbEtqUWhJbkc2VDRUR1c6NzJPV0hqSE9meHQ3VlY5bkZHdFRFNjh2M3c0akdVVXE=',
-    #                             'Content-Type': 'application/json'
-    #                             }
-    #                 response = requests.request("PUT", url, headers=headers, data=payload)
-    #                 response_json = response.json()
-    #                 if not response_json.get('errors'):
-    #                     for record in log_val:
-    #                         self.env['update.qty.log'].create({
-    #                             'name':'Sales Order Cancelled',
-    #                             'origin':'Sales Order' + str(self.name),
-    #                             'sales_order_id':order.id,
-    #                             'qty':record.get('order_qty'),
-    #                             'pushed_qty':record.get('pushed_qty'),
-    #                             'product_id':record.get('kit_product').id if record.get('kit_product') else False,
-    #                             'kit_product_id':record.get('product').id if record.get('product') else False,
-    #                             })
-    #                 else:
-    #                     raise UserError(_('Error From Listing mirror for push qty \n' + str(response_json.get('errors'))))
-    #             order.write({
-    #                 'lm_status':order_response[0].get('order_status')
-    #                 })
+    def action_cron_check_order_status(self):
+        sale_order = self.env['sale.order'].search([('lm_status', 'in', ['Pending', 'Unpaid'])])
+        print ("===status=====sale_order",sale_order)
+        for order in sale_order:
+
+            config = self.env['ir.config_parameter'].sudo()
+            kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
+            kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
+
+            if not kwik_url or not kwik_token:
+                raise UserError(_("API URL or Token is not configured."))
+
+            headers = {'Authorization': f"Basic {kwik_token}"}
+            url = f"{kwik_url}orders/?search_value={order.name}"
+
+            # url = "https://api.listingmirror.com/api/v2/orders/?search_value=" + order.name
+            print ("=====-------------status-----------=url", url)
+            payload = {}
+            # headers = {
+            #         'Authorization': 'Basic ZDVZaUJQRW5XRmRLQURxREJqbEtqUWhJbkc2VDRUR1c6NzJPV0hqSE9meHQ3VlY5bkZHdFRFNjh2M3c0akdVVXE='
+            #         }
+            response = requests.request("GET", url, headers=headers, data=payload)
+            response_json = response.json()
+            order_response = response_json.get('results')
+            print ("========status============order",order)
+            print ("=status======order_response",order_response)
+            if order_response:
+                if order_response[0].get('order_status') == 'Cancelled':
+                    vals = []
+                    log_val = []
+                    print ("==========order",order)
+                    order.action_cancel()
+                    for line in order.order_line:
+                        if line.product_id.bom_ids:
+                            for bom_line in line.product_id.bom_ids.bom_line_ids:
+                                loc_ids = self.env['stock.location'].search([('usage', '=', 'internal')])
+                                qty = 0
+                                for loc in loc_ids:
+                                    if loc.name != 'Stock' and not loc.exclude_location:
+                                        qty += self.env['stock.quant']._get_available_quantity(bom_line.product_id, loc)
+                                vals.append({
+                                    'sku':bom_line.product_id.default_code,
+                                    "quantity": qty
+                                    })
+                                log_val.append({
+                                    'product':bom_line.product_id,
+                                    'kit_product':line.product_id,
+                                    'order_qty':line.product_uom_qty,
+                                    'pushed_qty':qty
+                                    })
+                        else:
+                            if line.product_id.type != 'service':
+                                loc_ids = self.env['stock.location'].search([('usage', '=', 'internal')])
+                                qty = 0
+                                for loc in loc_ids:
+                                    if loc.name != 'Stock' and not loc.exclude_location:
+                                        qty += self.env['stock.quant']._get_available_quantity(line.product_id, loc)
+                                vals.append({
+                                    "sku": line.product_id.default_code,
+                                    "quantity": qty
+                               })
+                                log_val.append({
+                                    'product':line.product_id,
+                                    'order_qty':line.product_uom_qty,
+                                    'pushed_qty':qty
+                                })
+                    payload = json.dumps(vals)
+                    print("----recolog_valrd-----log_val----------------", log_val)
+
+                    # url = "https://api.listingmirror.com/api/v2/inventory/"
+                    # headers = {
+                    #             'Authorization': 'Basic ZDVZaUJQRW5XRmRLQURxREJqbEtqUWhJbkc2VDRUR1c6NzJPV0hqSE9meHQ3VlY5bkZHdFRFNjh2M3c0akdVVXE=',
+                    #             'Content-Type': 'application/json'
+                    #             }
+
+                    headers = {
+                        'Authorization': f"Basic {kwik_token}",
+                        'Content-Type': 'application/json'
+                    }
+                    url = f"{kwik_url}inventory/"
+                    response = requests.request("PUT", url, headers=headers, data=payload)
+                    response_json = response.json()
+                    print("----response_json-----response_json----------------",response_json)
+                    print("----response_json-response_json.get('errors')--------------",response_json.get('errors'))
+                    if not response_json.get('errors'):
+                        for record in log_val:
+                            print("----record-----record----------------", record)
+                            self.env['update.qty.log'].create({
+                                'name':'Sales Order Cancelled',
+                                'origin':'Sales Order' + str(self.name),
+                                'sales_order_id':order.id,
+                                'qty':record.get('order_qty'),
+                                'pushed_qty':record.get('pushed_qty'),
+                                'product_id':record.get('kit_product').id if record.get('kit_product') else False,
+                                'kit_product_id':record.get('product').id if record.get('product') else False,
+                                })
+                    else:
+                        # raise UserError(_('Error From Listing mirror for push qty \n' + str(response_json.get('errors'))))
+                        # self._log_integration_error(str(response_json.get('errors')), 'Error From Listing mirror for push qty')
+                        integration_name = 'Order API Integration from Listing Mirror'
+                        remark = 'Error From Listing mirror for push qty'
+                        self.env['integration.error.log']._log_integration_error(str(response_json.get('errors')), integration_name, remark)
+                order.write({
+                    'lm_status':order_response[0].get('order_status')
+                    })
 
     # def _api_order_integration(self, url, headers, payload):
     #     response = requests.request("GET", url, headers=headers, data=payload)
@@ -242,33 +270,75 @@ class SaleOrder(models.Model):
     #     # url = "https://api.listingmirror.com/api/v2/orders/?start_date=" + previous_date + "T00:00:00&end_date=" + current_date + "T23:59:00&order_status=Pending&fulfillment_inventory_source_id=2048"
     #     self._api_order_integration(url, headers, payload)
 
+
     def _create_special_line(self, order_id, code, quantity, price):
         """Helper to create a sale order line with a specific product code"""
         product = self.env['product.product'].search([('default_code', '=', code)], limit=1)
+        print("-----------------product----------------", product)
         if product:
             self.env['sale.order.line'].create({
                 'product_id': product.id,
                 'product_uom_qty': quantity,
                 'price_unit': price,
-                'order_id': order_id.id
+                'order_id': order_id.id,
             })
+        else:
+            integration_name = 'Order API Integration from Listing Mirror'
+            remark = 'Product Not Found'
+            self.env['integration.error.log']._log_integration_error(code, integration_name, remark)
+            # self._log_integration_error(code, 'Product Not Found')
+
 
     def _api_order_integration(self, url, headers, payload):
+        integration_name = f"Order API Integration from Listing Mirror"
+        remark = f"Created SO"
         while url:
-            print("======url", url)
-            response = requests.get(url, headers=headers, data=payload)
-            response.raise_for_status()
-            response_json = response.json()
+            start_date = fields.Datetime.now()
+            count = 0
+            so_list = []
+            for attempt in range(5):  # Retry up to 5 times
+                try:
+                    _logger.info("Fetching URL: %s (Attempt %s)", url, attempt + 1)
+                    response = requests.get(url, headers=headers, data=payload)
+                    # print("-----------------response----------------", response)
 
-            _logger.info("Fetching orders from: %s", url)
+                    if response.status_code == 429:
+                        retry_after = int(response.headers.get('Retry-After', 10))
+                        _logger.warning(f"429 Too Many Requests. Retrying after {retry_after} seconds...")
+                        time.sleep(retry_after)
+                        continue
+
+                    response.raise_for_status()
+                    break  # Successful request, break out of retry loop
+
+                except requests.exceptions.HTTPError as e:
+                    if response.status_code == 429:
+                        retry_after = int(response.headers.get('Retry-After', 10))
+                        _logger.warning(f"Rate limit hit. Retrying after {retry_after} seconds...")
+                        time.sleep(retry_after)
+                    else:
+                        raise e
+            else:
+                # raise UserError(_("Maximum retry attempts reached for URL: %s" % url))
+                # self._log_integration_error(url, 'Maximum retry attempts reached for URL')
+                remark = 'Maximum retry attempts reached for URL'
+                self.env['integration.error.log']._log_integration_error(url, integration_name, remark)
+
+            response_json = response.json()
             _logger.info("Order count: %s", response_json.get('count'))
 
             for order in response_json.get('results', []):
+                # print("----order----------order----------",order)
                 if self.search([('name', '=', order.get('market_order_id'))], limit=1):
                     continue  # Order already exists
 
                 partner = self.env['res.partner'].search(
                     [('integration_config_id', '=', order.get('integration_config_id'))], limit=1)
+
+                if not partner:
+                    # self._log_integration_error(order.get('integration_config_id'), 'Partner Not Found')
+                    remark = 'Partner Not Found'
+                    self.env['integration.error.log']._log_integration_error(order.get('integration_config_id'), integration_name, remark)
 
                 order_dt = zulu.parse(order.get('order_datetime'))
                 date_order = order_dt if order_dt.tzinfo is None else order_dt.replace(tzinfo=None)
@@ -281,28 +351,45 @@ class SaleOrder(models.Model):
                     'alternate_market_order_id_2': order.get('alternate_market_order_id_2'),
                     'date_order': date_order,
                     'lm_status': order.get('order_status'),
+                    'json_response': order
                 })
+                if new_order_id:
+                    count += len(new_order_id)
+                    so_list.append(new_order_id.id)
+
+                # print("----new_order_id----------new_order_id----------", new_order_id)
 
                 for line in order.get('order_items', []):
                     discount = float(line.get('shipping_discount') or 0.0) + float(line.get('item_discount') or 0.0)
                     main_product = self.env['product.product'].search([('default_code', '=', line.get('sku'))], limit=1)
+                    # print("-----------------main_product----------------", main_product)
 
                     if not main_product:
+                        # print("-----------------main_product-----Nottt-----------", main_product)
                         new_order_id.write({
                             'lm_status': 'Error',
-                            'error_msg': f"{line.get('sku')} Not Available in Odoo"
+                            'error_msg': f"{line.get('sku')} Not Available in Odoo",
+                            'json_response': line
                         })
+                        # self._log_integration_error(line.get('sku'), f"{line.get('sku')} Not Available in Odoo")
+                        remark = f"{line.get('sku')} Not Available in Odoo"
+                        self.env['integration.error.log']._log_integration_error(line.get('sku'), integration_name, remark)
                         continue
 
-                    self.env['sale.order.line'].create({
+                    sale_order_line_id = self.env['sale.order.line'].create({
                         'product_id': main_product.id,
                         'product_uom_qty': line.get('quantity'),
                         'price_unit': float(line.get('price')) / line.get('quantity'),
                         'discount': discount,
-                        'order_id': new_order_id.id
+                        'order_id': new_order_id.id,
                     })
+                    if not sale_order_line_id:
+                        # self._log_integration_error(new_order_id, f"{main_product} line not created in the sale order")
+                        remark = f"{main_product} line not created in the sale order"
+                        self.env['integration.error.log']._log_integration_error(new_order_id, integration_name, remark)
 
-                    # Create additional charge lines
+
+                    # Add charge lines
                     self._create_special_line(new_order_id, 'ship_price', 1, line.get('shipping_price', 0.0))
                     self._create_special_line(new_order_id, 'ship_tax', 1, line.get('shipping_tax', 0.0))
                     self._create_special_line(new_order_id, 'produ_tax', 1, line.get('tax', 0.0))
@@ -336,8 +423,28 @@ class SaleOrder(models.Model):
                     except Exception as e:
                         new_order_id.write({'lm_status': 'Error', 'error_msg': str(e)})
 
+            # Delay between paginated requests
             url = response_json.get('next')
-            print("===2222222222222222===url", url)
+            if url:
+                print("-----------------url------2222----------", url)
+                time.sleep(1)  # optional throttle
+                _logger.info("Fetching next page: %s", url)
+
+            end_date = fields.Datetime.now()
+            print("--------------------------",so_list)
+            if so_list:
+                self._log_details_integration(integration_name, remark, count, start_date, end_date, so_list)
+
+
+    def _log_details_integration(self, integration_name, remark, count, start_date, end_date, so_list):
+        self.env['integration.log.details'].create({
+            'integration_name': integration_name,
+            'remark': remark,
+            'count': count,
+            'start_date': start_date,
+            'end_date': end_date,
+            'sale_order_ids': [(6, 0, so_list)],
+        })
 
     def action_cron_order_api_integration(self):
         current_date = datetime.today().date()
@@ -357,6 +464,101 @@ class SaleOrder(models.Model):
         for status in order_statuses:
             url = f"{kwik_url}orders/?start_date={previous_date}T00:00:00&end_date={current_date}T23:59:59&order_status={status}&fulfillment_inventory_source_id=2048"
             self._api_order_integration(url, headers, payload)
+
+    def action_confirm(self):
+        res = super().action_confirm()
+
+        if self._context.get('custom'):
+            return res
+
+        vals = []
+        log_val = []
+        for line in self.order_line:
+            product_list = []
+            if line.product_id.bom_ids:
+                for bom_line in line.product_id.bom_ids.bom_line_ids:
+                    product_list.append(bom_line.product_id)
+                    log_val.append({
+                        'product_id': bom_line.product_id,
+                        'kit_product': line.product_id,
+                        'order_qty': line.product_uom_qty
+                    })
+            else:
+                if line.product_id.type != 'service':
+                    product_list.append(line.product_id)
+                    log_val.append({
+                        'product_id': line.product_id,
+                        'kit_product': False,
+                        'order_qty': line.product_uom_qty
+                    })
+
+            if product_list:
+                data_chunk = self.env['update.qty.log']._prepare_qty_data(product_list)
+                self.env['update.qty.log']._push_qty_to_listing_mirror(data_chunk,
+                                                                              integration_name="Sales Order Confirmed")
+
+                for entry in data_chunk:
+                    for record in log_val:
+                        if record['product_id'].default_code == entry['sku']:
+                            self.env['update.qty.log'].create({
+                                'name': 'Sales Order Confirmed',
+                                'origin': 'Sales Order ' + str(self.name),
+                                'sales_order_id': self.id,
+                                'qty': record.get('order_qty'),
+                                'pushed_qty': entry.get('quantity'),
+                                'product_id': record.get('kit_product').id if record.get('kit_product') else False,
+                                'kit_product_id': record.get('product').id if record.get('product') else False,
+                            })
+
+        # self.env['update.qty.log']._log_qty_push_result(log_val, origin='Sales Order Confirmed', sales_order=self)
+        return res
+
+    # def action_confirm(self):
+    #     res = super(SaleOrder, self).action_confirm()
+    #
+    #     if self._context.get('custom'):
+    #         return res
+    #
+    #     vals = []
+    #     log_val = []
+    #
+    #     for line in self.order_line:
+    #         product = line.product_id
+    #         if product.bom_ids:
+    #             for bom_line in product.bom_ids.bom_line_ids:
+    #                 qty = sum(self.env['stock.quant']._get_available_quantity(
+    #                     bom_line.product_id, loc)
+    #                           for loc in self.env['stock.location'].search(
+    #                     [('usage', '=', 'internal'), ('exclude_location', '=', False), ('name', '!=', 'Stock')]))
+    #                 vals.append({
+    #                     'sku': bom_line.product_id.default_code,
+    #                     'quantity': qty
+    #                 })
+    #                 log_val.append({
+    #                     'product': bom_line.product_id,
+    #                     'kit_product': product,
+    #                     'order_qty': line.product_uom_qty,
+    #                     'pushed_qty': qty
+    #                 })
+    #         elif product.type != 'service':
+    #             qty = sum(self.env['stock.quant']._get_available_quantity(
+    #                 product, loc)
+    #                       for loc in self.env['stock.location'].search(
+    #                 [('usage', '=', 'internal'), ('exclude_location', '=', False), ('name', '!=', 'Stock')]))
+    #             vals.append({
+    #                 'sku': product.default_code,
+    #                 'quantity': qty
+    #             })
+    #             log_val.append({
+    #                 'product': product,
+    #                 'order_qty': line.product_uom_qty,
+    #                 'pushed_qty': qty
+    #             })
+    #
+    #     self._send_qty_to_listing_mirror(vals)
+    #     self._log_qty_push_result(log_val, origin='Sales Order Confirmed', sales_order=self)
+
+        return res
 
 
 class SaleOrderLine(models.Model):

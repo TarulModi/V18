@@ -58,7 +58,10 @@
             <field name="view_id" ref="school_configurations_view_tree"/>
         </record>
 
-        <menuitem id="menu_education" name="Education"/>
+        <menuitem id="menu_education"
+                  name="Education"
+                  web_icon="sr_education_management,static/description/icon.png"/>
+
         <menuitem id="menu_configurations"
                   parent="sr_education_management.menu_education"
                   name="Configurations"

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pushed_qty_log_tree" model="ir.ui.view">
+        <field name="name">view.pushed.qty.log.tree</field>
+        <field name="model">update.qty.log</field>
+        <field name="arch" type="xml">
+            <list string="Pushed QTY Log" sample="1">
+                <field name="name"/>
+                <field name="origin"/>
+                <field name="product_id"/>
+                <field name="kit_product_id"/>
+                <field name="sales_order_id" optional="hide"/>
+                <field name="purchase_order_id" optional="hide"/>
+<!--                <field name="inventory_adjustment_id" optional="hide"/>-->
+                <field name="picking_id" optional="hide"/>
+                <field name="move_id" optional="hide"/>
+                <field name="qty"/>
+                <field name="pushed_qty"/>
+            </list>
+        </field>
+    </record>
+
+	<record id="update_product_qty_log_action" model="ir.actions.act_window">
+		<field name="name">Product QTY Pushed Log</field>
+		<field name="res_model">update.qty.log</field>
+		<field name="view_mode">list</field>
+	</record>
+
+
+	<menuitem id="update_product_qty_log_menu"
+		name="Product QTY Pushed Log" parent="integration_menu_root"
+		action="update_product_qty_log_action" />
+
+</odoo>

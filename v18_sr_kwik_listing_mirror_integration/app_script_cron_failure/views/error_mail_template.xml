@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="0">
+
+        <!-- Error Email template  -->
+        <record id="scheduler_error_mailer" model="mail.template">
+            <field name="name">Scheduler Error</field>
+            <field name="email_from">{{object.user_id.email}}</field>
+            <field name="subject">{{object.name}} FAILED</field>
+            <field name="model_id" ref="app_script_cron_failure.model_logs_action" />
+            <field name="auto_delete" eval="True" />
+            <field name="body_html">
+<!--                <![CDATA[-->
+<!--                Dear Support team,-->
+<!--                <div>Here we are attaching error logs from scheduled cron jobs on our server, so please-->
+<!--                urgently take action.</div>-->
+<!--                <div>If you have any question, don't hesitate to contact us.</div>-->
+<!--                Thank You.-->
+<!--                ]]>-->
+
+                <![CDATA[
+                        Dear Support team, <br />
+                        Here we are attaching error logs from scheduled cron jobs on our server, so please
+                urgently take action. <br />
+                        If you have any question, don't hesitate to contact us. <br />
+
+                        Thank You.
+                ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>

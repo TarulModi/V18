@@ -12,11 +12,25 @@
             sequence="1"/>
 
         <menuitem
+            id="menu_financial_position"
+            name="Financial Position"
+            parent="menu_account_report"
+            action="action_report_financial_position"
+            sequence="2"/>
+
+        <menuitem
             id="menu_financial_statement_notes"
             name="Financial Statement Notes"
             parent="menu_account_report"
             action="action_report_financial_statement_notes"
             sequence="3"/>
+	
+	<menuitem
+            id="menu_cash_flows_indirect"
+            name="Cash Flows Indirect"
+            parent="menu_account_report"
+            action="action_report_cash_flows_indirect"
+            sequence="4"/>
 
         <menuitem
             id="menu_report_aged_payable"

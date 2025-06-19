@@ -18,8 +18,8 @@
     """,
     "depends": ["base", "mail", "snailmail", "hr", "accountant"],
     "data": [
-        "security/ir.model.access.csv",
         "security/education_security.xml",
+        "security/ir.model.access.csv",
         "data/ir_sequence_data.xml",
         "views/school_configurations.xml",
         "views/language_view.xml",

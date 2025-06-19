@@ -143,6 +143,11 @@ class ProfitLossStatement(models.AbstractModel):
         }
 
         operating_profit_loss = {
+            k: revenue_totals[k] + total_operating[k]
+            for k in revenue_totals
+        }
+
+        total_profit_loss = {
             k: revenue_totals[k] - total_operating[k]
             for k in revenue_totals
         }
@@ -173,6 +178,7 @@ class ProfitLossStatement(models.AbstractModel):
             'non_operating_expenses': non_operating_expense_results,
             'non_operating_totals': total_non_op,
             'operating_profit_loss': operating_profit_loss,
+            'total_profit_loss': total_profit_loss,
             'operating_margin': operating_margin,
             'net_profit_loss': net_profit_loss,
             'net_margin': net_margin,

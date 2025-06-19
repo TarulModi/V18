@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_report_financial_position" model="ir.actions.report">
+        <field name="name">Financial Position</field>
+        <field name="model">financial.position</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_account_report_customization.fin_pos_report</field>
+        <field name="report_file">sr_account_report_customization.financial_position_report_view</field>
+        <field name="binding_model_id" ref="sr_account_report_configuration.model_financial_position"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

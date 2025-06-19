@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Custom Paper Format -->
+    <record id="paperformat_cash_flows_indirect" model="report.paperformat">
+        <field name="name">Cash Flows Indirect (Gulf Style)</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Main Report Template -->
+    <template id="csh_flws_indt">
+        <t t-call="web.internal_layout">
+            <div class="page">
+                <main>
+                    <h1 style="color: #00BFFF; font-weight: bold;">Statement of Cash Flows - Indirect Method</h1>
+                    <p style="font-weight: bold; font-size: 23px; margin: 0;">
+                        <t t-esc="res_company.name"/>
+                    </p>
+                    <p style="font-weight: bold; font-size: 23px;">
+                        For the month ended <t t-esc="current_month_last_date"/>
+                    </p>
+
+                    <t t-if="cash_flow_results">
+                        <!-- Table Header -->
+                        <table class="o_total_table table table-borderless avoid-page-break-inside"
+                               style="width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000;">
+                            <thead>
+                                <tr style="font-weight: bold; color: black;">
+                                    <th style="width: 40%; padding: 6px 8px; text-align: left;"></th>
+                                    <th style="width: 10%; padding: 6px 8px; text-align: right;font-weight: bold;"><t t-esc="labels['current_month']"/></th>
+                                    <th style="width: 10%; padding: 6px 8px; text-align: right;font-weight: bold;"><t t-esc="labels['prev_month_1']"/></th>
+                                    <th style="width: 10%; padding: 6px 8px; text-align: right;font-weight: bold;"><t t-esc="labels['prev_month_2']"/></th>
+                                    <th style="width: 10%; padding: 6px 8px; text-align: right;font-weight: bold;"><t t-esc="labels['ytd']"/></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <t t-foreach="cash_flow_results.items()" t-as="category_item">
+                            <t t-set="category_name" t-value="category_item[0]"/>
+                            <t t-set="category_data" t-value="category_item[1]"/>
+
+                            <h3 style="font-size: 20px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0; margin-top: 15px;">
+                                <t t-esc="cash_flow_map.get(category_name)"/>
+                            </h3>
+
+                            <table class="o_total_table table table-borderless avoid-page-break-inside"
+                                   style="width: 99%; border-collapse: collapse; border-spacing: 0; margin-left: 10px;">
+                                <tbody>
+                                    <t t-foreach="category_data['accounts']" t-as="account">
+                                        <tr>
+                                            <td style="padding: 6px 8px; text-align: left; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="account['account_name']"/>
+                                            </td>
+                                            <td style="width: 12.5%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if account['current_month'] == 0 else '({:,.2f})'.format(abs(account['current_month'])) if account['current_month'] &lt; 0 else '{:,.2f}'.format(account['current_month'])"/>
+                                            </td>
+                                            <td style="width: 12.5%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if account['prev_month_1'] == 0 else '({:,.2f})'.format(abs(account['prev_month_1'])) if account['prev_month_1'] &lt; 0 else '{:,.2f}'.format(account['prev_month_1'])"/>
+                                            </td>
+                                            <td style="width: 12.5%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if account['prev_month_2'] == 0 else '({:,.2f})'.format(abs(account['prev_month_2'])) if account['prev_month_2'] &lt; 0 else '{:,.2f}'.format(account['prev_month_2'])"/>
+                                            </td>
+                                            <td style="width: 12.5%; padding: 6px 8px; text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if account['ytd'] == 0 else '({:,.2f})'.format(abs(account['ytd'])) if account['ytd'] &lt; 0 else '{:,.2f}'.format(account['ytd'])"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 5px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                                <tbody>
+                                    <tr style="font-weight: bold; border-top: 1px solid #000;">
+                                        <td style="padding: 5px 0; font-weight: bold; font-size: 18px;">
+                                            <td><t t-esc="category_data.get('total_label')"/></td>
+                                        </td>
+                                        <td style="width: 10%; padding: 5px 0;"></td>
+                                        <td style="width: 12.5%; text-align: right; padding: 5px 10px 5px 0;">
+                                            <t t-esc="'-' if category_data['totals']['current_month'] == 0 else '({:,.2f})'.format(abs(category_data['totals']['current_month'])) if category_data['totals']['current_month'] &lt; 0 else '{:,.2f}'.format(category_data['totals']['current_month'])"/>
+                                        </td>
+                                        <td style="width: 12.5%; text-align: right; padding: 5px 10px 5px 0;">
+                                            <t t-esc="'-' if category_data['totals']['prev_month_1'] == 0 else '({:,.2f})'.format(abs(category_data['totals']['prev_month_1'])) if category_data['totals']['prev_month_1'] &lt; 0 else '{:,.2f}'.format(category_data['totals']['prev_month_1'])"/>
+                                        </td>
+                                        <td style="width: 12.5%; text-align: right; padding: 5px 10px 5px 0;">
+                                            <t t-esc="'-' if category_data['totals']['prev_month_2'] == 0 else '({:,.2f})'.format(abs(category_data['totals']['prev_month_2'])) if category_data['totals']['prev_month_2'] &lt; 0 else '{:,.2f}'.format(category_data['totals']['prev_month_2'])"/>
+                                        </td>
+                                        <td style="width: 12.5%; text-align: right; padding: 5px 10px 5px 0;">
+                                            <t t-esc="'-' if category_data['totals']['ytd'] == 0 else '({:,.2f})'.format(abs(category_data['totals']['ytd'])) if category_data['totals']['ytd'] &lt; 0 else '{:,.2f}'.format(category_data['totals']['ytd'])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </t>
+                    </t>
+                    <t t-if="show_net_cash_flows_row">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 18px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                            <tbody>
+                                <tr style="font-weight: bold; border-top: 1px solid #000;">
+                                    <td style="padding: 5px 0; font-weight: bold;">
+                                            <td>Net Cash Flows</td>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right;">
+                                        <t t-esc="'-' if net_cash_total['current_month'] == 0 else '({:,.2f})'.format(abs(net_cash_total['current_month'])) if net_cash_total['current_month'] &lt; 0 else '{:,.2f}'.format(net_cash_total['current_month'])"/>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right;">
+                                        <t t-esc="'-' if net_cash_total['prev_month_1'] == 0 else '({:,.2f})'.format(abs(net_cash_total['prev_month_1'])) if net_cash_total['prev_month_1'] &lt; 0 else '{:,.2f}'.format(net_cash_total['prev_month_1'])"/>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right;">
+                                        <t t-esc="'-' if net_cash_total['prev_month_2'] == 0 else '({:,.2f})'.format(abs(net_cash_total['prev_month_2'])) if net_cash_total['prev_month_2'] &lt; 0 else '{:,.2f}'.format(net_cash_total['prev_month_2'])"/>
+                                    </td>
+                                    <td style="width: 12.5%; text-align: right;">
+                                        <t t-esc="'-' if net_cash_total['ytd'] == 0 else '({:,.2f})'.format(abs(net_cash_total['ytd'])) if net_cash_total['ytd'] &lt; 0 else '{:,.2f}'.format(net_cash_total['ytd'])"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                        <t t-if="cash_equivalent_accounts">
+                            <h3 style="font-size: 20px; font-weight: bold; border-bottom: 1px solid #000; padding: 6px 8px; margin: 0; margin-top: 25px;">
+                                Cash and Cash Equivalents
+                            </h3>
+
+                            <table class="o_total_table table table-borderless avoid-page-break-inside"
+                                   style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-left: 10px;">
+                                <tbody>
+                                    <t t-foreach="cash_equivalent_accounts" t-as="line">
+                                        <tr>
+                                            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="line['account_name']"/>
+                                            </td>
+                                            <td style="text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['current_month'] == 0 else '({:,.2f})'.format(abs(line['current_month'])) if line['current_month'] &lt; 0 else '{:,.2f}'.format(line['current_month'])"/>
+                                            </td>
+                                            <td style="text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['prev_month_1'] == 0 else '({:,.2f})'.format(abs(line['prev_month_1'])) if line['prev_month_1'] &lt; 0 else '{:,.2f}'.format(line['prev_month_1'])"/>
+                                            </td>
+                                            <td style="text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['prev_month_2'] == 0 else '({:,.2f})'.format(abs(line['prev_month_2'])) if line['prev_month_2'] &lt; 0 else '{:,.2f}'.format(line['prev_month_2'])"/>
+                                            </td>
+                                            <td style="text-align: right; border-bottom: 1px solid #ddd;">
+                                                <t t-esc="'-' if line['ytd'] == 0 else '({:,.2f})'.format(abs(line['ytd'])) if line['ytd'] &lt; 0 else '{:,.2f}'.format(line['ytd'])"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Total Row -->
+                                    <tr style="font-weight: bold; border-top: 1px solid #ddd;">
+                                        <td>Net change in cash for period</td>
+                                        <td style="width: 12.5%; padding: 6px 8px; text-align: right;">
+                                            <t t-esc="'-' if cash_equivalent_table['total']['current_month'] == 0 else '({:,.2f})'.format(abs(cash_equivalent_table['total']['current_month'])) if cash_equivalent_table['total']['current_month'] &lt; 0 else '{:,.2f}'.format(cash_equivalent_table['total']['current_month'])"/>
+                                        </td>
+                                        <td style="width: 12.5%; padding: 6px 8px; text-align: right;">
+                                            <t t-esc="'-' if cash_equivalent_table['total']['prev_month_1'] == 0 else '({:,.2f})'.format(abs(cash_equivalent_table['total']['prev_month_1'])) if cash_equivalent_table['total']['prev_month_1'] &lt; 0 else '{:,.2f}'.format(cash_equivalent_table['total']['prev_month_1'])"/>
+                                        </td>
+                                        <td style="width: 12.5%; padding: 6px 8px; text-align: right;">
+                                            <t t-esc="'-' if cash_equivalent_table['total']['prev_month_2'] == 0 else '({:,.2f})'.format(abs(cash_equivalent_table['total']['prev_month_2'])) if cash_equivalent_table['total']['prev_month_2'] &lt; 0 else '{:,.2f}'.format(cash_equivalent_table['total']['prev_month_2'])"/>
+                                        </td>
+                                        <td style="width: 12.5%; padding: 6px 8px; text-align: right; ">
+                                            <t t-esc="'-' if cash_equivalent_table['total']['ytd'] == 0 else '({:,.2f})'.format(abs(cash_equivalent_table['total']['ytd'])) if cash_equivalent_table['total']['ytd'] &lt; 0 else '{:,.2f}'.format(cash_equivalent_table['total']['ytd'])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                </main>
+            </div>
+        </t>
+    </template>
+
+    <!-- Report Action -->
+    <record id="action_report_cash_flows_indirect" model="ir.actions.report">
+        <field name="name">Cash Flows - Indirect Method</field>
+        <field name="model">cash.flows.indirect</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_account_report_customization.csh_flws_indt</field>
+        <field name="report_file">sr_account_report_customization.csh_flws_indt</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="sr_account_report_customization.paperformat_cash_flows_indirect"/>
+    </record>
+</odoo>

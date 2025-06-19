@@ -2,25 +2,61 @@
 <odoo>
     <data noupdate="0">
 
+        <record id="module_category_sr_education" model="ir.module.category">
+            <field name="name">Education Management</field>
+            <field name="sequence">20</field>
+        </record>
+
         <record id="group_student" model="res.groups">
             <field name="name">Student</field>
-<!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+            <field name="category_id" ref="sr_education_management.module_category_sr_education"/>
         </record>
 
         <record id="group_faculty" model="res.groups">
             <field name="name">Faculty</field>
-<!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+            <field name="category_id" ref="sr_education_management.module_category_sr_education"/>
         </record>
 
-        <record id="group_parents" model="res.groups">
+        <!-- <record id="group_parents" model="res.groups">
             <field name="name">Parents</field>
-<!--            <field name="category_id" ref="base.module_category_hidden"/>-->
-        </record>
+            <field name="category_id" ref="sr_education_management.module_category_sr_education"/>
+        </record> -->
 
         <record id="group_administrator" model="res.groups">
             <field name="name">Administrator</field>
-<!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+            <field name="category_id" ref="sr_education_management.module_category_sr_education"/>
         </record>
 
+        <!-- security/hr_employee_rules.xml -->
+        <record id="hr_employee_rule_faculty_readonly" model="ir.rule">
+            <field name="name">Faculty: Read Only Employees</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="domain_force">[(1, '=', 1)]</field> <!-- All records -->
+            <field name="groups" eval="[(4, ref('sr_education_management.group_faculty'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <record id="hr_rule_employee_self" model="ir.rule">
+            <field name="name">Employee: only see own record</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="1"/>
+        </record>
+
+
+        <!-- security/hr_employee_rules.xml -->
+        <record id="fees_structure_rule_faculty_readonly" model="ir.rule">
+            <field name="name">Faculty: Read Only Fees Structure</field>
+            <field name="model_id" ref="sr_education_management.model_fees_structure"/>
+            <field name="domain_force">[(1, '=', 1)]</field> <!-- All records -->
+            <field name="groups" eval="[(4, ref('sr_education_management.group_faculty'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
     </data>
 </odoo>

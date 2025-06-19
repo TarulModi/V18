@@ -8,7 +8,7 @@
 			<field name="inherit_id" ref="hr.view_employee_form"/>
 			<field name="arch" type="xml">
 				<field name="coach_id" position="after">
-					<field name="is_faculty"/>
+					<field name="is_faculty" invisible="1"/>
 				</field>
 
 				<xpath expr="//notebook" position="inside">
@@ -120,7 +120,7 @@
             <field name="name">Faculty</field>
             <field name="res_model">hr.employee</field>
             <field name="domain">[('company_id', 'in', allowed_company_ids),('is_faculty' , '=', True)]</field>
-            <field name="context">{'chat_icon': True}</field>
+            <field name="context">{'chat_icon': True, 'default_is_faculty' : True}</field>
 			<field name="view_id" eval="False"/>
             <field name="search_view_id" ref="hr.view_employee_filter"/>
         </record>
@@ -128,7 +128,7 @@
         <menuitem id="menu_sub_employee"
 				  parent="sr_education_management.menu_education"
 				  name="Employee"
-				  groups="sr_education_management.group_administrator"
+				  groups="sr_education_management.group_administrator,sr_education_management.group_faculty"
 				  sequence="3"/>
 
 		<menuitem id="menu_employee"
@@ -142,7 +142,7 @@
 				  parent="sr_education_management.menu_sub_employee"
 				  name="Faculty"
 				  action="sr_education_management.open_view_employee_list_my_faculty"
-				  groups="sr_education_management.group_administrator"
+				  groups="sr_education_management.group_administrator,sr_education_management.group_faculty"
 				  sequence="2"/>
 
     </data>

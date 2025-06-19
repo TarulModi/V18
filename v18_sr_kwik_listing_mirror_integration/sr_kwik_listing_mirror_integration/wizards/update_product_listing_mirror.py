@@ -42,6 +42,11 @@ class ListingMirrorIntegration(models.TransientModel):
         kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
         kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
 
+        integration_name = f"Update Master Product Listing"
+        remark = f"Update Product"
+        start_date = fields.Datetime.now()
+        count = 0
+
         if not kwik_url or not kwik_token:
             raise UserError(_("API URL or Token is not configured."))
 
@@ -82,6 +87,9 @@ class ListingMirrorIntegration(models.TransientModel):
         # Default category fallback
         category = self.env['product.category'].search([], limit=1)
 
+        price = float(result.get('price') or 0.0)
+        cost = float(result.get('cost') or 0.0)
+
         # Write values
         product.write({
             'name': result.get('variation_title'),
@@ -92,8 +100,8 @@ class ListingMirrorIntegration(models.TransientModel):
             'upc': result.get('upc'),
             'mpn': result.get('mpn'),
             'categ_id': category.id if category else False,
-            'lst_price': result.get('price'),
-            'standard_price': result.get('cost'),
+            'lst_price': price,
+            'standard_price': cost,
             'uom_id': self.env['uom.uom'].search([('name', '=', 'Units')], limit=1).id,
             'uom_po_id': self.env['uom.uom'].search([('name', '=', 'Units')], limit=1).id,
             'weight': result.get('shipping_weight'),
@@ -104,4 +112,18 @@ class ListingMirrorIntegration(models.TransientModel):
             'shipping_uom': self._find_uom(result.get('item_shipping_unit_of_measure')),
             'image_1920': image_data,
             'listing_mirror_id': result.get('listing_id')
+        })
+        end_date = fields.Datetime.now()
+        count += len(product)
+        if product:
+            self._log_details_integration(integration_name, remark, count, start_date, end_date, product.ids)
+
+    def _log_details_integration(self, integration_name, remark, count, start_date, end_date, new_products):
+        self.env['integration.log.details'].create({
+            'integration_name': integration_name,
+            'remark': remark,
+            'count': count,
+            'start_date': start_date,
+            'end_date': end_date,
+            'product_ids': [(6, 0, new_products)],
         })

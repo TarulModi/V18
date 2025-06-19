@@ -22,3 +22,11 @@ class IntegrationErrorLog(models.Model):
     integration_name = fields.Char('Integration Name', copy=False, tracking=True)
     remark = fields.Char('Remark', copy=False, tracking=True)
     date = fields.Char('Date', copy=False, tracking=True)
+
+    def _log_integration_error(self, sku, integration_name, remark):
+        self.env['integration.error.log'].create({
+            'name': sku,
+            'integration_name': integration_name,
+            'remark': remark,
+            'date': fields.Datetime.now(),
+        })

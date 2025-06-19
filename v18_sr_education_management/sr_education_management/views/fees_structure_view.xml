@@ -58,7 +58,12 @@
             <field name="view_id" ref="fees_structure_view_tree"/>
         </record>
 
-        <menuitem id="menu_fees_structure" parent="sr_education_management.menu_configurations" name="Fees Structure" action="sr_education_management.action_fees_structure" groups="sr_education_management.group_administrator" sequence="3"/>
+        <menuitem id="menu_fees_structure"
+                  parent="sr_education_management.menu_education"
+                  name="Fees Structure"
+                  action="sr_education_management.action_fees_structure"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_faculty,sr_education_management.group_student"
+                  sequence="10"/>
 
     </data>
 </odoo>

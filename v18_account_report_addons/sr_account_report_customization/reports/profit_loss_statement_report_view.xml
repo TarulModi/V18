@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+    <record id="paperformat_statement_of_profit_or_loss" model="report.paperformat">
+        <field name="name">Statement of Profit or Loss of Profit or Loss</field>
+        <field name="default" eval="False"/>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
     <template id="profit_loss_report">
         <t t-call="web.internal_layout">
             <main>
                 <div class="page">
                     <!-- Report Header -->
-                    <h1 style="color: #6666ff; font-weight: bold;">Statement of Profit or Loss</h1>
-                    <h2>
-                        <p style="font-weight: bold; margin: 0; padding: 0; font-size: 24px;">
+                    <h1 style="color: #00BFFF; font-weight: bold;">Statement of Profit or Loss</h1>
+                        <p style="font-weight: bold; margin: 0; padding: 0; font-size: 23px;">
                             <t t-esc="res_company.name"/>
                         </p>
-                        <p style="font-weight: bold; font-size: 24px;">
+                        <p style="font-weight: bold; font-size: 23px;">
                             For the month ended <t t-esc="current_month_last_date"/>
                         </p>
-                    </h2>
 
                     <!-- Month-Year Header Row -->
-                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size:13px;" class="o_total_table table table-borderless avoid-page-break-inside">
                         <thead style="border-bottom: 1px solid black;">
                             <tr>
                                 <th style="width: 40%; text-align: left; padding-bottom: 5px; font-weight: bold;"> </th>
                                 <th style="width: 10%; text-align: left; padding-bottom: 5px; font-weight: bold;">NOTES</th>
                                 <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
-                                    <t t-esc="labels['current_month']"/>
+                                    <t t-esc="labels['current_month'].upper()"/>
                                 </th>
                                 <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
-                                    <t t-esc="labels['prev_month_1']"/>
+                                    <t t-esc="labels['prev_month_1'].upper()"/>
                                 </th>
                                 <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
-                                    <t t-esc="labels['prev_month_2']"/>
+                                    <t t-esc="labels['prev_month_2'].upper()"/>
                                 </th>
                                 <th style="width: 12.5%; text-align: right; padding-bottom: 5px; font-weight: bold;">
-                                    <t t-esc="labels['ytd']"/>
+                                    <t t-esc="labels['ytd'].upper()"/>
                                 </th>
                             </tr>
                         </thead>
                     </table>
 
                     <!-- Gross Profit Summary -->
-                    <table style="width: 100%; border-collapse: collapse;" class="o_total_table table table-borderless avoid-page-break-inside">
+                    <table style="width: 100%; border-collapse: collapse; font-size:20px; border-top: 1px solid black;" class="o_total_table table table-borderless avoid-page-break-inside">
                         <tbody>
                             <tr style="font-weight: bold; border-bottom: 1px solid #000;">
                                 <td style="width: 40%; padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">Gross Profit</td>
@@ -59,16 +69,13 @@
                         </tbody>
                     </table>
 
-
                     <t t-if="results">
                         <!-- Operating Expenses Section -->
-                        <h4 style="margin-bottom: 0; margin-top: 15px; font-weight: bold;">Operating Expenses</h4>
-                        <hr style="margin-top: 2px; border: none; border-bottom: 2px solid #000;"/>
-
+                        <h4 style="margin-bottom: 0; margin-top: 25px; font-weight: bold; font-size: 20px; border-bottom: 1px solid #000;">Operating Expenses</h4>
 
                         <!-- Dynamic Operating Expenses Tables -->
                         <t t-foreach="results" t-as="line">
-                            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless">
+                            <table style="width: 99%; border-collapse: collapse; margin-top: 10px; margin-left: 10px;" class="o_total_table table table-borderless">
                                 <tbody>
                                     <!-- Category Header -->
                                     <tr style="border-bottom: 1px solid #000;">
@@ -81,14 +88,14 @@
                                     <!-- Nested table for indented rows -->
                                     <tr>
                                         <td colspan="6" style="padding: 0;">
-                                            <table style="width: 100%; border-collapse: collapse; margin-left: 15px;">
+                                            <table style="width: 98%; border-collapse: collapse; margin-left: 15px;">
                                                 <tbody>
                                                     <!-- Account Rows -->
                                                     <t t-foreach="line['accounts']" t-as="acc">
                                                         <t t-if="acc['current_month'] != 0 or acc['prev_month_1'] != 0 or acc['prev_month_2'] != 0 or acc['ytd'] != 0">
-                                                            <tr style="border-bottom: 1px solid #000;">
+                                                            <tr style="border-bottom: 1px solid #ddd;margin-left: 8px;">
                                                                 <td style="width: 40%; padding: 5px 0;">
-                                                                    Expenses - <t t-esc="acc['account_name']"/>
+                                                                    <t t-esc="acc['account_name']"/>
                                                                 </td>
                                                                 <td style="width: 10%; padding: 5px 0;"/>
                                                                 <td style="width: 12.5%; text-align: right; padding: 5px 0;">
@@ -112,7 +119,7 @@
                                                     </t>
 
                                                     <!-- Total for this category -->
-                                                    <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                                    <tr style="font-weight: bold;">
                                                         <td style="padding: 5px 0;">
                                                             Total <t t-esc="line['category']"/>
                                                         </td>
@@ -143,9 +150,9 @@
                         </t>
 
                         <!-- Total Operating Expenses -->
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                        <table style="width: 99%; border-collapse: collapse; margin-top: 10px; margin-left: 10px;" class="o_total_table table table-borderless avoid-page-break-inside">
                             <tbody>
-                                <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                <tr style="font-weight: bold; border-top: 1px solid #000;">
                                     <td style="width: 40%; padding: 5px 0; font-weight: bold;">
                                         Total Operating Expenses
                                     </td>
@@ -179,20 +186,20 @@
                                     </td>
                                     <td style="width: 10%; padding: 5px 0;"/>
                                     <td style="width: 12.5%; text-align: right; padding: 5px 0;">
-                                        <t t-if="operating_profit_loss['current_month'] == 0">-</t>
-                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['current_month'])"/></t>
+                                        <t t-if="total_profit_loss['current_month'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(total_profit_loss['current_month'])"/></t>
                                     </td>
                                     <td style="width: 12.5%; text-align: right; padding: 5px 0;">
-                                        <t t-if="operating_profit_loss['prev_month_1'] == 0">-</t>
-                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['prev_month_1'])"/></t>
+                                        <t t-if="total_profit_loss['prev_month_1'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(total_profit_loss['prev_month_1'])"/></t>
                                     </td>
                                     <td style="width: 12.5%; text-align: right; padding: 5px 0;">
-                                        <t t-if="operating_profit_loss['prev_month_2'] == 0">-</t>
-                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['prev_month_2'])"/></t>
+                                        <t t-if="total_profit_loss['prev_month_2'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(total_profit_loss['prev_month_2'])"/></t>
                                     </td>
                                     <td style="width: 12.5%; text-align: right; padding: 5px 0;">
-                                        <t t-if="operating_profit_loss['ytd'] == 0">-</t>
-                                        <t t-else=""><t t-esc="format_currency(operating_profit_loss['ytd'])"/></t>
+                                        <t t-if="total_profit_loss['ytd'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_currency(total_profit_loss['ytd'])"/></t>
                                     </td>
                                 </tr>
                                 <tr style="font-weight: bold; border-bottom: 1px solid #000;">
@@ -223,11 +230,10 @@
 
                     <!-- Non-Operating Expenses Section -->
                     <t t-if="non_operating_expenses">
-                        <h4 style="margin-bottom: 5px; margin-top: 15px; font-weight: bold;">Non Operating Expenses</h4>
-                        <hr style="margin-top: 2px; border: none; border-bottom: 2px solid #000;" />
+                        <h4 style=" border-bottom: 1px solid #000; margin-bottom: 5px; margin-top: 15px; font-weight: bold;font-size: 1.2rem;">Non Operating Expenses</h4>
 
                         <!-- Outer table for section title (if needed) or structure -->
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless avoid-page-break-inside">
+                        <table style="width: 98.5%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless avoid-page-break-inside">
                             <tbody>
                                 <tr>
                                     <td colspan="6" style="padding: 0;">
@@ -237,7 +243,7 @@
                                                 <!-- Account Rows -->
                                                 <t t-foreach="non_operating_expenses" t-as="acc">
                                                     <t t-if="acc['current_month'] != 0 or acc['prev_month_1'] != 0 or acc['prev_month_2'] != 0 or acc['ytd'] != 0">
-                                                        <tr style="border-bottom: 1px solid #000;">
+                                                        <tr style="border-bottom: 1px solid #ddd;">
                                                             <td style="width: 40%; padding: 5px 0;">
                                                                 <t t-esc="acc['account_name']"/>
                                                             </td>
@@ -263,7 +269,7 @@
                                                 </t>
 
                                                 <!-- Total Row -->
-                                                <tr style="font-weight: bold; border-bottom: 1px solid #000;">
+                                                <tr style="font-weight: bold;">
                                                     <td style="padding: 5px 0;">
                                                         Total Non Operating Expenses
                                                     </td>
@@ -295,8 +301,8 @@
                     <table style="width: 100%; border-collapse: collapse; margin-top: 15px;" class="o_total_table table table-borderless avoid-page-break-inside">
                         <tbody>
                             <!-- Net Profit/(Loss) Row -->
-                            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
-                                <td style="width: 40%; padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">
+                            <tr style="font-weight: bold;  border-top: 1px solid #000;">
+                                <td style="width: 40%; padding: 5px 0; margin-top: 15px; margin-bottom: 0; font-weight: bold; font-size:20px;">
                                     Net Profit/(Loss)
                                 </td>
                                 <td style="width: 10%; padding: 5px 0;"/>
@@ -319,9 +325,9 @@
                             </tr>
 
                             <!-- Margin (%) Row -->
-                            <tr style="font-weight: bold; border-bottom: 1px solid #000;">
-                                <td style="padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold;">
-                                    Net Profit/(Loss) Margin (%)
+                            <tr style="font-weight: bold;  border-top: 1px solid #000;">
+                                <td style="padding: 5px 0; font-size: 1.2rem; margin-top: 15px; margin-bottom: 0; font-weight: bold; font-size:20px;">
+                                    Margin (%)
                                 </td>
                                 <td style="padding: 5px 0;"/>
                                 <td style="text-align: right; padding: 5px 0;">
@@ -347,4 +353,15 @@
             </main>
         </t>
     </template>
+
+    <record id="action_report_profit_loss_statement" model="ir.actions.report">
+        <field name="name">Profit Loss Statement</field>
+        <field name="model">profit.loss.statement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_account_report_customization.profit_loss_report</field>
+        <field name="report_file">sr_account_report_customization.profit_loss_statement_report_view</field>
+        <field name="binding_model_id" ref="sr_account_report_configuration.model_profit_loss_statement"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_statement_of_profit_or_loss"/>
+    </record>
 </odoo>

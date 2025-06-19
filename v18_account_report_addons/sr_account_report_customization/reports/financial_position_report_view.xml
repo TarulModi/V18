@@ -1,0 +1,287 @@
+<odoo>
+    <record id="paperformat_statement_of_financial_position" model="report.paperformat">
+        <field name="name">Statement of Financial Position</field>
+        <field name="default" eval="False"/>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <template id="fin_pos_report">
+        <t t-call="web.internal_layout">
+            <main>
+                <div class="page">
+                    <h1 style="color: #00BFFF; font-weight: bold;">Statement of Financial Position</h1>
+
+                    <p style="font-weight: bold; margin: 0; padding: 0; font-size: 23px;">
+                        <t t-esc="res_company.name"/>
+                    </p>
+                    <p style="font-weight: bold; font-size: 23px;">
+                        As at <t t-esc="date"/>
+                    </p>
+
+                    <table class="table-borderless" style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
+                        <thead>
+                            <tr style="color: black; border-bottom: 1px solid black; font-size: 13px;">
+                                <th style="width: 40%; text-align: left; padding: 4px 0; font-weight: bold; font-size: 13px;"></th>
+                                <th style="width: 20%; text-align: right; padding: 4px 0; font-weight: bold; font-size: 13px;">NOTES</th>
+                                <th style="width: 13.33%; text-align: right; padding: 4px 0; font-weight: bold; font-size: 13px;"><t t-esc="labels['current_month'].upper()"/></th>
+                                <th style="width: 13.33%; text-align: right; padding: 4px 0; font-weight: bold; font-size: 13px;"><t t-esc="labels['prev_month_1'].upper()"/></th>
+                                <th style="width: 13.33%; text-align: right; padding: 4px 0; font-weight: bold; font-size: 13px;"><t t-esc="labels['lytd'].upper()"/></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <t t-if="grouped_results">
+                        <h4 style="margin-bottom: 0; margin-top: 15px; font-weight: bold; font-size: 20px;  border-bottom: 1px solid black;">Assets</h4>
+
+                        <t t-foreach="grouped_results.items()" t-as="line">
+                            <table style="width: 99%; border-collapse: collapse; margin-top: 10px; margin-left: 10px;" class="o_total_table table table-borderless">
+                                <tbody>
+                                    <!-- Category Header -->
+                                    <tr style="border-bottom: 1px solid #000; margin-left: 7px;">
+                                        <td colspan="5" style="font-weight: bold; padding: 0px 0; color: #000;">
+                                            <span style="display: block; font-weight: bold; color: #000; font-size: 16px;">
+                                                <t t-esc="line[0]"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Nested table for indented rows -->
+                                    <tr>
+                                        <td colspan="5" style="padding: 0;">
+                                            <table style="width: 98%; border-collapse: collapse; margin-left: 15px;">
+                                                <tbody>
+                                                    <!-- Account Rows -->
+                                                    <t t-foreach="line[1]" t-as="acc">
+                                                        <t t-if="acc['current_month'] != 0 or acc['previous_month'] != 0 or acc['previous_previous_month'] != 0">
+                                                            <tr style="border-bottom: 1px solid #ddd;">
+                                                                <td style="width: 40%; padding: 5px 0;">
+                                                                    <t t-esc="acc['account_name']"/>
+                                                                </td>
+                                                                <td style="width: 20%; padding: 5px 0;"></td>
+                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['current_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_amount(acc['current_month'])"/></t>
+                                                                </td>
+                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['previous_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_amount(acc['previous_month'])"/></t>
+                                                                </td>
+                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['previous_previous_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_amount(acc['previous_previous_month'])"/></t>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+
+                                                    <!-- Total Row for this Category -->
+                                                    <tr style="font-weight: bold;">
+                                                        <td style="padding: 5px 0;">Total <t t-esc="line[0]"/></td>
+                                                        <td style="padding: 5px 0;"></td>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="grouped_totals[line[0]]['current'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_amount(grouped_totals[line[0]]['current'])"/></t>
+                                                        </td>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="grouped_totals[line[0]]['previous'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_amount(grouped_totals[line[0]]['previous'])"/></t>
+                                                        </td>
+                                                        <td style="text-align: right; padding: 5px 0;">
+                                                            <t t-if="grouped_totals[line[0]]['prev_prev'] == 0">-</t>
+                                                            <t t-else=""><t t-esc="format_amount(grouped_totals[line[0]]['prev_prev'])"/></t>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Total Assets row aligned with category headers (no indent) -->
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" class="o_total_table table table-borderless">
+                            <tbody>
+                                <tr style="font-weight: bold; border-top: 1px solid #000; margin-left: 4px;">
+                                    <td style="width: 40%; padding: 5px 0;">Total Assets</td>
+                                    <td style="width: 20%; padding: 5px 0;"></td>
+                                    <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                        <t t-if="total_assets['current'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_amount(total_assets['current'])"/></t>
+                                    </td>
+                                    <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                        <t t-if="total_assets['previous'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_amount(total_assets['previous'])"/></t>
+                                    </td>
+                                    <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                        <t t-if="total_assets['prev_prev'] == 0">-</t>
+                                        <t t-else=""><t t-esc="format_amount(total_assets['prev_prev'])"/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <t t-if="equity_grouped_results or combined_liabilities_total or total_equity_liabilities">
+                        <h4 style="margin-bottom: 0; margin-top: 15px; font-weight: bold;  font-size: 20px;">Equity and Liabilities</h4>
+                        <div style="width: 100%; border-bottom: 1px solid #000; margin-bottom: 5px;"/>
+
+                        <!-- === EQUITY SECTION === -->
+                        <t t-if="equity_grouped_results.get('Equity')">
+                            <table class="o_total_table table table-borderless" style="width: 99%; border-collapse: collapse; margin-top: 10px; margin-left: 10px;">
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #000;">
+                                        <td colspan="5" style="font-weight: bold; padding: 5px 0; font-size: 16px;">Equity</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="padding: 0;">
+                                            <table style="width: 98%; margin-left: 15px; border-collapse: collapse;">
+                                                <tbody>
+                                                    <t t-foreach="equity_grouped_results['Equity']" t-as="acc">
+                                                        <t t-if="acc['current_month'] or acc['previous_month'] or acc['previous_previous_month']">
+                                                            <tr style="border-bottom: 1px solid #ddd;">
+                                                                <td style="width: 40%; padding: 5px 0;"><t t-esc="acc['account_name']"/></td>
+                                                                <td style="width: 20%; padding: 5px 0;"></td>
+                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['current_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_amount(acc['current_month'])"/></t>
+                                                                </td>
+                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['previous_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_amount(acc['previous_month'])"/></t>
+                                                                </td>
+                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;">
+                                                                    <t t-if="acc['previous_previous_month'] == 0">-</t>
+                                                                    <t t-else=""><t t-esc="format_amount(acc['previous_previous_month'])"/></t>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+
+                                                    <!-- Total Equity -->
+                                                    <t t-if="equity_grouped_totals.get('Equity')">
+                                                        <tr style="font-weight: bold; border-top: 1px solid #000;">
+                                                            <td style="padding: 5px 0;">Total Equity</td>
+                                                            <td></td>
+                                                            <td style="text-align: right; padding: 5px 0;"><t t-esc="format_amount(equity_grouped_totals['Equity']['current'])" t-if="equity_grouped_totals['Equity']['current'] != 0"/><t t-if="equity_grouped_totals['Equity']['current'] == 0">-</t></td>
+                                                            <td style="text-align: right; padding: 5px 0;"><t t-esc="format_amount(equity_grouped_totals['Equity']['previous'])" t-if="equity_grouped_totals['Equity']['previous'] != 0"/><t t-if="equity_grouped_totals['Equity']['previous'] == 0">-</t></td>
+                                                            <td style="text-align: right; padding: 5px 0;"><t t-esc="format_amount(equity_grouped_totals['Equity']['prev_prev'])" t-if="equity_grouped_totals['Equity']['prev_prev'] != 0"/><t t-if="equity_grouped_totals['Equity']['prev_prev'] == 0">-</t></td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- === LIABILITIES SECTION === -->
+                        <t t-if="equity_grouped_results">
+                            <table class="o_total_table table table-borderless" style="width: 99%; border-collapse: collapse; margin-top: 10px; margin-left: 10px;">
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #000;">
+                                        <td colspan="5" style="font-weight: bold; padding: 5px 0; font-size: 16px;">Liabilities</td>
+                                    </tr>
+                                    <table class="o_total_table table table-borderless" style="width: 98%; border-collapse: collapse; margin-top: 5px; margin-left: 20px;">
+                                        <tbody>
+                                            <!-- Loop Through All Non-Equity Items -->
+                                            <t t-foreach="equity_grouped_results.items()" t-as="item">
+                                                <t t-set="label" t-value="item[0]"/>
+                                                <t t-set="accounts" t-value="item[1]"/>
+                                                <t t-if="label != 'Equity'">
+                                                    <tr style="border-bottom: 1px solid #000;">
+                                                        <td style="font-weight: bold; font-size: 16px;"><t t-esc="label"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" style="padding: 0;">
+                                                            <table style="width: 96.5%; margin-left: 30px; border-collapse: collapse;">
+                                                                <tbody>
+                                                                    <t t-foreach="accounts" t-as="acc">
+                                                                        <t t-if="acc['current_month'] or acc['previous_month'] or acc['previous_previous_month']">
+                                                                            <tr style="border-bottom: 1px solid #ddd;">
+                                                                                <td style="width: 40%; padding: 5px 0;"><t t-esc="acc['account_name']"/></td>
+                                                                                <td style="width: 20%; padding: 5px 0;"></td>
+                                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="acc['current_month'] != 0"><t t-esc="format_amount(acc['current_month'])"/></t><t t-if="acc['current_month'] == 0">-</t></td>
+                                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="acc['previous_month'] != 0"><t t-esc="format_amount(acc['previous_month'])"/></t><t t-if="acc['previous_month'] == 0">-</t></td>
+                                                                                <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="acc['previous_previous_month'] != 0"><t t-esc="format_amount(acc['previous_previous_month'])"/></t><t t-if="acc['previous_previous_month'] == 0">-</t></td>
+                                                                            </tr>
+                                                                        </t>
+                                                                    </t>
+
+                                                                    <!-- Total for Subcategory -->
+                                                                    <t t-if="equity_grouped_totals.get(label)">
+                                                                        <tr style="font-weight: bold; border-top: 1px solid #ddd;">
+                                                                            <td style="padding: 5px 0;">Total <t t-esc="label"/></td>
+                                                                            <td></td>
+                                                                            <td style="text-align: right; padding: 5px 0;"><t t-if="equity_grouped_totals[label]['current'] != 0"><t t-esc="format_amount(equity_grouped_totals[label]['current'])"/></t><t t-if="equity_grouped_totals[label]['current'] == 0">-</t></td>
+                                                                            <td style="text-align: right; padding: 5px 0;"><t t-if="equity_grouped_totals[label]['previous'] != 0"><t t-esc="format_amount(equity_grouped_totals[label]['previous'])"/></t><t t-if="equity_grouped_totals[label]['previous'] == 0">-</t></td>
+                                                                            <td style="text-align: right; padding: 5px 0;"><t t-if="equity_grouped_totals[label]['prev_prev'] != 0"><t t-esc="format_amount(equity_grouped_totals[label]['prev_prev'])"/></t><t t-if="equity_grouped_totals[label]['prev_prev'] == 0">-</t></td>
+                                                                        </tr>
+                                                                    </t>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </tbody>
+                                    </table>
+
+
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- === TOTAL LIABILITIES === -->
+                        <t t-if="combined_liabilities_total">
+                            <table class="o_total_table table table-borderless" style="width: 100%; border-collapse: collapse; margin-top: 5px; margin-left: 5px; font-size: 16px;">
+                                <tbody>
+                                    <tr style="font-weight: bold; border-top: 1px solid #ddd;">
+                                        <td style="width: 40%; padding: 5px 0;">Total Liabilities</td>
+                                        <td style="width: 20%; padding: 5px 0;"></td>
+                                        <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="combined_liabilities_total['current'] != 0"><t t-esc="format_amount(combined_liabilities_total['current'])"/></t><t t-if="combined_liabilities_total['current'] == 0">-</t></td>
+                                        <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="combined_liabilities_total['previous'] != 0"><t t-esc="format_amount(combined_liabilities_total['previous'])"/></t><t t-if="combined_liabilities_total['previous'] == 0">-</t></td>
+                                        <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="combined_liabilities_total['prev_prev'] != 0"><t t-esc="format_amount(combined_liabilities_total['prev_prev'])"/></t><t t-if="combined_liabilities_total['prev_prev'] == 0">-</t></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- === FINAL TOTAL: EQUITY + LIABILITIES === -->
+                        <t t-if="total_equity_liabilities">
+                            <table class="o_total_table table table-borderless" style="width: 100.6%; border-collapse: collapse; margin-top: 5px; font-size: 16px;">
+                                <tbody>
+                                    <tr style="font-weight: bold; border-top: 1px solid #ddd;">
+                                        <td style="width: 40%; padding: 5px 0;">Total Equity and Liabilities</td>
+                                        <td style="width: 20%; padding: 5px 0;"></td>
+                                        <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="total_equity_liabilities['current'] != 0"><t t-esc="format_amount(total_equity_liabilities['current'])"/></t><t t-if="total_equity_liabilities['current'] == 0">-</t></td>
+                                        <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="total_equity_liabilities['previous'] != 0"><t t-esc="format_amount(total_equity_liabilities['previous'])"/></t><t t-if="total_equity_liabilities['previous'] == 0">-</t></td>
+                                        <td style="width: 13.33%; text-align: right; padding: 5px 0;"><t t-if="total_equity_liabilities['prev_prev'] != 0"><t t-esc="format_amount(total_equity_liabilities['prev_prev'])"/></t><t t-if="total_equity_liabilities['prev_prev'] == 0">-</t></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </t>
+                </div>
+            </main>
+        </t>
+    </template>
+
+    <record id="action_report_financial_position" model="ir.actions.report">
+        <field name="name">Financial Position</field>
+        <field name="model">financial.position</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sr_account_report_customization.fin_pos_report</field>
+        <field name="report_file">sr_account_report_customization.financial_position_report_view</field>
+        <field name="binding_model_id" ref="sr_account_report_configuration.model_financial_position"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_statement_of_financial_position"/>
+    </record>
+</odoo>
