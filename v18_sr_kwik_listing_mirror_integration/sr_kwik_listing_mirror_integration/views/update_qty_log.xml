@@ -5,14 +5,14 @@
         <field name="name">view.pushed.qty.log.tree</field>
         <field name="model">update.qty.log</field>
         <field name="arch" type="xml">
-            <list string="Pushed QTY Log" sample="1">
+            <list string="Pushed QTY Log" sample="1" default_order="id desc">
                 <field name="name"/>
                 <field name="origin"/>
                 <field name="product_id"/>
                 <field name="kit_product_id"/>
                 <field name="sales_order_id" optional="hide"/>
                 <field name="purchase_order_id" optional="hide"/>
-<!--                <field name="inventory_adjustment_id" optional="hide"/>-->
+                <field name="stock_quant_id" optional="hide"/>
                 <field name="picking_id" optional="hide"/>
                 <field name="move_id" optional="hide"/>
                 <field name="qty"/>

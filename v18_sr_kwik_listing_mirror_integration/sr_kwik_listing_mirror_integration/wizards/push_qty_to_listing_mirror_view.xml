@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="push_qty_to_listing_mirror_by_skus" model="ir.ui.view">
+			<field name="name">push.qty.to.listing.mirror.by.skus</field>
+			<field name="model">push.qty.to.listing.mirror</field>
+			<field name="arch" type="xml">
+				<form string="Push QTY To Listing Mirror">
+					<span style="color: red;font-size: 20px;">Use comma separator for multiple SKU(s). Maximum
+						you can perfrom 100 sku(s)
+					</span>
+					<span/>
+					<group>
+						<group>
+							<field name="sku" required="1"/>
+						</group>
+					</group>
+					<footer>
+						<button name="push_qty_api_integration" string="Push QTY" type="object" class="btn-primary" />
+						<button string="Cancel" class="btn-secondary" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_push_qty_to_listing_mirror" model="ir.actions.act_window">
+			<field name="name">Push QTY To Listing Mirror</field>
+			<field name="res_model">push.qty.to.listing.mirror</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</odoo>
+ 

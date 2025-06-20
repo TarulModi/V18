@@ -23,7 +23,7 @@ class srupdateQtyLog(models.Model):
     sales_order_id = fields.Many2one('sale.order',string='Sales Order Reference')
     purchase_order_id = fields.Many2one('purchase.order',string='Purchase Order Reference')
     picking_id = fields.Many2one('stock.picking',string="Picking Order Reference")
-    # inventory_adjustment_id = fields.Many2one('stock.inventory',string="Inventory Adjustment Reference")
+    stock_quant_id = fields.Many2one('stock.quant',string="Inventory Adjustment Reference")
     move_id = fields.Many2one('stock.move',string="Move Reference")
     qty = fields.Float('QTY')
     pushed_qty = fields.Float('Pushed QTY to Listing Mirror')
@@ -56,12 +56,7 @@ class srupdateQtyLog(models.Model):
 
     def _push_qty_to_listing_mirror(self, data_list, integration_name="Push QTY API Integrations"):
         """Pushes prepared qty data to Listing Mirror and logs."""
-        config = self.env['ir.config_parameter'].sudo()
-        kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
-        kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
-
-        if not kwik_url or not kwik_token:
-            raise UserError(_("API URL or Token is not configured."))
+        kwik_url, kwik_token = self.env['res.config.settings']._url_and_token_listing_mirror()
 
         headers = {
             'Authorization': f"Basic {kwik_token}",
@@ -69,7 +64,6 @@ class srupdateQtyLog(models.Model):
         }
         url = f"{kwik_url}inventory/"
 
-        # update_qty_list = []
         for entry in data_list:
             payload = json.dumps(entry)
             # response = requests.request("PUT", url, headers=headers, data=payload)
@@ -79,30 +73,20 @@ class srupdateQtyLog(models.Model):
             #     remark = 'Error From Listing Mirror: \n%s' % str(response_json.get('errors'))
             #     self.env['integration.error.log']._log_integration_error(str(response_json.get('errors')), integration_name, remark)
 
-            # update_qty_list.append({
-            #     'name': integration_name,
-            #     'origin': integration_name,
-            #     'qty': entry['quantity'],
-            #     'pushed_qty': entry['quantity'],
-            #     'product_id': False,
-            #     'kit_product_id': False,
-            # })
         return True
 
-    def _log_qty_push_result(self, log_val, origin='Manual Push', sales_order=False):
-        for record in log_val:
-            print("---record.get('product_id')-------------------",record.get('product_id'), type(record.get('product_id')))
-            product_id = self.env['product.product'].browse(record.get('product_id')).id
-            kit_product_id = self.env['product.product'].browse(record.get('kit_product')).id
-            print("----product_id--------------",product_id)
-            self.env['update.qty.log'].create({
-                'name': origin,
-                'origin': f"Sales Order {sales_order.name}" if sales_order else origin,
-                'sales_order_id': sales_order.id if sales_order else False,
-                'qty': record.get('order_qty'),
-                'pushed_qty': record.get('pushed_qty'),
-                'product_id': product_id if product_id else False,
-                'kit_product_id': kit_product_id if kit_product_id else False,
-            })
-
-
+    # def _log_qty_push_result(self, log_val, origin='Manual Push', sales_order=False):
+    #     for record in log_val:
+    #         print("---record.get('product_id')-------------------",record.get('product_id'), type(record.get('product_id')))
+    #         product_id = self.env['product.product'].browse(record.get('product_id')).id
+    #         kit_product_id = self.env['product.product'].browse(record.get('kit_product')).id
+    #         print("----product_id--------------",product_id)
+    #         self.env['update.qty.log'].create({
+    #             'name': origin,
+    #             'origin': f"Sales Order {sales_order.name}" if sales_order else origin,
+    #             'sales_order_id': sales_order.id if sales_order else False,
+    #             'qty': record.get('order_qty'),
+    #             'pushed_qty': record.get('pushed_qty'),
+    #             'product_id': product_id if product_id else False,
+    #             'kit_product_id': kit_product_id if kit_product_id else False,
+    #         })

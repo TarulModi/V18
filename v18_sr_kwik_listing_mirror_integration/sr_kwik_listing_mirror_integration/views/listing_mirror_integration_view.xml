@@ -50,22 +50,23 @@
 												</button>
 											</t>
 
-<!--											<t t-if="record.name.value == 'Orders Integration'">-->
-<!--												<button class="btn btn-primary"-->
-<!--													style="margin-left: 10px;" name="fetch_all_orders_listing"-->
-<!--													type="object" context="{'active_id':active_id}">-->
-<!--													Orders Integration-->
-<!--												</button>-->
-<!--											</t>-->
+											<t t-if="record.name.value == 'Orders Integration'">
+												<br/>
+												<button class="btn btn-primary"
+													style="margin-left: 10px;" name="fetch_all_orders_listing"
+													type="object">
+													Orders Integration
+												</button>
+											</t>
 
-<!--											<t t-if="record.name.value == 'QTY Integration'">-->
-<!--												<button class="btn btn-primary"-->
-<!--													style="margin-left: 10px;"-->
-<!--													name="push_qty_to_orders_listing" type="object"-->
-<!--													context="{'active_id':active_id}">-->
-<!--													Push QTY to Listing Mirror-->
-<!--												</button>-->
-<!--											</t>-->
+											<t t-if="record.name.value == 'QTY Integration'">
+												<br/>
+												<button class="btn btn-primary"
+													style="margin-left: 10px;"
+													name="push_qty_to_orders_listing" type="object">
+													Push QTY to Listing Mirror
+												</button>
+											</t>
 
 										</div>
 									</div>

@@ -103,23 +103,9 @@ class ProductProduct(models.Model):
     #             # response = requests.request("PUT", url, headers=headers, data=payload)
     #             # response_json = response.json()
 
-    #             self._put_log_details_integration(
-    #                 name=entry['sku'],
-    #                 integration_name=integration_name,
-    #                 qty=entry['quantity'],
-    #                 date=date
-    #             )
-    #
-    # def _put_log_details_integration(self, name, integration_name, qty, date):
-    #     self.env['integration.put.log.details'].create({
-    #         'name': name,
-    #         'integration_name': integration_name,
-    #         'qty': qty,
-    #         'date': date,
-    #     })
 
     def action_cron_push_qty_api(self):
-        all_products = self.search([], limit=100)
+        all_products = self.search([])
         chunk_size = 100
         for i in range(0, len(all_products), chunk_size):
             product_chunk = all_products[i:i + chunk_size]
@@ -128,17 +114,17 @@ class ProductProduct(models.Model):
             push_data = self.env['update.qty.log']._push_qty_to_listing_mirror(data_chunk, integration_name="Push QTY API Integrations with Listing Mirror")
             print("-------push_data------------",push_data)
 
-            log_vals = []
-            for entry in data_chunk:
-                print("-------entry['product_id']------------", entry['product_id'])
-                log_vals.append({
-                    'order_qty':0,
-                    'pushed_qty': entry['quantity'],
-                    'kit_product': False,
-                    'product_id': entry['product_id'],
-                })
-
-            print("-------log_vals------------", log_vals)
-            self.env['update.qty.log']._log_qty_push_result(
-                log_vals, origin='Push QTY API Integrations with Listing Mirror'
-            )
+            # log_vals = []
+            # for entry in data_chunk:
+            #     print("-------entry['product_id']------------", entry['product_id'])
+            #     log_vals.append({
+            #         'order_qty':0,
+            #         'pushed_qty': entry['quantity'],
+            #         'kit_product': False,
+            #         'product_id': entry['product_id'],
+            #     })
+            #
+            # print("-------log_vals------------", log_vals)
+            # self.env['update.qty.log']._log_qty_push_result(
+            #     log_vals, origin='Push QTY API Integrations with Listing Mirror'
+            # )

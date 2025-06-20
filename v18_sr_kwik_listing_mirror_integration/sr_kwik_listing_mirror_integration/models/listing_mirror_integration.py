@@ -136,12 +136,7 @@ class ListingMirrorIntegration(models.Model):
         return self.env['uom.uom'].sudo().search([('name', '=', name)], limit=1).id or False
 
     def fetch_all_master_product_listing(self):
-        config = self.env['ir.config_parameter'].sudo()
-        kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
-        kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
-
-        if not kwik_url or not kwik_token:
-            raise UserError(_("API URL or Token is not configured."))
+        kwik_url, kwik_token = self.env['res.config.settings']._url_and_token_listing_mirror()
 
         headers = {'Authorization': f"Basic {kwik_token}"}
         url = f"{kwik_url}master-listing/"
@@ -469,12 +464,7 @@ class ListingMirrorIntegration(models.Model):
         #             'Authorization': 'Basic ZDVZaUJQRW5XRmRLQURxREJqbEtqUWhJbkc2VDRUR1c6NzJPV0hqSE9meHQ3VlY5bkZHdFRFNjh2M3c0akdVVXE='
         #             }
 
-        config = self.env['ir.config_parameter'].sudo()
-        kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
-        kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
-
-        if not kwik_url or not kwik_token:
-            raise UserError(_("API URL or Token is not configured."))
+        kwik_url, kwik_token = self.env['res.config.settings']._url_and_token_listing_mirror()
 
         headers = {'Authorization': f"Basic {kwik_token}"}
         url = f"{kwik_url}recipes/"
@@ -487,7 +477,7 @@ class ListingMirrorIntegration(models.Model):
 # Orders Integration
 
     def fetch_all_orders_listing(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("sr_kwik_listing_mirror_api_integration.action_update_orders_from_listing_mirror")
+        action = self.env["ir.actions.actions"]._for_xml_id("sr_kwik_listing_mirror_integration.action_update_orders_from_listing_mirror")
         action['context'] = dict(
             self.env.context,
         )
@@ -496,7 +486,7 @@ class ListingMirrorIntegration(models.Model):
 # push qty to listing mirror
 
     def push_qty_to_orders_listing(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("sr_kwik_listing_mirror_api_integration.action_push_qty_to_listing_mirror")
+        action = self.env["ir.actions.actions"]._for_xml_id("sr_kwik_listing_mirror_integration.action_push_qty_to_listing_mirror")
         action['context'] = dict(
             self.env.context,
         )

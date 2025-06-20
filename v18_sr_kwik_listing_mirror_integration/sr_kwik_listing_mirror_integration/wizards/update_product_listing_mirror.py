@@ -38,17 +38,12 @@ class ListingMirrorIntegration(models.TransientModel):
 
     def update_product_api_integration(self):
         # Fetch config parameters
-        config = self.env['ir.config_parameter'].sudo()
-        kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
-        kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
+        kwik_url, kwik_token = self.env['res.config.settings']._url_and_token_listing_mirror()
 
         integration_name = f"Update Master Product Listing"
         remark = f"Update Product"
         start_date = fields.Datetime.now()
         count = 0
-
-        if not kwik_url or not kwik_token:
-            raise UserError(_("API URL or Token is not configured."))
 
         if not self.sku:
             raise UserError(_("SKU is missing."))

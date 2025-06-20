@@ -44,12 +44,7 @@ class SaleOrder(models.Model):
         print ("===status=====sale_order",sale_order)
         for order in sale_order:
 
-            config = self.env['ir.config_parameter'].sudo()
-            kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
-            kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
-
-            if not kwik_url or not kwik_token:
-                raise UserError(_("API URL or Token is not configured."))
+            kwik_url, kwik_token = self.env['res.config.settings']._url_and_token_listing_mirror()
 
             headers = {'Authorization': f"Basic {kwik_token}"}
             url = f"{kwik_url}orders/?search_value={order.name}"
@@ -119,8 +114,8 @@ class SaleOrder(models.Model):
                         'Content-Type': 'application/json'
                     }
                     url = f"{kwik_url}inventory/"
-                    response = requests.request("PUT", url, headers=headers, data=payload)
-                    response_json = response.json()
+                    # response = requests.request("PUT", url, headers=headers, data=payload)
+                    # response_json = response.json()
                     print("----response_json-----response_json----------------",response_json)
                     print("----response_json-response_json.get('errors')--------------",response_json.get('errors'))
                     if not response_json.get('errors'):
@@ -450,12 +445,7 @@ class SaleOrder(models.Model):
         current_date = datetime.today().date()
         previous_date = current_date - timedelta(days=1)
 
-        config = self.env['ir.config_parameter'].sudo()
-        kwik_url = config.get_param('sr_kwik_listing_mirror_integration.kwik_url')
-        kwik_token = config.get_param('sr_kwik_listing_mirror_integration.kwik_token')
-
-        if not kwik_url or not kwik_token:
-            raise UserError(_("API URL or Token is not configured."))
+        kwik_url, kwik_token = self.env['res.config.settings']._url_and_token_listing_mirror()
 
         headers = {'Authorization': f"Basic {kwik_token}"}
         payload = {}
@@ -506,57 +496,9 @@ class SaleOrder(models.Model):
                                 'sales_order_id': self.id,
                                 'qty': record.get('order_qty'),
                                 'pushed_qty': entry.get('quantity'),
-                                'product_id': record.get('kit_product').id if record.get('kit_product') else False,
-                                'kit_product_id': record.get('product').id if record.get('product') else False,
+                                'product_id': record.get('product_id').id if record.get('product_id') else False,
+                                'kit_product_id': record.get('kit_product').id if record.get('kit_product') else False,
                             })
-
-        # self.env['update.qty.log']._log_qty_push_result(log_val, origin='Sales Order Confirmed', sales_order=self)
-        return res
-
-    # def action_confirm(self):
-    #     res = super(SaleOrder, self).action_confirm()
-    #
-    #     if self._context.get('custom'):
-    #         return res
-    #
-    #     vals = []
-    #     log_val = []
-    #
-    #     for line in self.order_line:
-    #         product = line.product_id
-    #         if product.bom_ids:
-    #             for bom_line in product.bom_ids.bom_line_ids:
-    #                 qty = sum(self.env['stock.quant']._get_available_quantity(
-    #                     bom_line.product_id, loc)
-    #                           for loc in self.env['stock.location'].search(
-    #                     [('usage', '=', 'internal'), ('exclude_location', '=', False), ('name', '!=', 'Stock')]))
-    #                 vals.append({
-    #                     'sku': bom_line.product_id.default_code,
-    #                     'quantity': qty
-    #                 })
-    #                 log_val.append({
-    #                     'product': bom_line.product_id,
-    #                     'kit_product': product,
-    #                     'order_qty': line.product_uom_qty,
-    #                     'pushed_qty': qty
-    #                 })
-    #         elif product.type != 'service':
-    #             qty = sum(self.env['stock.quant']._get_available_quantity(
-    #                 product, loc)
-    #                       for loc in self.env['stock.location'].search(
-    #                 [('usage', '=', 'internal'), ('exclude_location', '=', False), ('name', '!=', 'Stock')]))
-    #             vals.append({
-    #                 'sku': product.default_code,
-    #                 'quantity': qty
-    #             })
-    #             log_val.append({
-    #                 'product': product,
-    #                 'order_qty': line.product_uom_qty,
-    #                 'pushed_qty': qty
-    #             })
-    #
-    #     self._send_qty_to_listing_mirror(vals)
-    #     self._log_qty_push_result(log_val, origin='Sales Order Confirmed', sales_order=self)
 
         return res
 
