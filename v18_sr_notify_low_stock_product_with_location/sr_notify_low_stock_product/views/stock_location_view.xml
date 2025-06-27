@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record id="sr_inherit_stock_location_form" model="ir.ui.view">
+            <field name="name">stock.location.form.inherit</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='replenish_location']" position="after">
+                    <field name="min_qty_visible" invisible="1"/>
+                    <field name="min_qty" invisible="min_qty_visible == False"/>
+                    <field name="user_ids" widget="many2many_tags" invisible="min_qty_visible == False"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

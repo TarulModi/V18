@@ -26,7 +26,7 @@
 							<field name="product_categ_ids" widget="many2many_tags"
 								invisible="result_selection != 'category'" required="result_selection == 'category'" />
 							<field name="product_ids" widget="many2many_tags"
-								invisible="result_selection != 'product'"  required="result_selection == 'product'" />
+								invisible="result_selection != 'product'" />
 
 							<field name="company_id" required="1" />
 						</group>

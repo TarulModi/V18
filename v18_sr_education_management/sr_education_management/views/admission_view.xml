@@ -165,13 +165,14 @@
         <menuitem id="menu_admission"
                   parent="sr_education_management.menu_education"
                   name="Admission"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_receptionist"
                   sequence="1"/>
 
         <menuitem id="submenu_admission"
                   parent="sr_education_management.menu_admission"
                   name="Admission"
                   action="sr_education_management.action_admission"
-                  groups="sr_education_management.group_administrator"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_receptionist"
                   sequence="1"/>
 
     </data>

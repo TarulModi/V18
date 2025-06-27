@@ -10,6 +10,8 @@
 
 import time
 from datetime import datetime
+from itertools import product
+
 from odoo.exceptions import UserError
 from odoo import api, fields, models, _
 from dateutil.relativedelta import relativedelta
@@ -43,6 +45,11 @@ class srStockAgingReport(models.TransientModel):
                 'start': (i != 0 and stop.strftime('%Y-%m-%d') or False),
             }
             start = (stop - relativedelta(days=1)).strftime("%Y-%m-%d")
+
+        if self.result_selection == 'product' and self.product_ids:
+            product_ids = self.product_ids.ids
+        else:
+            product_ids = self.env['product.product'].search([]).ids
         data = {
             'column':res,
             'warehouse':self.warehouse_ids.ids,
@@ -50,7 +57,8 @@ class srStockAgingReport(models.TransientModel):
             'date_from':self.date_from,
             'result_selection':self.result_selection,
             'product_categ_ids':self.product_categ_ids.ids,
-            'product_ids':self.product_ids.ids,
+            # 'product_ids':self.product_ids.ids,
+            'product_ids':product_ids,
             'company_id':self.company_id.id,
             'period_length':self.period_length,
             'target_result':self.target_result,

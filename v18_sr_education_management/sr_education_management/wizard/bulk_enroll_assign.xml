@@ -44,6 +44,6 @@
                   parent="sr_education_management.menu_admission"
                   name="Enroll"
                   action="sr_education_management.action_bulk_assign_enroll"
-                  groups="sr_education_management.group_administrator"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_receptionist"
                   sequence="1"/>
 </odoo>

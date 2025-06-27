@@ -11,13 +11,12 @@
                     <field name="name"/>
                     <field name="gender"/>
                     <field name="bod"/>
-                    <field name="emg_contact_person"/>
-                    <field name="emg_contact_person_no"/>
                     <field name="email"/>
                     <field name="mobile"/>
-                    <field name="mother_tongue_id"/>
-                    <field name="blood_group"/>
-                    <field name="nationality_id"/>
+                    <field name="enroll_no"/>
+                    <field name="academic_year_id"/>
+                    <field name="course_id"/>
+                    <field name="class_room_id"/>
                 </list>
             </field>
         </record>
@@ -157,21 +156,21 @@
         <menuitem id="main_menu_student"
                   parent="sr_education_management.menu_education"
                   name="Students"
-                  groups="sr_education_management.group_administrator,sr_education_management.group_student"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_student,sr_education_management.group_receptionist"
                   />
 
         <menuitem id="menu_student"
                   parent="sr_education_management.main_menu_student"
                   name="Students"
                   action="sr_education_management.action_student"
-                  groups="sr_education_management.group_administrator,sr_education_management.group_student"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_student,sr_education_management.group_receptionist"
                   sequence="1"/>
 
         <menuitem id="menu_student_alumni"
                   parent="sr_education_management.main_menu_student"
                   name="Alumni Students"
                   action="sr_education_management.action_student_alumni"
-                  groups="sr_education_management.group_administrator,sr_education_management.group_student"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_student,sr_education_management.group_receptionist"
                   sequence="2"/>
 
     </data>

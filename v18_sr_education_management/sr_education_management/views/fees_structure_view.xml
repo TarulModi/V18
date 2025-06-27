@@ -62,7 +62,7 @@
                   parent="sr_education_management.menu_education"
                   name="Fees Structure"
                   action="sr_education_management.action_fees_structure"
-                  groups="sr_education_management.group_administrator,sr_education_management.group_faculty,sr_education_management.group_student"
+                  groups="sr_education_management.group_administrator,sr_education_management.group_faculty,sr_education_management.group_student,sr_education_management.group_receptionist"
                   sequence="10"/>
 
     </data>

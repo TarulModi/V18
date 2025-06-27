@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+
+        <record id="view_product_customer_code_list" model="ir.ui.view">
+            <field name="name">view.product.customer.code.list</field>
+            <field name="model">product.customer.code</field>
+            <field name="arch" type="xml">
+                <list string="Product Customer Code" editable="top">
+                    <field name="customer_id" required="1"/>
+                    <field name="product_template_id" required="1"/>
+                    <field name="product_variant_id"/>
+                    <field name="code" required="1"/>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_product_customer_code_search" model="ir.ui.view">
+            <field name="model">product.customer.code</field>
+            <field name="arch" type="xml">
+                <search string="Product Customer Code">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="product_template_id"/>
+                    <field name="customer_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_product_customer_code" model="ir.actions.act_window">
+            <field name="name">Product Customer Code</field>
+            <field name="res_model">product.customer.code</field>
+            <field name="view_mode">list</field>
+        </record>
+
+        <menuitem id="submenu_product_customer_code"
+          name="Product Customer Code"
+          parent="sale.product_menu_catalog"
+          action="action_product_customer_code"
+          sequence="30"/>
+    </data>
+</odoo>

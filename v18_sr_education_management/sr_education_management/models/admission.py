@@ -205,10 +205,21 @@ class Admission(models.Model):
             })
             student_id.partner_id = partner_id.id
             # Generate fee invoice
+
+            # fees_plan_id = self.env['fees.structure'].search([
+            #     ('academic_year_id', '=', self.academic_year_id.id),
+            #     ('term_ids', 'in', [self.academic_year_id.academic_terms_ids[0].id])
+            # ], limit=1)
+
+            term_ids = self.academic_year_id.academic_terms_ids
+            if not term_ids:
+                raise ValidationError(_("No academic terms found for the selected academic year."))
+
             fees_plan_id = self.env['fees.structure'].search([
                 ('academic_year_id', '=', self.academic_year_id.id),
-                ('term_ids', 'in', [self.academic_year_id.academic_terms_ids[0].id])
+                ('term_ids', 'in', term_ids.ids)
             ], limit=1)
+
             if fees_plan_id:
                 lines = []
                 for fees_line in fees_plan_id.line_ids:

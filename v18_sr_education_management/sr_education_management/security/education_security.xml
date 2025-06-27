@@ -27,6 +27,11 @@
             <field name="category_id" ref="sr_education_management.module_category_sr_education"/>
         </record>
 
+        <record id="group_receptionist" model="res.groups">
+            <field name="name">Receptionist</field>
+            <field name="category_id" ref="sr_education_management.module_category_sr_education"/>
+        </record>
+
         <!-- security/hr_employee_rules.xml -->
         <record id="hr_employee_rule_faculty_readonly" model="ir.rule">
             <field name="name">Faculty: Read Only Employees</field>
@@ -58,5 +63,39 @@
             <field name="perm_create" eval="0"/>
             <field name="perm_unlink" eval="0"/>
         </record>
+
+        <record id="student_student_rule_receptionist_all" model="ir.rule">
+            <field name="name">Receptionist: Full Access to All Students</field>
+            <field name="model_id" ref="sr_education_management.model_student_student"/>
+            <field name="domain_force">[(1, '=', 1)]</field> <!-- Access all records -->
+            <field name="groups" eval="[(4, ref('sr_education_management.group_receptionist'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="admission_admission_rule_receptionist_all" model="ir.rule">
+            <field name="name">Receptionist: Full Access to All Admissions</field>
+            <field name="model_id" ref="sr_education_management.model_admission_admission"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sr_education_management.group_receptionist'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="fees_structure_receptionist_read_rule" model="ir.rule">
+            <field name="name">Fees Structure: Read Only for Receptionist</field>
+            <field name="model_id" ref="sr_education_management.model_fees_structure"/>
+            <field name="domain_force">[(1, '=', 1)]</field> <!-- All records -->
+            <field name="groups" eval="[(4, ref('sr_education_management.group_receptionist'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
     </data>
 </odoo>

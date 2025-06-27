@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record
+                id="res_config_settings_view_form_product_notification"
+                model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.product.notification
+            </field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id"
+                   ref="stock.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//app/block[@name='operations_setting_container']"
+                       position="after">
+                    <h2>Product Low Stock notification</h2>
+                    <div class="row mt16 o_settings_container" name="low_stock_setting_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="low_stock_config"
+                             groups='stock.group_stock_manager'>
+                            <div class="o_setting_right_pane">
+                                <label for="apply_min_qty_on" string="Apply Min Qty On"/>
+                                <div class="text-muted">
+                                    select which method use to apply minimum quantity
+                                </div>
+                                <div class="content-group">
+                                    <field name="apply_min_qty_on" class="o_light_label"/>
+                                </div>
+                                <label for="min_qty" string="Min Qty" invisible="apply_min_qty_on != 'global'"/>
+                                <div>
+                                    <field name="min_qty" class="o_light_label" invisible="apply_min_qty_on != 'global'"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="product_min_qty_notification_div"
+                             groups='stock.group_stock_manager'>
+                            <div class="o_setting_right_pane">
+                                <label for="notify_to" string="Notify To"/>
+                                <div class="text-muted">
+                                    Select option to which users you have to send notification
+                                </div>
+                                <div class="content-group">
+                                    <field name="notify_to" class="o_light_label"/>
+                                </div>
+                                <label for="min_qty_user_ids" string="Users" invisible="notify_to != 'users'"/>
+                                <div class="content-group" invisible="notify_to != 'users'">
+                                    <field name="min_qty_user_ids" widget="many2many_tags" class="o_light_label"/>
+                                </div>
+                                <label for="min_qty_group_ids" string="Groups" invisible="notify_to != 'groups'"/>
+                                <div class="content-group"  invisible="notify_to != 'groups'">
+                                    <field name="min_qty_group_ids" widget="many2many_tags" class="o_light_label"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="outgoing_mail_notification"
+                             groups='stock.group_stock_manager'>
+                            <div class="o_setting_right_pane">
+                                <label for="outgoing_mail_id" string="Outgoing mail server for notification"/>
+                                <div class="text-muted">
+                                    Set outgoing mail server to send notification.
+                                </div>
+                                <div class="content-group">
+                                    <field name="outgoing_mail_id" class="o_light_label"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

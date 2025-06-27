@@ -6,10 +6,10 @@
 		<field name="model">integration.error.log</field>
 		<field name="arch" type="xml">
 			<list string="Integration Error Log" editable="bottom" create="1" edit="1" import="1">
+				<field name="date"/>
 				<field name="name" required="1"/>
 				<field name="integration_name"/>
 				<field name="remark"/>
-				<field name="date"/>
 			</list>
 		</field>
 	</record>
