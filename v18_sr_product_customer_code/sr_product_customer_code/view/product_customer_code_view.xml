@@ -7,7 +7,7 @@
             <field name="name">view.product.customer.code.list</field>
             <field name="model">product.customer.code</field>
             <field name="arch" type="xml">
-                <list string="Product Customer Code" editable="top">
+                <list string="Product Customer Code" editable="top" default_order="id desc">
                     <field name="customer_id" required="1"/>
                     <field name="product_template_id" required="1"/>
                     <field name="product_variant_id"/>

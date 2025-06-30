@@ -8,27 +8,26 @@
 #
 ##############################################################################
 
-from odoo import fields, models, api, _
+from odoo import models, fields, api, _
 
 
-class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
 
     code = fields.Char(string='Product Code')
 
-    @api.onchange('product_template_id')
+    @api.onchange('product_id')
     def _onchange_product_template_code(self):
-        if self.product_template_id and self.order_id.partner_id:
-            customer = self.order_id.partner_id
+        if self.product_id and self.move_id.partner_id:
+            customer = self.move_id.partner_id
 
             customer_code = self.env['product.customer.code'].search([
-                ('product_template_id', '=', self.product_template_id.id),
+                ('product_variant_id', '=', self.product_id.id),
                 ('customer_id', '=', customer.id),
             ])
 
             if customer_code:
-                self.product_uom_qty = 1
-                self.price_unit = self.product_template_id.list_price
+                self.price_unit = self.product_id.list_price
                 self.code = customer_code.code
             else:
                 self.code = False

@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_template_id']" position="after">
-                    <field name="code"/>
+                    <field name="code" readonly="1"/>
                 </xpath>
                 <xpath expr="//field[@name='product_template_id']" position="attributes">
                     <attribute name="context">{'default_partner_id': parent.partner_id}</attribute>

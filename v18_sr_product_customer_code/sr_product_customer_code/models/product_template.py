@@ -15,7 +15,6 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     product_code_ids = fields.One2many('product.customer.code' , 'product_template_id')
-
     x_customer_code_search = fields.Char(string='Customer Code', compute='compute_code',search='search_customer_code', store=False)
 
     def compute_code(self):

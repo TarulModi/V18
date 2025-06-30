@@ -82,40 +82,37 @@ class ProductCustomerCode(models.Model):
                         _('Duplicate: This customer already has a template-level entry for this product.')
                     )
 
-
     @api.depends('product_variant_id')
     def _compute_apply_to_all_variants(self):
         for record in self:
             record.apply_to_all_variants = not bool(record.product_variant_id)
 
-    @api.model
-    def create(self, vals):
-        # Auto-set product_template_id if product_variant_id is given and template not set
-        if vals.get('product_variant_id') and not vals.get('product_template_id'):
-            product = self.env['product.product'].browse(vals['product_variant_id'])
-            vals['product_template_id'] = product.product_tmpl_id.id
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = []
 
-        # If it's a template-level entry (no variant), create per-variant lines and skip this one
-        if vals.get('product_template_id') and not vals.get('product_variant_id'):
-            template = self.env['product.template'].browse(vals['product_template_id'])
-            variants = template.product_variant_ids
+        for vals in vals_list:
+            # Auto-set product_template_id if product_variant_id is given and template not set
+            if vals.get('product_variant_id') and not vals.get('product_template_id'):
+                product = self.env['product.product'].browse(vals['product_variant_id'])
+                vals['product_template_id'] = product.product_tmpl_id.id
 
-            records = []
-            for variant in variants:
-                record_vals = vals.copy()
-                record_vals['product_variant_id'] = variant.id
-                records.append(super().create(record_vals))
-            return self.browse([r.id for r in records])
+            # If it's a template-level entry (no variant), create per-variant lines and skip this one
+            if vals.get('product_template_id') and not vals.get('product_variant_id'):
+                template = self.env['product.template'].browse(vals['product_template_id'])
+                for variant in template.product_variant_ids:
+                    record_vals = vals.copy()
+                    record_vals['product_variant_id'] = variant.id
+                    records.append(super().create(record_vals))
+            else:
+                records.append(super().create(vals))
 
-        # Else, normal creation
-        return super().create(vals)
+        return self.browse([r.id for r in records])
 
     def write(self, vals):
-
         if vals.get('product_variant_id') and not vals.get('product_template_id'):
             product = self.env['product.product'].browse(vals['product_variant_id'])
             vals['product_template_id'] = product.product_tmpl_id.id
-
         res = super().write(vals)
 
         if any(field in vals for field in ['code', 'name']):
@@ -171,5 +168,3 @@ class ProductCustomerCode(models.Model):
     def _onchange_product_variant_id(self):
         if self.product_variant_id:
             self.product_template_id = self.product_variant_id.product_tmpl_id
-
-

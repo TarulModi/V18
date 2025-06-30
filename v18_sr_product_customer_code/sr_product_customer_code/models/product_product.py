@@ -10,6 +10,7 @@
 
 from odoo import models, fields, api, _
 
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -27,3 +28,39 @@ class ProductProduct(models.Model):
         product_codes = self.env['product.customer.code'].search([('code', operator, value)])
         template_ids = product_codes.mapped('product_variant_id').ids
         return [('id', 'in', template_ids)]
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        try:
+            if args is None:
+                args = []
+
+            partner_id = self._context.get('default_partner_id') or \
+                         self._context.get('partner_id') or \
+                         self._context.get('parent_partner_id')
+
+            if partner_id and name and name.strip():
+                # Exact match
+                exact_codes = self.env['product.customer.code'].search([
+                    ('customer_id', '=', partner_id),
+                    ('code', '=', name.strip())
+                ], limit=limit)
+
+                if exact_codes:
+                    variants = exact_codes.mapped('product_variant_id')
+                    return [(v.id, f"{v.display_name} [{v.default_code or ''}]") for v in variants if v]
+
+                # Partial match
+                partial_codes = self.env['product.customer.code'].search([
+                    ('customer_id', '=', partner_id),
+                    ('code', 'ilike', name.strip())
+                ], limit=limit)
+
+                if partial_codes:
+                    variants = partial_codes.mapped('product_variant_id')
+                    return [(v.id, f"{v.display_name} [{v.default_code or ''}]") for v in variants if v]
+
+            return super().name_search(name, args, operator, limit)
+
+        except Exception:
+            return super().name_search(name, args, operator, limit)
