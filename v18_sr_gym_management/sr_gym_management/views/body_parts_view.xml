@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="body_parts_view_list" model="ir.ui.view">
+            <field name="name">body.parts.view.list</field>
+            <field name="model">body.parts</field>
+            <field name="arch" type="xml">
+                <list string="Medium" editable="bottom" create="1" edit="1" import="1">
+                    <field name="name" required="1"/>
+                </list>
+            </field>
+        </record>
+
+<!--        <record id="medium_view_form" model="ir.ui.view">-->
+<!--            <field name="name">medium.view.form</field>-->
+<!--            <field name="model">medium.medium</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Medium">-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_title mb24">-->
+<!--                            <h1>-->
+<!--                                <field name="name" placeholder="e.g. Medium" required="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                    </sheet>-->
+<!--                    <chatter/>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="action_body_parts" model="ir.actions.act_window">
+            <field name="name">Body Parts</field>
+            <field name="res_model">body.parts</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="body_parts_view_list"/>
+        </record>
+
+        <menuitem id="menu_body_parts"
+                  parent="sr_gym_management.menu_configurations"
+                  name="Body Parts"
+                  action="sr_gym_management.action_body_parts"
+                  sequence="3"/>
+
+    </data>
+</odoo>

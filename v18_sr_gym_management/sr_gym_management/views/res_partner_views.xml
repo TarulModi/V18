@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_partner_form_extended_add_fields" model="ir.ui.view">
+        <field name="name">res.partner.view.form.extended.add.fields</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="is_gym_member"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="membership" string="Membership">
+                    <group>
+                        <group>
+                            <button name="button_buy_membership" string="Buy Membership" type="object" class="btn-primary"/>
+                        </group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="trainer_skills_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <field name="membership_ids" store="True" readonly="True">
+                        <list>
+                            <field name="membership_id" required="1"/>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                            <field name="fees"/>
+                            <field name="status"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="membership_id" required="1"/>
+                                    <field name="start_date" required="1"/>
+                                    <field name="end_date" required="1"/>
+                                </group>
+                                <group>
+                                    <field name="fees"/>
+                                    <field name="status"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_res_partner_member" model="ir.actions.act_window">
+        <field name="name">Members</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_gym_member','=','True')]</field>
+        <field name="context">{'default_is_gym_member':'True'}</field>
+    </record>
+
+    <menuitem
+            id="menu_members"
+            name="Members"
+            parent="sr_gym_management.main_menu_member"
+            action="action_res_partner_member"
+            sequence="1"/>
+</odoo>

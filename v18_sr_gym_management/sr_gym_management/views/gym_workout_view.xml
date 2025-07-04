@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="gym_workout_view_list" model="ir.ui.view">
+            <field name="name">gym.workout.view.list</field>
+            <field name="model">gym.workout</field>
+            <field name="arch" type="xml">
+                <list string="GYM Workout">
+                    <field name="name"/>
+                    <field name="name"/>
+                    <field name="name"/>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="gym_workout_view_form" model="ir.ui.view">
+            <field name="name">gym.workout.view.form</field>
+            <field name="model">gym.workout</field>
+            <field name="arch" type="xml">
+                <form string="GYM Exercise">
+                    <sheet>
+                        <div class="oe_title mb24">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. Workout Name" required="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="calories_burn"/>
+                            </group>
+                            <group>
+                                <field name="product_template_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="workout_exercise_ids" string="Workout Exercise">
+                                <field name="workout_exercise_ids">
+                                    <list editable="bottom">
+                                        <field name="exercise_id" required="1"/>
+                                        <field name="exercise_for_ids"/>
+                                        <field name="product_template_ids"/>
+                                        <field name="sets"/>
+                                        <field name="repeat"/>
+                                        <field name="weight"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_gym_workout" model="ir.actions.act_window">
+            <field name="name">Workout</field>
+            <field name="res_model">gym.workout</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="gym_workout_view_list"/>
+        </record>
+
+        <menuitem id="menu_gym_workout"
+                  parent="sr_gym_management.main_menu_workout"
+                  name="Workout"
+                  action="sr_gym_management.action_gym_workout"
+                  sequence="1"/>
+
+    </data>
+</odoo>

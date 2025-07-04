@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="exercise_for_view_list" model="ir.ui.view">
+            <field name="name">exercise.for.view.list</field>
+            <field name="model">exercise.for</field>
+            <field name="arch" type="xml">
+                <list string="Medium" editable="bottom" create="1" edit="1" import="1">
+                    <field name="name" required="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_exercise_for" model="ir.actions.act_window">
+            <field name="name">Exercise For</field>
+            <field name="res_model">exercise.for</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="exercise_for_view_list"/>
+        </record>
+
+        <menuitem id="menu_exercise_for"
+                  parent="sr_gym_management.menu_configurations"
+                  name="Exercise For"
+                  action="sr_gym_management.action_exercise_for"
+                  sequence="8"/>
+
+    </data>
+</odoo>

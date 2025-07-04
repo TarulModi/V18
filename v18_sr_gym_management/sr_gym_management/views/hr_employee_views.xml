@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_form_extended_add_fields" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.extended.add.fields</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='mobile_phone']" position="after">
+                <field name="is_trainer"/>
+                <field name="trainer_skills_ids" widget="many2many_tags" invisible="is_trainer == False"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_hr_employee_trainer" model="ir.actions.act_window">
+        <field name="name">Trainers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_trainer','=','True')]</field>
+        <field name="context">{'default_is_trainer':'True'}</field>
+    </record>
+
+    <menuitem
+            id="menu_gym_trainer"
+            name="Trainers"
+            parent="sr_gym_management.main_menu_trainers"
+            action="action_hr_employee_trainer"
+            sequence="1"/>
+
+</odoo>

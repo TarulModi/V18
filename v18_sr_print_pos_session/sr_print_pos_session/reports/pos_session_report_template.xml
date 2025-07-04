@@ -10,19 +10,19 @@
                             <span t-field="doc.name"/>
                         </h2>
                         <div class="row mt32 mb32">
-                            <div class="col-auto mw-100 mb-2">
+                            <div class="mw-100 mb-4 col-3">
                                 <strong>Point Of Sale:</strong>
                                 <p t-field="doc.config_id"/>
                             </div>
-                            <div class="col-auto mw-100 mb-2">
+                            <div class="col-3 mw-100 mb-4">
                                 <strong>Responsible Person:</strong>
                                 <p t-field="doc.user_id"/>
                             </div>
-                            <div class="col-auto mw-100 mb-2">
+                            <div class="col-3 mw-100 mb-4">
                                 <strong>Opening Date:</strong>
                                 <p t-field="doc.start_at"/>
                             </div>
-                            <div class="col-auto mw-100 mb-2">
+                            <div class="col-3 mw-100 mb-4">
                                 <strong>Closing Date:</strong>
                                 <p t-field="doc.stop_at"/>
                             </div>
@@ -61,7 +61,8 @@
                                         </td>
                                         <td class="text-right">
                                             <!-- Accessing the session's total entry encoding -->
-                                            <span t-field="record.pos_session_id.cash_register_total_entry_encoding"/>
+                                            <!-- <span t-field="record.pos_session_id.cash_register_total_entry_encoding"/> -->
+                                            <span t-field="record.pos_session_id.cash_register_balance_end"/>
                                         </td>
                                         <td class="text-right">
                                             <!-- Accessing the session's difference (theoretical vs real closing) -->
@@ -115,10 +116,10 @@
                                             <td>
                                                 <span t-field="line.name"/>
                                             </td>
-<!--                                            <td class="text-right">-->
-<!--                                                <span t-field="line.amount_total"/>-->
-<!--                                                <t t-set="total_cash" t-value="total_cash + line.amount_total"/>-->
-<!--                                            </td>-->
+                                            <td class="text-right">
+                                                <span t-field="line.amount_residual"/>
+                                                <t t-set="total_cash" t-value="total_cash + line.amount_residual"/>
+                                            </td>
                                         </tr>
                                     </t>
                                     <t t-if='total_cash'>
@@ -160,8 +161,8 @@
                                                 <span t-field="line.name"/>
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.amount_total"/>
-                                                <t t-set="total_credit" t-value="total_credit + line.amount_total"/>
+                                                <span t-field="line.amount_residual"/>
+                                                <t t-set="total_credit" t-value="total_credit + line.amount_residual"/>
                                             </td>
                                         </tr>
                                     </t>

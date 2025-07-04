@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_gym"
+                  name="GYM"
+                  web_icon="sr_gym_management,static/description/icon.png"/>
+
+        <menuitem id="menu_configurations"
+                  parent="sr_gym_management.menu_gym"
+                  name="Configurations"
+                  sequence="100"/>
+
+        <menuitem id="main_menu_trainers"
+                  name="Trainers"
+                  parent="sr_gym_management.menu_gym"
+                  sequence="20"/>
+
+        <menuitem id="main_menu_member"
+                  name="Members"
+                  parent="sr_gym_management.menu_gym"
+                  sequence="10"/>
+
+        <menuitem id="main_menu_workout"
+                  name="Workout"
+                  parent="sr_gym_management.menu_gym"
+                  sequence="30"/>
+    </data>
+</odoo>

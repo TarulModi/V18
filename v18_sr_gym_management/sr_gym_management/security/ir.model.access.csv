@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+sr_gym_management.access_trainer_skills,access_trainer_skills,sr_gym_management.model_trainer_skills,base.group_user,1,1,1,1
+sr_gym_management.access_diet_interval,access_diet_interval,sr_gym_management.model_diet_interval,base.group_user,1,1,1,1
+sr_gym_management.access_body_parts,access_body_parts,sr_gym_management.model_body_parts,base.group_user,1,1,1,1
+sr_gym_management.access_workout_days,access_workout_days,sr_gym_management.model_workout_days,base.group_user,1,1,1,1
+sr_gym_management.access_gym_membership,access_gym_membership,sr_gym_management.model_gym_membership,base.group_user,1,1,1,1
+sr_gym_management.access_gym_member_membership,access_gym_member_membership,sr_gym_management.model_gym_member_membership,base.group_user,1,1,1,1
+sr_gym_management.access_buy_membership_wizard,access_buy_membership_wizard,sr_gym_management.model_buy_membership_wizard,base.group_user,1,1,1,1
+sr_gym_management.access_bmi_calculation,access_bmi_calculation,sr_gym_management.model_bmi_calculation,base.group_user,1,1,1,1
+sr_gym_management.access_exercise_for,access_exercise_for,sr_gym_management.model_exercise_for,base.group_user,1,1,1,1
+sr_gym_management.access_gym_exercise,access_gym_exercise,sr_gym_management.model_gym_exercise,base.group_user,1,1,1,1
+sr_gym_management.access_gym_workout,access_gym_workout,sr_gym_management.model_gym_workout,base.group_user,1,1,1,1
+sr_gym_management.access_gym_workout_exercise,access_gym_workout_exercise,sr_gym_management.model_gym_workout_exercise,base.group_user,1,1,1,1

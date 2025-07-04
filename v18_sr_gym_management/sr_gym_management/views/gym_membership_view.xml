@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="gym_membership_view_list" model="ir.ui.view">
+            <field name="name">gym.membership.view.list</field>
+            <field name="model">gym.membership</field>
+            <field name="arch" type="xml">
+                <list string="Medium" editable="bottom" create="1" edit="1" import="1">
+                    <field name="name" required="1"/>
+                    <field name="start_date" required="1"/>
+                    <field name="end_date" required="1"/>
+                    <field name="fees"/>
+                    <field name="partner_ids" widget="many2many_tags"/>
+                </list>
+            </field>
+        </record>
+
+<!--        <record id="medium_view_form" model="ir.ui.view">-->
+<!--            <field name="name">medium.view.form</field>-->
+<!--            <field name="model">medium.medium</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Medium">-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_title mb24">-->
+<!--                            <h1>-->
+<!--                                <field name="name" placeholder="e.g. Medium" required="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                    </sheet>-->
+<!--                    <chatter/>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="action_gym_membership" model="ir.actions.act_window">
+            <field name="name">Membership</field>
+            <field name="res_model">gym.membership</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="gym_membership_view_list"/>
+        </record>
+
+        <menuitem id="menu_gym_membership"
+                  parent="sr_gym_management.menu_configurations"
+                  name="Membership"
+                  action="sr_gym_management.action_gym_membership"
+                  sequence="5"/>
+
+    </data>
+</odoo>

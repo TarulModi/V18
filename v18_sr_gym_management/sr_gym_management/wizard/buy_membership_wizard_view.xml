@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="buy_membership_wizard_form_view" model="ir.ui.view">
+        <field name="name">buy.membership.wizard.form.view</field>
+        <field name="model">buy.membership.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="membership_id" required="1"/>
+                            <field name="fees"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Create Invoice" type="object" name="create_membership_invoice" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buy_membership_wizard" model="ir.actions.act_window">
+        <field name="name">Buy Membership</field>
+        <field name="res_model">buy.membership.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="buy_membership_wizard_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

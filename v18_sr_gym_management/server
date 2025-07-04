@@ -1,0 +1,14 @@
+tfak-a254-r8ej
+
+cd Projects/
+
+source python3.10-3.10-venv/bin/activate
+
+
+
+cd /home/abcd/Projects/v18/odoo
+
+./odoo-bin --addons=/home/abcd/Projects/v18/enterprise/odoo,/home/abcd/Projects/v18/odoo/addons,/home/abcd/Projects/v18/projects/v18_sr_gym_management --limit-time-real=100000 --db-filter=v18_sr_gym_management -d v18_sr_gym_management
+
+
+v18_sr_gym_management
